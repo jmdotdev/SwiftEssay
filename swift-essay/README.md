@@ -7,7 +7,6 @@ Welcome to Swift Essay, an academic writing platform built with ReactJS, where c
 - [Features](#features)
 - [Installation](#installation)
 - [Usage](#usage)
-- [Screenshots](#screenshots)
 - [Tech Stack](#tech-stack)
 - [Contributing](#contributing)
 - [License](#license)
@@ -77,10 +76,10 @@ Welcome to Swift Essay, an academic writing platform built with ReactJS, where c
   - ReactJS
 
 - **Backend:**
-  - [Your Backend Framework/Technology]
+  - Nodejs
 
 - **Database:**
-  - [Your Database Technology]
+  - MongoDb
 
 ## Contributing
 
