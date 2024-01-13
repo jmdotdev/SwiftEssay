@@ -2,8 +2,6 @@ import React from 'react'
 import './Register.css'
 import landingimage from '../../assets/images/login.webp'
 import notepad from '../../assets/images/notepad.png'
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 export const Register = () => {
   return (
     <div className="main">
@@ -31,20 +29,18 @@ export const Register = () => {
             <form>
                 <label>Email:</label>
              <div className="input-control">
-             <EmailOutlinedIcon/>
               <input type="email" placeholder="email" />
              </div>
               <label>Password:</label>
              <div className="input-control">
-             <LockOutlinedIcon/>
               <input type="password" placeholder="password" />
              </div>
              <label>Confirm Password:</label>
              <div className="input-control">
-             <LockOutlinedIcon/>
               <input type="password" placeholder="confirm password" />
              </div>
-              <button>Sign Up</button>
+              <button>Sign Up         
+              </button>
             </form>
             <h4>Forgot Password?</h4>
           </div>

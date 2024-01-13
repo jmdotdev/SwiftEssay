@@ -1,0 +1,31 @@
+.topnavigation{
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+}
+.topnavigation .profile-section{
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 40%;
+}
+.profile-section .settings{
+    display: flex;
+    align-items: center;
+}
+.profile-section .notifications{
+    display: flex;
+    align-items: center;
+}
+.profile-section .logout{
+    display: flex;
+    align-items: center;
+}
+.profile-section .account{
+    display: flex;
+    align-items: center;
+}
+.account img{
+    height: 30px;
+}

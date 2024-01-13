@@ -2,8 +2,6 @@ import React from "react";
 import "./Login.css";
 import landingimage from '../../assets/images/login.webp'
 import notepad from '../../assets/images/notepad.png'
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 export const Login = () => {
   return (
     <div className="main">
@@ -31,12 +29,10 @@ export const Login = () => {
             <form>
                 <label>Email:</label>
              <div className="input-control">
-             <EmailOutlinedIcon/>
               <input type="email" placeholder="email" />
              </div>
               <label>Password:</label>
              <div className="input-control">
-             <LockOutlinedIcon/>
               <input type="password" placeholder="password" />
              </div>
               <button>Sign In</button>

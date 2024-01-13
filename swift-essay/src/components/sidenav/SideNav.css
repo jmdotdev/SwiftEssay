@@ -1,0 +1,24 @@
+.sidenav{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 5px;
+    background-color: #03264D;
+    color: #FFFF;
+}
+.sidenav .sidenav-header{
+    width: auto;
+    display: flex;
+    align-items: center;
+}
+.sidenav-header img{
+    height: 50px;
+}
+.sidenav ul {
+    margin-top: 40px;
+}
+.sidenav ul li{
+    list-style: none;
+    margin-top: 40px;
+    cursor: pointer;
+}
