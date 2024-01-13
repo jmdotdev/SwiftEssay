@@ -1,70 +1,90 @@
-# Getting Started with Create React App
+# Swift Essay - Academic Writing Platform
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Welcome to Swift Essay, an academic writing platform built with ReactJS, where clients can post academic writing tasks and writers can bid on and complete them. This project is designed to streamline the process of connecting clients with skilled writers for academic assignments.
 
-## Available Scripts
+## Table of Contents
 
-In the project directory, you can run:
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Tech Stack](#tech-stack)
+- [Contributing](#contributing)
+- [License](#license)
 
-### `npm start`
+## Features
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **User Roles:**
+  - **Admin:** Manages users, tasks, and overall system.
+  - **Clients:** Post tasks, review bids, and assign tasks to writers.
+  - **Writers:** Bid on tasks, communicate with clients, and submit completed work.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- **Task Management:**
+  - Clients can post detailed tasks with requirements.
+  - Writers can bid on available tasks and provide estimated completion times.
 
-### `npm test`
+- **Messaging System:**
+  - Integrated messaging allows clients and writers to communicate throughout the writing process.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- **User Authentication:**
+  - Secure user authentication system for admins, clients, and writers.
 
-### `npm run build`
+- **Dashboard:**
+  - Personalized dashboards for clients and writers to track ongoing tasks, bids, and completed work.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Installation
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+1. Clone the repository:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+   ```bash
+   git clone https://github.com/your-username/swift-essay.git
+   cd swift-essay
+   ```
 
-### `npm run eject`
+2. Install dependencies:
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+   ```bash
+   npm install
+   ```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+3. Set up environment variables:
+   
+   Create a `.env` file in the root directory and add the necessary environment variables.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+4. Run the development server:
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+   ```bash
+   npm start
+   ```
 
-## Learn More
+5. Open your browser and visit [http://localhost:3000](http://localhost:3000) to view the app.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Usage
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+1. **Admin:**
+   - Access the admin dashboard to manage users, tasks, and overall system settings.
 
-### Code Splitting
+2. **Clients:**
+   - Log in to post new tasks, review bids, and communicate with writers.
+   - Assign tasks to chosen writers and track the progress.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+3. **Writers:**
+   - Bid on available tasks, communicate with clients, and submit completed work.
 
-### Analyzing the Bundle Size
+## Tech Stack
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+- **Frontend:**
+  - ReactJS
 
-### Making a Progressive Web App
+- **Backend:**
+  - Nodejs
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+- **Database:**
+  - MongoDb
 
-### Advanced Configuration
+## Contributing
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+We welcome contributions! Please follow our [contribution guidelines](CONTRIBUTING.md) to contribute to Swift Essay.
 
-### Deployment
+## License
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+This project is licensed under the [MIT License](LICENSE). Feel free to use, modify, and distribute it as per the license terms.
