@@ -13,18 +13,22 @@
 .profile-section .settings{
     display: flex;
     align-items: center;
+    cursor: pointer;
 }
 .profile-section .notifications{
     display: flex;
     align-items: center;
+    cursor: pointer;
 }
 .profile-section .logout{
     display: flex;
     align-items: center;
+    cursor: pointer;
 }
 .profile-section .account{
     display: flex;
     align-items: center;
+    cursor: pointer;
 }
 .account img{
     height: 30px;
