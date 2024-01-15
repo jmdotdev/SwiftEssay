@@ -18,7 +18,7 @@ export const Login = () => {
           <div className="main-header">
             <div className="icon">
             <img  src={notepad} alt="notepad.png"/>
-            <h3>SwiftEssay</h3>
+            <h3>Welcome Back</h3>
             </div>
           </div>
           <div className="sign-in-header">
