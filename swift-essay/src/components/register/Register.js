@@ -18,7 +18,7 @@ export const Register = () => {
           <div className="main-header">
             <div className="icon">
             <img  src={notepad} alt="notepad.png"/>
-            <h3>Join Us</h3>
+            <h3>Join SwiftEssay</h3>
             </div>
           </div>
           <div className="sign-in-header">
