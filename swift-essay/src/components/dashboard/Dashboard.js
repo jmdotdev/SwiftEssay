@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import './Dashboard.css'
 import { SideNav } from '../../components/sidenav/SideNav'
 import { TopNav } from "../topnav/TopNav";
+import { DashboardContent } from "../dashboard-content/DashboardContent";
 export const Dashboard = () => {
-  const[selectedLink,setSelectedLink] = useState(null);
+  const[selectedLink,setSelectedLink] = useState("dashboard");
   
   const handleSelectedLink = (link) =>{
       setSelectedLink(link)
@@ -19,7 +20,7 @@ export const Dashboard = () => {
           <TopNav/>
         </div>
         <div className="container-content">
-          <p>{selectedLink}</p>
+          { selectedLink == "dashboard" ? <p><DashboardContent/></p> : <p>{selectedLink}</p>}
         </div>
       </div>
     </div>
