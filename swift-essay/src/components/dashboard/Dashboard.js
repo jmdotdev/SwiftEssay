@@ -3,6 +3,7 @@ import './Dashboard.css'
 import { SideNav } from '../../components/sidenav/SideNav'
 import { TopNav } from "../topnav/TopNav";
 import { DashboardContent } from "../dashboard-content/DashboardContent";
+import { Orders } from "../Orders/Orders";
 export const Dashboard = () => {
   const[selectedLink,setSelectedLink] = useState("dashboard");
   
@@ -20,7 +21,7 @@ export const Dashboard = () => {
           <TopNav/>
         </div>
         <div className="container-content">
-          { selectedLink == "dashboard" ? <p><DashboardContent/></p> : <p>{selectedLink}</p>}
+          { selectedLink == "dashboard" ? <p><DashboardContent/></p> : <Orders/>}
         </div>
       </div>
     </div>
