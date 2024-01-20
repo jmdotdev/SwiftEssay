@@ -6,6 +6,7 @@ import { DashboardContent } from "../dashboard-content/DashboardContent";
 import { Orders } from "../Orders/Orders";
 import { Writers } from "../writers/Writers";
 import { Payment } from "../Payment/Payment";
+import { Messages } from "../messages/Messages";
 export const Dashboard = () => {
   const[selectedLink,setSelectedLink] = useState("dashboard");
   
@@ -27,6 +28,7 @@ export const Dashboard = () => {
           { selectedLink == "Writers" && <p><Writers/></p>}
           { selectedLink == "Orders" && <p><Orders/></p>}
           { selectedLink == "Payments" && <p><Payment/></p>}
+          { selectedLink == "Messages" && <p><Messages/></p>}
         </div>
       </div>
     </div>

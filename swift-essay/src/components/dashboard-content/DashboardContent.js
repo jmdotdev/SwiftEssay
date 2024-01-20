@@ -7,6 +7,7 @@ import pendingIcon from '../../assets/images/pending.svg'
 import progressIcon from '../../assets/images/progress.jpg'
 import completedIcon from '../../assets/images/complete.jpg'
 import repeatIcon from '../../assets/images/repeat.svg'
+import { DataGrid } from "@mui/x-data-grid";
 export const DashboardContent = () => {
 
     const [tabvalue, setTabValue] = useState(0);
@@ -14,6 +15,24 @@ export const DashboardContent = () => {
     const handleChange = (event, newValue) => {
       setTabValue(newValue);
     };
+    const columns = [
+      { field: 'id', headerName: 'ID', width: 70 },
+      { field: 'client', headerName: 'Client', width: 130 },
+      { field: 'writer', headerName: 'Writer', width: 130 },
+      { field: 'comment', headerName: 'Comment', width: 130 },
+    ];
+    
+    const rows = [
+      { id: 1, writer: 'Snow', client: 'Jon', comment: 35 },
+      { id: 2, writer: 'Lannister', client: 'Cersei', comment: 42 },
+      { id: 3, writer: 'Lannister', client: 'Jaime', comment: 45 },
+      { id: 4, writer: 'Stark', client: 'Arya', comment: 16 },
+      { id: 5, writer: 'Targaryen', client: 'Daenerys', comment: null },
+      { id: 6, writer: 'Melisandre', client: null, comment: 150 },
+      { id: 7, writer: 'Clifford', client: 'Ferrara', comment: 44 },
+      { id: 8, writer: 'Frances', client: 'Rossini', comment: 36 },
+      { id: 9, writer: 'Roxie', client: 'Harvey', comment: 65 },
+    ];
   return (
     <div className='dashboard-content'>
         <div className='dashboard-content-title'>
@@ -31,7 +50,7 @@ export const DashboardContent = () => {
             </div>
             <div className='dashboard-card'>
                 <div className='left-section'>
-                   <h2>26</h2>
+                   <h2>18</h2>
                    <h4>Orders Inprogress</h4>
                 </div>
                 <div className='right-section'>
@@ -39,7 +58,7 @@ export const DashboardContent = () => {
                 </div>
             </div> <div className='dashboard-card'>
                 <div className='left-section'>
-                   <h2>26</h2>
+                   <h2>10</h2>
                    <h4>Completed Orders</h4>
                 </div>
                 <div className='right-section'>
@@ -47,7 +66,7 @@ export const DashboardContent = () => {
                 </div>
             </div> <div className='dashboard-card'>
                 <div className='left-section'>
-                   <h2>26</h2>
+                   <h2>5</h2>
                    <h4>Revision Orders</h4>
                 </div>
                 <div className='right-section'>
@@ -64,9 +83,45 @@ export const DashboardContent = () => {
       </Tabs>
     </Box>
     <div className='tabs-info'>
-      {tabvalue == 0 && <p>Tab one</p>}
-      {tabvalue == 1 && <p>Tab two</p>}
-      {tabvalue == 2 && <p>Tab three</p>}
+      {tabvalue == 0 && <div style={{ height: 250, width: "100%" }}>
+          <DataGrid
+            rows={rows}
+            columns={columns}
+            initialState={{
+              pagination: {
+                paginationModel: { page: 0, pageSize: 5 },
+              },
+            }}
+            pageSizeOptions={[5, 10]}
+            checkboxSelection
+          />
+        </div>}
+      {tabvalue == 1 && <div style={{ height: 300, width: "100%" }}>
+          <DataGrid
+            rows={rows}
+            columns={columns}
+            initialState={{
+              pagination: {
+                paginationModel: { page: 0, pageSize: 5 },
+              },
+            }}
+            pageSizeOptions={[5, 10]}
+            checkboxSelection
+          />
+        </div>}
+      {tabvalue == 2 && <div style={{ height: 300, width: "100%" }}>
+          <DataGrid
+            rows={rows}
+            columns={columns}
+            initialState={{
+              pagination: {
+                paginationModel: { page: 0, pageSize: 5 },
+              },
+            }}
+            pageSizeOptions={[5, 10]}
+            checkboxSelection
+          />
+        </div>}
       
     </div>
         </div>

@@ -1,41 +1,42 @@
-.dashboard-content{
+.messages-content{
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 100%;
     height: calc(100vh - 100px);
 }
-.dashboard-content-title{
+.messages-content-title{
     display: flex;
     width: 100%;
     padding: 0 25px;
     margin-bottom: 30px;
     align-items: flex-start;
 }
-.dashboard-content-cards{
+.messages-content-cards{
     display: flex;
     justify-content: space-evenly;
     height: 20vh;
     width: 100%;
+    cursor: pointer;
 }
-.dashboard-content-cards .dashboard-card{
+.messages-content-cards .messages-card{
     display: flex;
     justify-content: space-between;
     align-items: center;
     height: 100px;
-    width: 22%;
+    width: 30%;
     background-color: #FFFF;
-    padding: 15px;
+    padding: 20px;
 }
-.dashboard-card .right-section{
+.messages-card .right-section{
     font-size: 50px;
     color: green;
 }
-.dashboard-card .right-section img{
-    height: 60px;
-    width: 60px;
+.messages-card .right-section img{
+    height: 70px;
+    width: 70px;
 }
-.dashboard-content .tabs{
+.messages-content .tabs{
     display: flex;
     flex-direction: column;
     height: auto;

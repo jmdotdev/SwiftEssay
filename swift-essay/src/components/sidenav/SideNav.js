@@ -16,7 +16,7 @@ export const SideNav = ({onLinkClick}) => {
         <li onClick={() => {handleSelectedLink("dashboard")}}>Dashboard</li>
         <li onClick={() => {handleSelectedLink("Writers")}}>Writers</li>
         <li onClick={() => {handleSelectedLink("Orders")}}>Orders</li>
-        <li onClick={() => {handleSelectedLink("Alerts")}}>Alerts</li>
+        <li onClick={() => {handleSelectedLink("Messages")}}>Messages</li>
         <li onClick={() => {handleSelectedLink("Payments")}}>Payments</li>
         <li onClick={() => {handleSelectedLink("Reviews")}}>Reviews</li>
         <li onClick={() => {handleSelectedLink("News")}}>News</li>
