@@ -12,8 +12,8 @@ function App() {
       <Routes>
       <Route exact path='' element={<Login/>}/>
       <Route path='register' element={<Register/>}/>
-      <Route path='dashboard' element={<Dashboard/>}/>
-      <Route path='*' element={<NotFound/>}/>
+      <Route path=':link/*' element={<Dashboard/>}/>
+      <Route path='notfound' element={<NotFound/>}/>
       </Routes>
     </div>
   );
