@@ -10,7 +10,12 @@ import InputBase from '@mui/material/InputBase';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import { CiSearch } from "react-icons/ci";
+import { useNavigate } from 'react-router-dom';
 export const TopNav = () => {
+  const navigate = useNavigate()
+  const logout =() =>{
+     navigate('/')
+  }
   return (
     <div className='topnavigation'>
         <form>
@@ -37,7 +42,7 @@ export const TopNav = () => {
          <BiMessageDetail />
          <VscBellDot/>
          </div>
-         <div className='logout'>
+         <div className='logout' onClick={logout}>
          <IoMdLogOut/>
          logout
          </div>

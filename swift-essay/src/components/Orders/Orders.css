@@ -21,6 +21,8 @@
     margin-top: 40px;
     height: 80%;
     width: 100%;
+    background-color: #FFFF;
+    padding: 10px;
 }
 .order-filters a{
     position: relative;

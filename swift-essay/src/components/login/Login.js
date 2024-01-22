@@ -1,8 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Login.css";
 import landingimage from '../../assets/images/login.webp'
 import notepad from '../../assets/images/notepad.png'
+import {useNavigate} from 'react-router-dom'
 export const Login = () => {
+  const [email,setEmail] = useState()
+  const [password,setPassword] = useState()
+  const navigate = useNavigate()
+  const loginUser = (e) =>{
+    e.preventDefault() 
+    if(email == 'test@gmail.com' && password == 'test'){
+      navigate('/dashboard')
+    }
+    else{
+      window.alert("wrong password or email")
+    }
+  }
   return (
     <div className="main">
       <div className="left-section">
@@ -29,13 +42,13 @@ export const Login = () => {
             <form>
                 <label>Email:</label>
              <div className="input-control">
-              <input type="email" placeholder="email" />
+              <input type="email" placeholder="email" value={email} onChange={(e)=>setEmail(e.target.value)}/>
              </div>
               <label>Password:</label>
              <div className="input-control">
-              <input type="password" placeholder="password" />
+              <input type="password" placeholder="password" value={password} onChange={(e)=>setPassword(e.target.value)} />
              </div>
-              <button>Sign In</button>
+              <button onClick={loginUser}>Sign In</button>
             </form>
             <h4>Forgot Password?</h4>
           </div>
