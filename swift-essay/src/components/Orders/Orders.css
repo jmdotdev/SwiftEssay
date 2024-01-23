@@ -5,6 +5,9 @@
     width: 100%;
 }
 .orders-section .orders-header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     padding: 5px;
     font-size: 20px;
 }
@@ -30,4 +33,14 @@
 .order-filters a span{
     color: red;
     margin-left: 3px;
+}
+.add-order-btn{
+    display: flex;
+    align-items: center;
+    padding: 10px 12px;
+    border: none;
+    cursor: pointer;
+    color: #FFFF;
+    background-color: #03264D;
+    border-radius: 5px;
 }

@@ -8,6 +8,7 @@ import { Orders } from "../Orders/Orders";
 import { Writers } from "../writers/Writers";
 import { Payment } from "../Payment/Payment";
 import { Messages } from "../messages/Messages";
+import { AddOrder } from "../Orders/AddOrder/AddOrder";
 export const Dashboard = () => {
   const { link } = useParams();
   const [selectedLink, setSelectedLink] = useState(link || "dashboard");
@@ -24,6 +25,22 @@ export const Dashboard = () => {
       navigate('/notfound')
     }
   };
+  const renderSelectedComponent = () => {
+    switch (selectedLink) {
+      case "dashboard":
+        return <DashboardContent />;
+      case "Writers":
+        return <Writers />;
+      case "Orders":
+        return <Orders />;
+      case "Payments":
+        return <Payment />;
+      case "Messages":
+        return <Messages />;
+      default:
+        return null;
+    }
+  };
 
   return (
     <div className="dashboard">
@@ -34,33 +51,7 @@ export const Dashboard = () => {
         <div className="top-nav">
           <TopNav />
         </div>
-        <div className="container-content">
-          {selectedLink == "dashboard" && (
-            <p>
-              <DashboardContent />
-            </p>
-          )}
-          {selectedLink == "Writers" && (
-            <p>
-              <Writers />
-            </p>
-          )}
-          {selectedLink == "Orders" && (
-            <p>
-              <Orders />
-            </p>
-          )}
-          {selectedLink == "Payments" && (
-            <p>
-              <Payment />
-            </p>
-          )}
-          {selectedLink == "Messages" && (
-            <p>
-              <Messages />
-            </p>
-          )}
-        </div>
+        <div className="container-content">{renderSelectedComponent()}</div>;
       </div>
     </div>
   );

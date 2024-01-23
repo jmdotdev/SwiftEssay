@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './Orders.css'
 import { DataGrid } from '@mui/x-data-grid';
 export const Orders = () => {
@@ -21,10 +21,14 @@ export const Orders = () => {
     { id: 8, due: 'Frances', topic: 'Rossini', status: 36 ,client:'jayson',amount:50},
     { id: 9, due: 'Roxie', topic: 'Harvey', status: 65 ,client:'jay',amount:50},
   ];
+
+  const [showAddOrder,setAddOrder] = useState(false)
   return (
     <div className='orders-section'>
+     {!showAddOrder?<div>
       <div className='orders-header'>
         <h4>Orders</h4>
+        <button className='add-order-btn'onClick={()=>setAddOrder(true)}>Add Order</button>
       </div>
       <div className='order-filters'>
         <a>Available<span>0</span></a>
@@ -51,6 +55,7 @@ export const Orders = () => {
       />
     </div>
       </div>
+     </div>:"add order form"}
     </div>
   )
 }
