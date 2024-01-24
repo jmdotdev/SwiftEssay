@@ -1,0 +1,19 @@
+.add-order-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: calc(100vh - 100px);
+    width: 100%;
+}
+.add-order-container .add-order-form{
+    display: flex;
+    width: 70%;
+    height: 80vh;
+    border: 1px solid black;
+}
+.add-order-container .checkout-section{
+    display: flex;
+    width: 30%;
+    height: 80vh;
+    border: 1px solid green;
+}

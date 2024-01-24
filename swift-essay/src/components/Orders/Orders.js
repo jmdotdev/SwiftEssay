@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import './Orders.css'
 import { DataGrid } from '@mui/x-data-grid';
+import { AddOrder } from './AddOrder/AddOrder';
 export const Orders = () => {
   const columns = [
     { field: 'id', headerName: 'ID', width: 150 },
@@ -23,12 +24,18 @@ export const Orders = () => {
   ];
 
   const [showAddOrder,setAddOrder] = useState(false)
+  const [clickedLink,setClickedLink] = useState('Add-Order')
+  
+  const addOrderHandler = () =>{
+    setAddOrder(true)
+    console.log("This is the clicked link",clickedLink)
+  }
   return (
     <div className='orders-section'>
      {!showAddOrder?<div>
       <div className='orders-header'>
         <h4>Orders</h4>
-        <button className='add-order-btn'onClick={()=>setAddOrder(true)}>Add Order</button>
+        <button className='add-order-btn'onClick={addOrderHandler}>Add Order</button>
       </div>
       <div className='order-filters'>
         <a>Available<span>0</span></a>
@@ -55,7 +62,7 @@ export const Orders = () => {
       />
     </div>
       </div>
-     </div>:"add order form"}
+     </div>:<AddOrder/>}
     </div>
   )
 }
