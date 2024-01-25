@@ -4,6 +4,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
+import {TopNav} from '../topnav/TopNav'
 
 const style = {
   position: 'absolute',
@@ -39,6 +40,7 @@ export const Writers = () => {
   ];
   return (
     <div className='writers-section'>
+      <TopNav />
       {/* Modal to add writer */}
       <Modal
         open={open}
@@ -87,7 +89,7 @@ export const Writers = () => {
         <a>Approved</a>
       </div>
       <div className='writers-list'>
-      <div style={{ height: 400, width: '100%' }}>
+      <div style={{ height: 350, width: '100%' }}>
       <DataGrid
         rows={rows}
         columns={columns}

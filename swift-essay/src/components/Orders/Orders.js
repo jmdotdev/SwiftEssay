@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import './Orders.css'
 import { DataGrid } from '@mui/x-data-grid';
 import { AddOrder } from './AddOrder/AddOrder';
+import {TopNav}  from '../topnav/TopNav'
 export const Orders = () => {
   const columns = [
     { field: 'id', headerName: 'ID', width: 150 },
@@ -32,6 +33,7 @@ export const Orders = () => {
   }
   return (
     <div className='orders-section'>
+      <TopNav />
      {!showAddOrder?<div>
       <div className='orders-header'>
         <h4>Orders</h4>
@@ -48,7 +50,7 @@ export const Orders = () => {
         <a>Approved</a>
       </div>
       <div className='orders-list'>
-      <div style={{ height: 400, width: '100%' }}>
+      <div style={{ height: 350, width: '100%' }}>
       <DataGrid
         rows={rows}
         columns={columns}

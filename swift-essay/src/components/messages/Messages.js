@@ -7,6 +7,7 @@ import smsIcon from "../../assets/images/sms.svg";
 import emailIcon from "../../assets/images/email.svg";
 import messagesIcon from "../../assets/images/message.svg";
 import { DataGrid } from "@mui/x-data-grid";
+import {TopNav}  from '../topnav/TopNav'
 export const Messages = () => {
   const [tabvalue, setTabValue] = useState(0);
 
@@ -33,8 +34,9 @@ export const Messages = () => {
   ];
   return (
     <div className="messages-content">
+      <TopNav/>
       <div className="messages-content-title">
-        <h4>Communication Dashboard</h4>
+        <h3>Communication Dashboard</h3>
       </div>
       <div className="messages-content-cards">
         <div className="messages-card">
@@ -75,7 +77,7 @@ export const Messages = () => {
         </Box>
         <div className="tabs-info">
           {tabvalue == 0 && (
-            <div style={{ height: 250, width: "100%" }}>
+            <div style={{ height: 300, width: "100%" }}>
               <DataGrid
                 rows={rows}
                 columns={columns}

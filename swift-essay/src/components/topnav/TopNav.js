@@ -21,14 +21,14 @@ export const TopNav = () => {
         <form>
         <Paper
       component="form"
-      sx={{ p: '4px', display: 'flex', alignItems: 'center', width: 400}}
+      sx={{ p: 'auto', display: 'flex', width: 400,}}
     >
       <InputBase
         sx={{ ml: 1, flex: 1 }}
         placeholder="Search"
         inputProps={{ 'aria-label': 'search' }}
       />
-      <IconButton type="button" sx={{ p: '10px' }} aria-label="search">
+      <IconButton type="button" sx={{ p: '10px'}} aria-label="search">
       <CiSearch />
       </IconButton>
     </Paper>

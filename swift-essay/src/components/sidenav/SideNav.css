@@ -3,8 +3,10 @@
     flex-direction: column;
     align-items: center;
     padding: 20px 5px;
-    background-color: #03264D;
     color: #FFFF;
+    background-color: #03264D;
+    width: 20vw;
+    height: 100vh;
 }
 .sidenav .sidenav-header{
     width: auto;
@@ -19,6 +21,18 @@
 }
 .sidenav ul li{
     list-style: none;
-    margin-top: 40px;
+    margin: 50px 0;
     cursor: pointer;
+}
+.sidenav-link{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    cursor: pointer;
+    color: #FFFF;
+    text-decoration-line: none;
+}
+.sidenav-link .icon{
+    font-size: 20px;
+    margin-right: 5px;
 }

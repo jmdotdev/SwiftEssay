@@ -3,13 +3,14 @@
     flex-direction: column;
     height: calc(100vh - 100px);
     width: 100%;
+    padding: 20px;
 }
 .orders-section .orders-header{
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 5px;
     font-size: 20px;
+    margin: 20px 0;
 }
 .orders-section .order-filters{
     display: flex;
@@ -21,7 +22,7 @@
     height: 10%;
 }
 .orders-section .orders-list{
-    margin-top: 40px;
+    margin-top: 20px;
     height: 80%;
     width: 100%;
     background-color: #FFFF;

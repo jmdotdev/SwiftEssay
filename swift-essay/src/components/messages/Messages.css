@@ -4,17 +4,18 @@
     align-items: center;
     width: 100%;
     height: calc(100vh - 100px);
+    padding: 20px;
 }
 .messages-content-title{
     display: flex;
     width: 100%;
-    padding: 0 25px;
     margin-bottom: 30px;
     align-items: flex-start;
+    margin: 20px 0;
 }
 .messages-content-cards{
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-between;
     height: 20vh;
     width: 100%;
     cursor: pointer;
@@ -26,7 +27,7 @@
     height: 100px;
     width: 30%;
     background-color: #FFFF;
-    padding: 20px;
+    padding: 10px;
 }
 .messages-card .right-section{
     font-size: 50px;
@@ -40,7 +41,8 @@
     display: flex;
     flex-direction: column;
     height: auto;
-    width: 95%;
+    width: 100%;
     background-color: #FFFF;
     padding: 10px;
+    margin-top: 20px;
 }

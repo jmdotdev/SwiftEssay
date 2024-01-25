@@ -8,6 +8,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { DataGrid } from "@mui/x-data-grid";
+import {TopNav}  from '../topnav/TopNav'
 export const Payment = () => {
   const [age, setAge] = React.useState("");
 
@@ -48,6 +49,7 @@ export const Payment = () => {
   ];
   return (
     <div className="payment">
+      <TopNav/>
       <div className="header">
         <div className="left-section">
           <div className="image-section">
