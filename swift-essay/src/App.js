@@ -33,7 +33,7 @@ function App() {
     <div className="App">
       {!isExcludedRoute && <SideNav />}
       <Routes>
-      <Route exact path='/' element={<Login/>}/>
+      <Route exact path='login' element={<Login/>}/>
       <Route path='register' element={<Register/>}/>
       <Route path='dashboard' element={<Dashboard/>}/>
       <Route path='writers' element={<Writers/>} />
