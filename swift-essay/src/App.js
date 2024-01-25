@@ -18,7 +18,7 @@ function App() {
   const location = useLocation();
 
   // List of routes where you want to hide the SideNav
-  const excludedRoutes = ['/register', '*'];
+  const excludedRoutes = ['login','/register', '*'];
 
   // Check if the current route is in the excludedRoutes list
   const isExcludedRoute = excludedRoutes.some(route => location.pathname.includes(route));
@@ -26,7 +26,7 @@ function App() {
   // Redirect to a different route if needed (e.g., redirect from '/' to '/login')
   useEffect(() => {
     if (location.pathname === '/') {
-      navigate('/');
+      navigate('/login');
     }
   }, [location.pathname, navigate]);
   return (
