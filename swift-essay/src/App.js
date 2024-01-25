@@ -18,7 +18,7 @@ function App() {
   const location = useLocation();
 
   // List of routes where you want to hide the SideNav
-  const excludedRoutes = ['/', '/register', '*'];
+  const excludedRoutes = ['/register', '*'];
 
   // Check if the current route is in the excludedRoutes list
   const isExcludedRoute = excludedRoutes.some(route => location.pathname.includes(route));
