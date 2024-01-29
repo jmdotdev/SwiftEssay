@@ -79,14 +79,13 @@ export const Writers = () => {
         <button className='add-writer-btn' onClick={handleOpen}>Add Writer</button>
       </div>
       <div className='writers-filters'>
-        <a>Available<span>0</span></a>
-        <a>Assigned</a>
-        <a>Pending</a>
-        <a>Completed</a>
-        <a>Revision</a>
-        <a>Progress</a>
-        <a>Cancelled</a>
-        <a>Approved</a>
+        <a>Assigned<span>0</span></a>
+        <a>Unassigned</a>
+        <a>Active</a>
+        <a>Inactive</a>
+        <form>
+         <input type='text' placeholder='search' />
+        </form>
       </div>
       <div className='writers-list'>
       <div style={{ height: 350, width: '100%' }}>
