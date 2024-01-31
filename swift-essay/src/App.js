@@ -10,6 +10,7 @@ import { Dashboard } from './components/dashboard/Dashboard';
 import { Writers } from './components/writers/Writers';
 import {Orders} from './components/Orders/Orders'
 import { AddOrder } from './components/Orders/AddOrder/AddOrder';
+import {OrderDetails} from './components/Orders/OrderDetails/OrderDetails'
 import {Messages} from  './components/messages/Messages'
 import {Payment} from  './components/Payment/Payment'
 
@@ -39,6 +40,7 @@ function App() {
       <Route path='writers' element={<Writers/>} />
       <Route path='orders' element={<Orders/>}/>
       <Route path='orders/add-order' element={<AddOrder/>}/>
+      <Route path='orders/order-details/:id' element={<OrderDetails/>}/>
       <Route path='messages' element={<Messages/>}/>
       <Route path='payments' element={<Payment/>}/>
       <Route path='*' element={<NotFound/>}/>

@@ -10,18 +10,28 @@ export const Orders = () => {
     { field: 'due', headerName: 'Due', width: 150 },
     {field: 'status',headerName: 'Status',type: 'number',width: 150},
     {field: 'client',headerName: 'Client',width: 150},
-    {field: 'amount',headerName: 'Amount',type: 'number',width: 150},
+    {field: 'view',headerName: 'view',type: 'text',width: 150},
+    {
+      field: 'actions',
+      headerName: 'Actions',
+      width: 150,
+      renderCell: (params) => (
+        <Link to={`/orders/order-details/${params.row.id}`}>
+          <button className='edit-order-btn'>View Order</button>
+        </Link>
+      ),
+    },
   ];
   const rows = [
-    { id: 1, due: 'Snow', topic: 'Jon', status: 35 ,client:'jayson',amount:50},
-    { id: 2, due: 'Lannister', topic: 'Cersei', status: 42, client:'jayson',amount:50},
-    { id: 3, due: 'Lannister', topic: 'Jaime', status: 45 ,client:'jayson',amount:50},
-    { id: 4, due: 'Stark', topic: 'Arya', status: 16,client:'jay',amount:50 },
-    { id: 5, due: 'Targaryen', topic: 'Daenerys', status: null,client:'Son' ,amount:50},
-    { id: 6, due: 'Melisandre', topic: null, status: 150,client:'jays',amount:50 },
-    { id: 7, due: 'Clifford', topic: 'Ferrara', status: 44,client:'john' ,amount:50},
-    { id: 8, due: 'Frances', topic: 'Rossini', status: 36 ,client:'jayson',amount:50},
-    { id: 9, due: 'Roxie', topic: 'Harvey', status: 65 ,client:'jay',amount:50},
+    { id: 1, due: 'Snow', topic: 'Jon', status: 35 ,client:'jayson',view:50},
+    { id: 2, due: 'Lannister', topic: 'Cersei', status: 42, client:'jayson',view:50},
+    { id: 3, due: 'Lannister', topic: 'Jaime', status: 45 ,client:'jayson',view:50},
+    { id: 4, due: 'Stark', topic: 'Arya', status: 16,client:'jay',view:50 },
+    { id: 5, due: 'Targaryen', topic: 'Daenerys', status: null,client:'Son' ,view:50},
+    { id: 6, due: 'Melisandre', topic: null, status: 150,client:'jays',view:50 },
+    { id: 7, due: 'Clifford', topic: 'Ferrara', status: 44,client:'john' ,view:50},
+    { id: 8, due: 'Frances', topic: 'Rossini', status: 36 ,client:'jayson',view:50},
+    { id: 9, due: 'Roxie', topic: 'Harvey', status: 65 ,client:'jay',view:50},
   ];
 
 
