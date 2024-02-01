@@ -1,0 +1,48 @@
+.messages-content{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: calc(100vh - 100px);
+    padding: 20px;
+}
+.messages-content-title{
+    display: flex;
+    width: 100%;
+    margin-bottom: 30px;
+    align-items: flex-start;
+    margin: 20px 0;
+}
+.messages-content-cards{
+    display: flex;
+    justify-content: space-between;
+    height: 20vh;
+    width: 100%;
+    cursor: pointer;
+}
+.messages-content-cards .messages-card{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100px;
+    width: 30%;
+    background-color: #FFFF;
+    padding: 10px;
+}
+.messages-card .right-section{
+    font-size: 50px;
+    color: green;
+}
+.messages-card .right-section img{
+    height: 70px;
+    width: 70px;
+}
+.messages-content .tabs{
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    width: 100%;
+    background-color: #FFFF;
+    padding: 10px;
+    margin-top: 20px;
+}

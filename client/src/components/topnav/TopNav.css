@@ -1,0 +1,35 @@
+.topnavigation{
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+}
+.topnavigation .profile-section{
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 40%;
+}
+.profile-section .settings{
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+.profile-section .notifications{
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+.profile-section .logout{
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+.profile-section .account{
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+.account img{
+    height: 30px;
+}
