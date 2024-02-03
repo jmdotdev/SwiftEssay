@@ -7,6 +7,6 @@
 }
 .App{
     display: flex;
-    height: 100vh;
+    height: calc(100vh - 100px);
     background-color: #F7F8F9;
 }

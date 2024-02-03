@@ -27,6 +27,10 @@ export const Register = () => {
           </div>
           <div className="form">
             <form>
+            <label>Username:</label>
+             <div className="input-control">
+              <input type="text" placeholder="username" />
+             </div>
                 <label>Email:</label>
              <div className="input-control">
               <input type="email" placeholder="email" />
