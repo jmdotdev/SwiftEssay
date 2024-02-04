@@ -4,7 +4,8 @@ const { Schema } = mongoose;
 const userSchema = new Schema({
    username:{
     type:String,
-    required:true
+    required:true,
+    unique:true
    },
    email:{
     type:String,
@@ -30,10 +31,6 @@ const userSchema = new Schema({
       default:[]
    },
    paypal_account:{
-    type:String,
-    required:false
-   },
-   city:{
     type:String,
     required:false
    },
