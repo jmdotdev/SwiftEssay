@@ -2,7 +2,63 @@ import mongoose from "mongoose";
 const Schema = mongoose;
 
 const orderSchema = new Schema({
-  
+  title:{
+    type:String,
+    required:true
+  },
+  description:{
+    type:String,
+    required:true
+  },
+  instructions:{
+    type:String,
+    required:true
+  },
+  academic_level:{
+    type:String,
+    required:true
+  },
+  type:{
+    type:String,
+    required:true
+  },
+  discipline:{
+    type:String,
+    required:true
+  },
+  topic:{
+    type:String,
+    required:true
+  },
+  page_format:{
+    type:String,
+    required:true
+  },
+  pages:{
+    type:Number,
+    required:true
+  },
+  order_files:{
+    type:FileList,
+    required:true
+  },
+  deadline:{
+    type:Date
+  },
+  assigned_to:{
+    type:mongoose.Schema.Types.ObjectId,
+    ref:"User",
+    required:false
+  },
+  submitted_files:{
+    type:mongoose.Schema.Types.ObjectId,
+    ref:"User"
+  },
+  submitted_by:{
+    type:mongoose.Schema.Types.ObjectId,
+    ref:"User",
+  },
+  timestamps:true
 })
 const Order = mongoose.model('Order',orderSchema)
 

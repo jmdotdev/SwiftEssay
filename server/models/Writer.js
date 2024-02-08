@@ -22,6 +22,10 @@ const userSchema = new Schema({
     required: true,
     enum: ["admin", "client", "writer"],
   },
+  city:{
+    type:String,
+    required:false
+  },
   assigned_tasks: [
     { type: mongoose.Schema.Types.ObjectId, ref: "Order", default: [] },
   ],
