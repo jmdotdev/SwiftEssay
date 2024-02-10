@@ -1,35 +1,67 @@
-.topnavigation{
-    display: flex;
-    width: 100%;
-    align-items: center;
-    justify-content: space-between;
+.topnavigation {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
 }
-.topnavigation .profile-section{
+.topnavigation .profile-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  width: 40%;
+}
+.profile-section .settings {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.profile-section .notifications {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.profile-section .logout {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.profile-section .account {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.account img {
+  height: 30px;
+}
+@media screen and (max-width: 850px) {
+  .topnavigation {
+    display: flex;
+    flex-direction: column;
+  }
+  .profile-section {
     display: flex;
     align-items: center;
-    justify-content: space-evenly;
-    width: 40%;
+    justify-content: space-between !important;
+    width: 100% !important;
+  }
+  form {
+    width: 100% !important;
+    margin-bottom: 10px;
+  }
 }
-.profile-section .settings{
+@media screen and (max-width: 768px) {
+  .topnavigation {
+    display: flex;
+    flex-direction: column;
+  }
+  .profile-section {
     display: flex;
     align-items: center;
-    cursor: pointer;
-}
-.profile-section .notifications{
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-}
-.profile-section .logout{
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-}
-.profile-section .account{
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-}
-.account img{
-    height: 30px;
+    justify-content: space-between !important;
+    width: 100% !important;
+  }
+  form {
+    width: 100% !important;
+    margin-bottom: 10px;
+  }
 }

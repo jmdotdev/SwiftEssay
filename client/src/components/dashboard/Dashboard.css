@@ -43,3 +43,30 @@
     width: 100%;
     background-color: #FFFF;
 }
+@media screen and (max-width:768px) {
+    .dashboard-content-cards{
+        display: grid;
+        grid-template-columns: repeat(2,1fr);
+        width: 100%;
+        height: auto;
+    }
+    .dashboard-content-cards .dashboard-card{
+        width: 98%;
+        margin-top: 10px;
+    }
+
+}
+
+@media screen and (max-width:500px) {
+    .dashboard-content-cards{
+        display: grid;
+        grid-template-columns: repeat(1,1fr);
+        width: 100%;
+        height: auto;
+    }
+    .dashboard-content-cards .dashboard-card{
+        width: 98%;
+        margin-top: 10px;
+    }
+
+}

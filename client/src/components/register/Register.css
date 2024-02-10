@@ -100,3 +100,13 @@ form label{
     margin-top: 20px;
     color: #EFA80B;
 }
+/* responsivity */
+@media screen and (max-width:768px) {
+    .main .left-section{
+        display: none !important;
+        width: 0%;
+    }
+    .main .right-section{
+        width: 100% !important;
+    }
+}
