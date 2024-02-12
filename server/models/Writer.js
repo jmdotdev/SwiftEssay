@@ -45,9 +45,16 @@ const userSchema = new Schema({
     type: Boolean,
     default: false,
   },
-  timestamps: true,
+  created_at:{
+    type:Date,
+    default:Date.now()
+  },
+  update_at:{
+    type:Date,
+    default:()=>Date.now()
+  }
 });
 
 const User = mongoose.model("User", userSchema);
 
-module.exports(User);
+export default User

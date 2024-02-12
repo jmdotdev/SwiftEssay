@@ -58,7 +58,14 @@ const orderSchema = new Schema({
     type:mongoose.Schema.Types.ObjectId,
     ref:"User",
   },
-  timestamps:true
+  created_at:{
+    type:Date,
+    default:Date.now()
+  },
+  update_at:{
+    type:Date,
+    default:()=>Date.now()
+  }
 })
 const Order = mongoose.model('Order',orderSchema)
 
