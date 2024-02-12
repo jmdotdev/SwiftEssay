@@ -75,3 +75,19 @@
 #modal-modal-title input:focus{
    outline: none;
 }
+
+/* responsivity */
+@media screen and (max-width:768px) {
+    .writers-section{
+        min-height: 100vh;
+    }
+    .writers-section .writers-filters{
+        display: flex;
+        flex-direction: column;
+        height: 50vh !important;
+        border: 2px solid red;
+    }
+    form{
+        text-align: center;
+    }
+}

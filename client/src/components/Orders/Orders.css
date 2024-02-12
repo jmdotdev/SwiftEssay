@@ -48,3 +48,10 @@
 .link{
     text-decoration-line: none;
 }
+@media screen and (max-width:768px) {
+    .order-filters{
+        display: flex;
+        flex-direction: column;
+        height: 60vh !important;
+    }
+}
