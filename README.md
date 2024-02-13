@@ -1,6 +1,6 @@
 # Swift Essay - Academic Writing Platform
 
-Welcome to Swift Essay, an academic writing platform built with ReactJS, where clients can post academic writing tasks and writers can bid on and complete them. This project is designed to streamline the process of connecting clients with skilled writers for academic assignments.
+Welcome to Swift Essay, an academic writing platform built with MERN stack, where clients can post academic writing tasks and writers can bid on and complete them. This project is designed to streamline the process of connecting clients with skilled writers for academic assignments.
 
 ## Table of Contents
 
