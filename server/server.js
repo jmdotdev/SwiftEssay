@@ -18,7 +18,7 @@ const connectDb = () => {
 }
 
 
-app.use('users/',userRouter)
+app.use('/users',userRouter)
 app.listen(PORT, () => {
   connectDb();
   console.log(`server running at port ${PORT}`);
