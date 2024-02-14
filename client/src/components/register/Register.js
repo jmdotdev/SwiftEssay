@@ -1,8 +1,39 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './Register.css'
 import landingimage from '../../assets/images/login.webp'
 import notepad from '../../assets/images/notepad.png'
+import axios from 'axios'
 export const Register = () => {
+  const[username,setUserName] = useState();
+  const[email,setEmail]=useState();
+  const[password,setPassword]= useState();
+  const[confirmPassword,setConfirmPassword] = useState();
+
+  const clearFields = () =>{
+    setUserName('')
+    setEmail('')
+    setPassword('')
+    setConfirmPassword('')
+  }
+
+  const submitHandler = async (e) =>{
+    e.preventDefault();
+     if(username === undefined || email === undefined || password === undefined || confirmPassword === undefined){
+      window.alert("please fill in all fields")
+     }
+     else if(password !== confirmPassword){
+      window.alert("password dont match")
+     }
+     else{
+      await axios.post('http://localhost:5000/users/registerUser',{
+        username,email,password
+      }).then(res=>{
+        console.log(res)
+      })
+      .catch(err=>console.log(err))
+      clearFields()
+     }
+  }
   return (
     <div className="main">
       <div className="left-section">
@@ -26,22 +57,22 @@ export const Register = () => {
             <p>Create an account with us and guarantee constant work</p>
           </div>
           <div className="form">
-            <form>
+            <form onSubmit={submitHandler}>
             <label>Username:</label>
              <div className="input-control">
-              <input type="text" placeholder="username" />
+              <input type="text" placeholder="username" value={username} onChange={(e)=>setUserName(e.target.value)} />
              </div>
                 <label>Email:</label>
              <div className="input-control">
-              <input type="email" placeholder="email" />
+              <input type="email" placeholder="email" value={email} onChange={(e)=>setEmail(e.target.value)} />
              </div>
               <label>Password:</label>
              <div className="input-control">
-              <input type="password" placeholder="password" />
+              <input type="password" placeholder="password" value={password} onChange={(e)=>setPassword(e.target.value)}/>
              </div>
              <label>Confirm Password:</label>
              <div className="input-control">
-              <input type="password" placeholder="confirm password" />
+              <input type="password" placeholder="confirm password" value={confirmPassword}  onChange={(e)=>setConfirmPassword(e.target.value)}/>
              </div>
               <button>Sign Up         
               </button>
