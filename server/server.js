@@ -2,7 +2,8 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-import { userRouter } from "./routes/userRoutes.js";
+import { clientRouter } from "./routes/clientRoutes.js";
+import { writerRouter } from "./routes/writerRoutes.js";
 const app = express()
 dotenv.config();
 app.use(cors());
@@ -18,7 +19,9 @@ const connectDb = () => {
 }
 
 
-app.use('/users',userRouter)
+app.use('/clients',clientRouter)
+app.use('/writers',writerRouter)
+
 app.listen(PORT, () => {
   connectDb();
   console.log(`server running at port ${PORT}`);

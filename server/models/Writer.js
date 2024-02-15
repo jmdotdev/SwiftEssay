@@ -13,7 +13,7 @@ const userSchema = new Schema({
     unique: true,
   },
   phone: {
-    type: String,
+    type: Number,
     required: true,
     unique: true,
     default:0
@@ -22,10 +22,6 @@ const userSchema = new Schema({
     type: String,
     required: true,
     enum: ["admin", "client", "writer"],
-  },
-  city:{
-    type:String,
-    required:false
   },
   assigned_tasks: [
     { type: mongoose.Schema.Types.ObjectId, ref: "Order", default: [] },

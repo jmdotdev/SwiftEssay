@@ -3,9 +3,9 @@ import User from '../models/Writer.js'
 import jwt from "jsonwebtoken"
 import bcrypt from "bcrypt"
 
-export const registerUserController = async (req, res) => {
+export const registerWriterController = async (req, res) => {
   try {
-     const{username,email,password} = req.body
+     const{username,email,phone,password} = req.body
    //   const [error] = registrationAuth.validateAsync(req.body)
    //   if(error){
    //      return res.status(404).json({error:error.details.message})
@@ -14,8 +14,9 @@ export const registerUserController = async (req, res) => {
      const user = new User({
         username,
         email,
+        phone,
         password:hashedPassword,
-        role:"client"
+        role:"writer"
      })
      await user.save()
      return res.status(200).json({message:"Writer Created Successfully"})
