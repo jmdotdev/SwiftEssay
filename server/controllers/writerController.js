@@ -24,3 +24,13 @@ export const registerWriterController = async (req, res) => {
     res.status(500).json({ error: err });
   }
 };
+
+
+export const getWriters = async (req,res) =>{
+  try {
+    const users = await User.find()
+    return res.status(200).json(users)
+  } catch (err) {
+    res.status(500).json({error:err})
+  }
+}
