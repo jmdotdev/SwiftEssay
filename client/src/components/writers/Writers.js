@@ -1,10 +1,11 @@
-import React,{useState} from 'react'
-import './Writers.css'
+import React,{useState} from 'react';
+import './Writers.css';
 import { DataGrid } from '@mui/x-data-grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
-import {TopNav} from '../topnav/TopNav'
+import {TopNav} from '../topnav/TopNav';
+import axios from 'axios';
 
 const style = {
   position: 'absolute',
@@ -19,6 +20,20 @@ export const Writers = () => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const[username,setUsername]= useState();
+  const [email,setEmail] = useState();
+  const [phone,setPhone] = useState();
+  const [password,setPassword] = useState();
+  
+  const submitHandler = async(e) =>{
+       e.preventDefault();
+        await axios.post('http://localhost:5000/writers/registerWriter',{
+          username,email,phone,password
+        }).then(res=>{
+          console.log(res)
+        })
+       
+  }
   const columns = [
     { field: 'id', headerName: 'ID', width: 150 },
     { field: 'topic', headerName: 'Topic', width: 150 },
@@ -50,27 +65,25 @@ export const Writers = () => {
       >
         <Box sx={style}>
           <h3 style={{marginBottom:'20px'}}>Add New Writer:</h3>
+          <form onSubmit={submitHandler}>
           <Typography id="modal-modal-title" variant="h6" component="h2">
             <label>Username:</label>
-           <input type='text' placeholder='username' />
+           <input type='text' placeholder='username' value= {username} onChange={(e)=>setUsername(e.target.value)}/>
           </Typography>
           <Typography id="modal-modal-title" variant="h6" component="h2">
             <label>Email:</label>
-           <input type='email' placeholder='email' />
+           <input type='email' placeholder='email' value={email} onChange={(e)=>setEmail(e.target.value)} />
           </Typography>
           <Typography id="modal-modal-title" variant="h6" component="h2">
             <label>Phone:</label>
-           <input type='text' placeholder='phone' />
-          </Typography>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            <label>City</label>
-           <input type='text' placeholder='city' />
+           <input type='text' placeholder='phone' value={phone} onChange={(e)=>setPhone(e.target.value)}/>
           </Typography>
           <Typography id="modal-modal-title" variant="h6" component="h2">
             <label>Password</label>
-           <input type='password' placeholder='password' />
+           <input type='password' placeholder='password' value={password} onChange={((e)=>setPassword(e.target.value))} />
           </Typography>
           <button className='add-writer-btn'>Add Writer</button>
+          </form>
         </Box>
       </Modal>
       {/* End of modal to add user */}

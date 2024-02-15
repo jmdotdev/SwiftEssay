@@ -25,7 +25,7 @@ export const Register = () => {
       window.alert("password dont match")
      }
      else{
-      await axios.post('http://localhost:5000/users/registerUser',{
+      await axios.post('http://localhost:5000/clients/registerClient',{
         username,email,password
       }).then(res=>{
         console.log(res)
