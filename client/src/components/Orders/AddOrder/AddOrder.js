@@ -16,7 +16,12 @@ export const AddOrder = () => {
             <form>
               <div className="input-control">
                 <label>Academic Level:</label>
-                <input type="text" placeholder="academic level dropdown" />
+                <select>
+                <option>------</option>
+                  <option>academic level one</option>
+                  <option>academic level two</option>
+                  <option>academic level three</option>
+                </select>
               </div>
               <div className="input-control">
                 <label>Type:</label>
@@ -65,6 +70,7 @@ export const AddOrder = () => {
         <div className="checkout-section">
           <div className="checkout-card">
             <div className="header">
+              {/* find a way to show this in mobile view */}
               <h3>Order Details</h3>
             </div>
             <div className="paper-details">
