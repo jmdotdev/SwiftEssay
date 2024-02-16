@@ -70,9 +70,8 @@ export const Messages = () => {
       <div className="tabs">
         <Box sx={{ width: "100%", bgcolor: "background.paper" }}>
           <Tabs value={tabvalue} onChange={handleChange} centered>
-            <Tab label="Approval Comments" />
-            <Tab label="Revision Requests" />
-            <Tab label="Order Disputes" />
+            <Tab label="Messages" />
+            <Tab label="Emails" />
           </Tabs>
         </Box>
         <div className="tabs-info">
@@ -92,21 +91,6 @@ export const Messages = () => {
             </div>
           )}
           {tabvalue == 1 && (
-            <div style={{ height: 300, width: "100%" }}>
-              <DataGrid
-                rows={rows}
-                columns={columns}
-                initialState={{
-                  pagination: {
-                    paginationModel: { page: 0, pageSize: 5 },
-                  },
-                }}
-                pageSizeOptions={[5, 10]}
-                checkboxSelection
-              />
-            </div>
-          )}
-          {tabvalue == 2 && (
             <div style={{ height: 300, width: "100%" }}>
               <DataGrid
                 rows={rows}
