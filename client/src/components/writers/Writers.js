@@ -74,7 +74,7 @@ export const Writers = () => {
       phone: writer.phone,
       tasks_done: writer.assigned_tasks.length,
       assigned: writer.is_assigned ? 1 : 0,
-      joined: writer.created_at,
+      joined: new Date(writer.created_at).toLocaleDateString()
     }));
   return (
     <div className="writers-section">
