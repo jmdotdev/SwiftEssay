@@ -1,8 +1,16 @@
-import React from "react";
+import {React,useState} from "react";
 import { TopNav } from "../../topnav/TopNav";
 import "./AddOrder.css";
+import {orderDiscipline,paperTypes,citationOptions,academicLevels} from './AddOrderFormOptions'
 import paypalImage from '../../../../src/assets/images/paypal.png'
 export const AddOrder = () => {
+  const [selectedFiles, setSelectedFiles] = useState([]);
+
+  const handleFileChange = (e) =>{
+    const files = Array.from(e.target.files)
+    setSelectedFiles(files)
+    console.log(selectedFiles)
+  }
   return (
     <div className="main-container">
       <TopNav />
@@ -17,19 +25,20 @@ export const AddOrder = () => {
               <div className="input-control">
                 <label>Academic Level:</label>
                 <select>
-                <option>------</option>
-                  <option>academic level one</option>
-                  <option>academic level two</option>
-                  <option>academic level three</option>
+                  {academicLevels.map(al =><option>{al}</option> )}
                 </select>
               </div>
               <div className="input-control">
                 <label>Type:</label>
-                <input type="text" placeholder="type of paper dropdown" />
+                <select>
+                  {paperTypes.map(type =><option>{type}</option> )}
+                </select>
               </div>
               <div className="input-control">
                 <label>Discipline:</label>
-                <input type="text" placeholder="discipline" />
+                <select>
+                  {orderDiscipline.map(discipline =><option>{discipline}</option> )}
+                </select>
               </div>
               <div className="input-control">
                 <label>Topic:</label>
@@ -37,31 +46,37 @@ export const AddOrder = () => {
               </div>
               <div className="input-control">
                 <label>Instructions:</label>
-                <input type="text" placeholder="paper instructions" />
+                <textarea type="text" placeholder="paper instructions" />
               </div>
               <div className="input-control">
                 <label>Files:</label>
-                <input type="text" placeholder="academic materials (file)" />
+                <input type="file" multiple onChange={handleFileChange}/>
               </div>
               <div className="input-control">
                 <label>Page Format</label>
-                <input type="text" placeholder="page format" />
+                <select>
+                  {citationOptions.map(option =><option>{option}</option> )}
+                </select>
               </div>
               <div className="input-control">
                 <label>Pages:</label>
                 <input type="number" placeholder="number of pages" />
               </div>
               <div className="input-control">
-                <label>Type:</label>
-                <input type="text" placeholder="type of paper" />
-              </div>
-              <div className="input-control">
                 <label>Double/Single:</label>
                 <input type="text" placeholder="double or single" />
               </div>
               <div className="input-control">
+                <label>Sources To Cite:</label>
+                <input type="number" placeholder="cited sources" />
+              </div>
+              <div className="input-control">
+                <label>Powerpoint Slides:</label>
+                <input type="number" placeholder="powerpoint slides" />
+              </div>
+              <div className="input-control">
                 <label>Deadline:</label>
-                <input type="text" placeholder="deadline" />
+                <input type="datetime-local" id="datetimeInput" name="datetimeInput"/>
               </div>
               <button>Checkout</button>
             </form>

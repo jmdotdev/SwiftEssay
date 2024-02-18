@@ -42,8 +42,8 @@ form select {
   display: flex;
   width: 90%;
   border: none;
-  height: 40px;
-  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  height: 40px; 
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
   padding: 5px 35px 5px 5px;
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -62,6 +62,15 @@ form select option {
 }
 .input-control input {
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+form textarea{
+  width: 90%;
+  height: 100px;
+  border: none;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+form textarea:focus{
+ outline: none;
 }
 form button {
   display: flex;
