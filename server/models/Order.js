@@ -2,18 +2,6 @@ import mongoose from "mongoose";
 const Schema = mongoose;
 
 const orderSchema = new Schema({
-  title:{
-    type:String,
-    required:true
-  },
-  description:{
-    type:String,
-    required:true
-  },
-  instructions:{
-    type:String,
-    required:true
-  },
   academic_level:{
     type:String,
     required:true
@@ -30,6 +18,14 @@ const orderSchema = new Schema({
     type:String,
     required:true
   },
+  instructions:{
+    type:String,
+    required:true
+  },
+  files:{
+    type:FileList,
+    required:true
+  },
   page_format:{
     type:String,
     required:true
@@ -38,12 +34,23 @@ const orderSchema = new Schema({
     type:Number,
     required:true
   },
-  order_files:{
-    type:FileList,
+  single_or_double:{
+    type:string,
     required:true
   },
+  citatons:{
+    type:Number,
+    required:true,
+    default:0
+  },
+  slides:{
+    type:Number,
+    required:false,
+    default:0
+  },
   deadline:{
-    type:Date
+    type:Date,
+    required:true
   },
   assigned_to:{
     type:mongoose.Schema.Types.ObjectId,
@@ -62,7 +69,7 @@ const orderSchema = new Schema({
     type:Date,
     default:Date.now()
   },
-  update_at:{
+  updated_at:{
     type:Date,
     default:()=>Date.now()
   }
