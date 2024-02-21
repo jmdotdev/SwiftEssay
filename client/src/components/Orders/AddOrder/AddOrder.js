@@ -4,13 +4,35 @@ import "./AddOrder.css";
 import {orderDiscipline,paperTypes,citationOptions,academicLevels} from './AddOrderFormOptions'
 import paypalImage from '../../../../src/assets/images/paypal.png'
 export const AddOrder = () => {
-  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [orderDetails, setOrderDetails] = useState({
+    academicLevel: "",
+    type: "",
+    discipline: "",
+    topic: "",
+    instructions: "",
+    files: [],
+    pageFormat: "",
+    pages: 0,
+    doubleSingle: "",
+    sourcesToCite: 0,
+    powerpointSlides: 0,
+    deadline: "",
+  });
 
-  const handleFileChange = (e) =>{
-    const files = Array.from(e.target.files)
-    setSelectedFiles(files)
-    console.log(selectedFiles)
-  }
+  const handleFileChange = (e) => {
+    const files = Array.from(e.target.files);
+    setOrderDetails({ ...orderDetails, files });
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setOrderDetails({ ...orderDetails, [name]: value });
+  };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+   console.log({orderDetails})
+  };
+
   return (
     <div className="main-container">
       <TopNav />
@@ -21,32 +43,32 @@ export const AddOrder = () => {
             <p>Fast,Secure and Reliable</p>
           </div>
           <div className="order-form">
-            <form>
+            <form onSubmit={handleSubmit}>
               <div className="input-control">
                 <label>Academic Level:</label>
-                <select>
+                <select onChange={handleInputChange} value={orderDetails.academicLevel} name="academicLevel">
                   {academicLevels.map(al =><option>{al}</option> )}
                 </select>
               </div>
               <div className="input-control">
                 <label>Type:</label>
-                <select>
+                <select onChange={handleInputChange} value={orderDetails.type} name="type">
                   {paperTypes.map(type =><option>{type}</option> )}
                 </select>
               </div>
               <div className="input-control">
                 <label>Discipline:</label>
-                <select>
+                <select onChange={handleInputChange} value={orderDetails.discipline} name="discipline">
                   {orderDiscipline.map(discipline =><option>{discipline}</option> )}
                 </select>
               </div>
               <div className="input-control">
                 <label>Topic:</label>
-                <input type="text" placeholder="topic" />
+                <input type="text" placeholder="topic" onChange={handleInputChange} value={orderDetails.topic} name="topic"/>
               </div>
               <div className="input-control">
                 <label>Instructions:</label>
-                <textarea type="text" placeholder="paper instructions" />
+                <textarea type="text" placeholder="paper instructions" onChange={handleInputChange} value={orderDetails.instructions} name="instructions"/>
               </div>
               <div className="input-control">
                 <label>Files:</label>
@@ -54,29 +76,29 @@ export const AddOrder = () => {
               </div>
               <div className="input-control">
                 <label>Page Format</label>
-                <select>
+                <select onChange={handleInputChange} value={orderDetails.pageFormat} name="pageFormat">
                   {citationOptions.map(option =><option>{option}</option> )}
                 </select>
               </div>
               <div className="input-control">
                 <label>Pages:</label>
-                <input type="number" placeholder="number of pages" />
+                <input type="number" placeholder="number of pages" onChange={handleInputChange} value={orderDetails.pages} name="pages"/>
               </div>
               <div className="input-control">
                 <label>Double/Single:</label>
-                <input type="text" placeholder="double or single" />
+                <input type="text" placeholder="double or single" onChange={handleInputChange} value={orderDetails.doubleSingle} name="doubleSingle"/>
               </div>
               <div className="input-control">
                 <label>Sources To Cite:</label>
-                <input type="number" placeholder="cited sources" />
+                <input type="number" placeholder="cited sources" onChange={handleInputChange} value={orderDetails.sourcesToCite} name="sourcesToCite"/>
               </div>
               <div className="input-control">
                 <label>Powerpoint Slides:</label>
-                <input type="number" placeholder="powerpoint slides" />
+                <input type="number" placeholder="powerpoint slides" onChange={handleInputChange} value={orderDetails.powerpointSlides} name="powerpointSlides"/>
               </div>
               <div className="input-control">
                 <label>Deadline:</label>
-                <input type="datetime-local" id="datetimeInput" name="datetimeInput"/>
+                <input type="datetime-local" id="datetimeInput" name="deadline" onChange={handleInputChange} value={orderDetails.deadline}/>
               </div>
               <button>Checkout</button>
             </form>
