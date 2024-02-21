@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-const Schema = mongoose;
+const Schema  = mongoose;
 
 const orderSchema = new Schema({
   academic_level:{
@@ -23,57 +23,59 @@ const orderSchema = new Schema({
     required:true
   },
   files:{
-    type:FileList,
-    required:true
+    type: [Buffer], // Buffer type for binary data (files)
+    required:true,
   },
   page_format:{
     type:String,
-    required:true
+    required:true,
   },
   pages:{
     type:Number,
-    required:true
-  },
-  single_or_double:{
-    type:string,
-    required:true
-  },
-  citatons:{
-    type:Number,
     required:true,
-    default:0
+  },
+  single_or_double: {
+    type:String,
+    required: true,
+  },
+  citations:{
+    type: Number,
+    required: true,
+    default:0,
   },
   slides:{
     type:Number,
     required:false,
-    default:0
+    default: 0,
   },
   deadline:{
     type:Date,
-    required:true
+    required:true,
   },
   assigned_to:{
     type:mongoose.Schema.Types.ObjectId,
     ref:"User",
-    required:false
+    required:false,
   },
   submitted_files:{
-    type:mongoose.Schema.Types.ObjectId,
-    ref:"User"
+    type:[Buffer], //Buffer type for binary data (files)
+    required:false,
   },
-  submitted_by:{
-    type:mongoose.Schema.Types.ObjectId,
-    ref:"User",
+  submitted_by: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
   },
-  created_at:{
-    type:Date,
-    default:Date.now()
+  created_at: {
+    type: Date,
+    default: Date.now,
   },
-  updated_at:{
-    type:Date,
-    default:()=>Date.now()
-  }
-})
-const Order = mongoose.model('Order',orderSchema)
+  updated_at: {
+    type: Date,
+    default: ()=>Date.now(),
+  },
+});
+
+const Order = mongoose.model('Order',orderSchema);
 
 module.exports(Order)
