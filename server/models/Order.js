@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-const Schema  = mongoose;
+const {Schema}  = mongoose;
 
 const orderSchema = new Schema({
   academic_level:{
@@ -64,7 +64,7 @@ const orderSchema = new Schema({
   submitted_by: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
-    required: true,
+    required: false,
   },
   created_at: {
     type: Date,
@@ -78,4 +78,4 @@ const orderSchema = new Schema({
 
 const Order = mongoose.model('Order',orderSchema);
 
-module.exports(Order)
+export default Order

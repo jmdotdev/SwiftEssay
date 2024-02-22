@@ -3,17 +3,18 @@ import { TopNav } from "../../topnav/TopNav";
 import "./AddOrder.css";
 import {orderDiscipline,paperTypes,citationOptions,academicLevels} from './AddOrderFormOptions'
 import paypalImage from '../../../../src/assets/images/paypal.png'
+import axios from 'axios'
 export const AddOrder = () => {
   const [orderDetails, setOrderDetails] = useState({
-    academicLevel: "",
+    academic_level: "",
     type: "",
     discipline: "",
     topic: "",
     instructions: "",
     files: [],
-    pageFormat: "",
+    page_format: "",
     pages: 0,
-    doubleSingle: "",
+    single_or_double: "",
     sourcesToCite: 0,
     powerpointSlides: 0,
     deadline: "",
@@ -28,10 +29,34 @@ export const AddOrder = () => {
     const { name, value } = e.target;
     setOrderDetails({ ...orderDetails, [name]: value });
   };
-  const handleSubmit = (e) => {
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-   console.log({orderDetails})
+
+    try {
+      const formData = new FormData();
+      Object.entries(orderDetails).forEach(([key, value]) => {
+        if (key === "files") {
+          value.forEach((file, index) => {
+            formData.append(`files[${index}]`, file);
+          });
+        } else {
+          formData.append(key, value);
+        }
+      });
+      console.log("orderdetals",orderDetails)
+      for (let [key, value] of formData.entries()) {
+        console.log(`${key}: ${value}`);
+      }
+      await axios.post("http://localhost:5000/orders/createOrder",formData)
+      .then(res=>console.log(res))
+
+      // console.log("Order submitted successfully!");
+    } catch (error) {
+      console.error("Error submitting order:", error);
+    }
   };
+
 
   return (
     <div className="main-container">
@@ -46,7 +71,7 @@ export const AddOrder = () => {
             <form onSubmit={handleSubmit}>
               <div className="input-control">
                 <label>Academic Level:</label>
-                <select onChange={handleInputChange} value={orderDetails.academicLevel} name="academicLevel">
+                <select onChange={handleInputChange} value={orderDetails.academic_level} name="academic_level">
                   {academicLevels.map(al =><option>{al}</option> )}
                 </select>
               </div>
@@ -76,7 +101,7 @@ export const AddOrder = () => {
               </div>
               <div className="input-control">
                 <label>Page Format</label>
-                <select onChange={handleInputChange} value={orderDetails.pageFormat} name="pageFormat">
+                <select onChange={handleInputChange} value={orderDetails.page_format} name="page_format">
                   {citationOptions.map(option =><option>{option}</option> )}
                 </select>
               </div>
@@ -86,7 +111,7 @@ export const AddOrder = () => {
               </div>
               <div className="input-control">
                 <label>Double/Single:</label>
-                <input type="text" placeholder="double or single" onChange={handleInputChange} value={orderDetails.doubleSingle} name="doubleSingle"/>
+                <input type="text" placeholder="double or single" onChange={handleInputChange} value={orderDetails.single_or_double} name="single_or_double"/>
               </div>
               <div className="input-control">
                 <label>Sources To Cite:</label>
