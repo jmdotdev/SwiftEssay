@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import { clientRouter } from "./routes/clientRoutes.js";
 import { writerRouter } from "./routes/writerRoutes.js";
+import { orderRouter } from "./routes/orderRoutes.js";
 const app = express()
 dotenv.config();
 app.use(cors());
@@ -21,6 +22,7 @@ const connectDb = () => {
 
 app.use('/clients',clientRouter)
 app.use('/writers',writerRouter)
+app.use('/orders',orderRouter)
 
 app.listen(PORT, () => {
   connectDb();
