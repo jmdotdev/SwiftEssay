@@ -38,7 +38,7 @@ export const AddOrder = () => {
       Object.entries(orderDetails).forEach(([key, value]) => {
         if (key === "files") {
           value.forEach((file, index) => {
-            formData.append(`files[${index}]`, file);
+            formData.append("files", file);
           });
         } else {
           formData.append(key, value);
@@ -97,7 +97,7 @@ export const AddOrder = () => {
               </div>
               <div className="input-control">
                 <label>Files:</label>
-                <input type="file" multiple onChange={handleFileChange}/>
+                <input type="file" multiple onChange={handleFileChange} name="files"/>
               </div>
               <div className="input-control">
                 <label>Page Format</label>

@@ -12,8 +12,8 @@ export const createOrder = async (req, res) => {
     // Construct order object with file data
     const order = new Order({
       ...orderDetails,
-      files: files.map(file => file.buffer), // Store file buffers in the database
-      submitted_files: submittedFiles.map(file => file.buffer), // Store file buffers in the database
+      files: files.map(file => file.buffer) // Store file buffers in the database
+      // submitted_files: submittedFiles.map(file => file.buffer), // Store file buffers in the database
     });
     console.log("backend",orderDetails)
     // Save order to the database
