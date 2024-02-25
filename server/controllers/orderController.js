@@ -15,15 +15,24 @@ export const createOrder = async (req, res) => {
       files: files.map(file => file.buffer) // Store file buffers in the database
       // submitted_files: submittedFiles.map(file => file.buffer), // Store file buffers in the database
     });
-    console.log("backend",orderDetails)
     // Save order to the database
     await order.save();
 
     res.status(201).json({ message: 'Order created successfully' });
   } catch (error) {
-    console.log("backend",orderDetails)
-    console.error('Error creating order:', error);
     res.status(500).json({ error: error });
   }
 };
 
+
+
+export const getOrders = async (req,res) =>{
+  try{
+    const orders = await Order.find();
+    return res.status(200).json(orders)
+  }
+  catch(error){
+     return res.status(500).json({error:error})
+  }
+
+}

@@ -1,16 +1,19 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './Orders.css'
 import { DataGrid } from '@mui/x-data-grid';
 import { Link } from 'react-router-dom';
 import {TopNav}  from '../topnav/TopNav'
+import axios from "axios"
 export const Orders = () => {
+
+  const[orders,setOrders] = useState([])
   const columns = [
     { field: 'id', headerName: 'ID', width: 150 },
-    { field: 'topic', headerName: 'Topic', width: 150 },
-    { field: 'due', headerName: 'Due', width: 150 },
-    {field: 'status',headerName: 'Status',type: 'number',width: 150},
-    {field: 'client',headerName: 'Client',width: 150},
-    {field: 'view',headerName: 'view',type: 'text',width: 150},
+    { field: 'level', headerName: 'Level', width: 150 },
+    { field: 'discipline', headerName: 'Discipline', width: 150 },
+    {field: 'topic',headerName: 'Topic',width: 150},
+    {field: 'type',headerName: 'Type',width: 150},
+    {field: 'deadline',headerName: 'Deadline',width: 150},
     {
       field: 'actions',
       headerName: 'Actions',
@@ -22,18 +25,26 @@ export const Orders = () => {
       ),
     },
   ];
-  const rows = [
-    { id: 1, due: 'Snow', topic: 'Jon', status: 35 ,client:'jayson',view:50},
-    { id: 2, due: 'Lannister', topic: 'Cersei', status: 42, client:'jayson',view:50},
-    { id: 3, due: 'Lannister', topic: 'Jaime', status: 45 ,client:'jayson',view:50},
-    { id: 4, due: 'Stark', topic: 'Arya', status: 16,client:'jay',view:50 },
-    { id: 5, due: 'Targaryen', topic: 'Daenerys', status: null,client:'Son' ,view:50},
-    { id: 6, due: 'Melisandre', topic: null, status: 150,client:'jays',view:50 },
-    { id: 7, due: 'Clifford', topic: 'Ferrara', status: 44,client:'john' ,view:50},
-    { id: 8, due: 'Frances', topic: 'Rossini', status: 36 ,client:'jayson',view:50},
-    { id: 9, due: 'Roxie', topic: 'Harvey', status: 65 ,client:'jay',view:50},
-  ];
+  const rows = orders.map((order,index)=>({
+    id: order._id ? index + 1 : 0,
+    level:order.academic_level,
+    discipline:order.discipline,
+    topic:order.topic,
+    type:order.type,
+    single_double:order.single_or_double,
+    files:order.files,
+    deadline:order.deadline
 
+  }))
+  const getOrders = async ()=>{
+    await axios.get("http://localhost:5000/orders/getOrders").then(res=>{
+      console.log(res.data)
+      setOrders(res.data)
+    })
+  }
+  useEffect(()=>{
+    getOrders() 
+  },[])
 
   return (
     <div className='orders-section'>
