@@ -36,3 +36,15 @@ export const getOrders = async (req,res) =>{
   }
 
 }
+
+export const getSingleOrder = async (req,res) =>{
+  try{
+    const id= req.params.id;
+    const order = await Order.findById(id);
+    return res.status(200).json(order)
+  }
+  catch(error){
+     return res.status(500).json({error:error})
+  }
+
+}

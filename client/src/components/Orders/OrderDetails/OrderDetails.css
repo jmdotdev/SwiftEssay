@@ -1,0 +1,31 @@
+.order-detail{
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100%;
+    padding: 30px;
+    overflow-y: auto;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  tr{
+    height: 50px;
+  }
+
+  th, td {
+    padding: 10px;
+    border: 1px solid #ddd;
+  }
+
+  th {
+    background-color: #f2f2f2;
+    text-align: left;
+  }
+
+  .fixed-column {
+    position: sticky;
+    left: 0;
+    background-color: #f2f2f2;
+  }

@@ -7,7 +7,7 @@ import axios from "axios"
 export const Orders = () => {
 
   const[orders,setOrders] = useState([])
-  const columns = [
+    const columns = [
     { field: 'id', headerName: 'ID', width: 150 },
     { field: 'level', headerName: 'Level', width: 150 },
     { field: 'discipline', headerName: 'Discipline', width: 150 },
@@ -26,7 +26,7 @@ export const Orders = () => {
     },
   ];
   const rows = orders.map((order,index)=>({
-    id: order._id ? index + 1 : 0,
+    id: order._id,
     level:order.academic_level,
     discipline:order.discipline,
     topic:order.topic,
