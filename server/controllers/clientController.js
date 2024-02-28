@@ -5,7 +5,7 @@ import bcrypt from "bcrypt"
 
 export const registerClientController = async (req, res) => {
   try {
-     const{username,email,password} = req.body
+     const{username,email,phone,password} = req.body
    //   const [error] = registrationAuth.validateAsync(req.body)
    //   if(error){
    //      return res.status(404).json({error:error.details.message})

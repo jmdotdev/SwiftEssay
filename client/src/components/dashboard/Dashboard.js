@@ -1,4 +1,4 @@
-import {React,useState} from 'react'
+import {React,useEffect,useState} from 'react'
 import './Dashboard.css'
 import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
@@ -9,10 +9,10 @@ import completedIcon from '../../assets/images/complete.jpg'
 import repeatIcon from '../../assets/images/repeat.svg'
 import { DataGrid } from "@mui/x-data-grid";
 import {TopNav} from '../topnav/TopNav'
+import { useJwt } from "react-jwt";
 export const Dashboard = () => {
-
     const [tabvalue, setTabValue] = useState(0);
-
+    const { decodedToken, isExpired } = useJwt(localStorage.getItem("token"));
     const handleChange = (event, newValue) => {
       setTabValue(newValue);
     };
@@ -34,6 +34,10 @@ export const Dashboard = () => {
       { id: 8, writer: 'Frances', client: 'Rossini', comment: 36 },
       { id: 9, writer: 'Roxie', client: 'Harvey', comment: 65 },
     ];
+
+     useEffect(()=>{
+      console.log("decodedToken",decodedToken)
+     })
   return (
     <div className='dashboard-content'>
       <TopNav />

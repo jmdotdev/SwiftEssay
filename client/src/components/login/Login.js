@@ -3,19 +3,28 @@ import "./Login.css";
 import landingimage from '../../assets/images/login.webp'
 import notepad from '../../assets/images/notepad.png'
 import {useNavigate} from 'react-router-dom'
+import axios from 'axios'
 export const Login = () => {
   const [email,setEmail] = useState()
   const [password,setPassword] = useState()
   const navigate = useNavigate()
-  const loginUser = (e) =>{
+  const handleSubmit = async (e) =>{
     e.preventDefault() 
-    if(email == 'test@gmail.com' && password == 'test'){
-      navigate('/dashboard')
-    }
-    else{
-      window.alert("wrong password or email")
-    }
+      await axios.post('http://localhost:5000/writers/login',{
+        email,password
+      })
+      .then((res)=>{
+        if(res.status == 200){
+            localStorage.setItem("token",res.data.token)
+            window.alert("login successfull")
+            navigate("/dashboard");
+        }
+        else{
+          window.alert("login failed")
+        }
+      })
   }
+
   return (
     <div className="main">
       <div className="left-section">
@@ -39,7 +48,7 @@ export const Login = () => {
             <p>Access Academic Writing panel using your email and password.</p>
           </div>
           <div className="form">
-            <form>
+            <form onSubmit={handleSubmit}>
                 <label>Email:</label>
              <div className="input-control">
               <input type="email" placeholder="email" value={email} onChange={(e)=>setEmail(e.target.value)}/>
@@ -48,7 +57,7 @@ export const Login = () => {
              <div className="input-control">
               <input type="password" placeholder="password" value={password} onChange={(e)=>setPassword(e.target.value)} />
              </div>
-              <button onClick={loginUser}>Sign In</button>
+              <button>Sign In</button>
             </form>
             <h4>Forgot Password?</h4>
           </div>

@@ -58,9 +58,6 @@
     display: flex;
     flex-direction: column;
 }
-.form-container .sign-in-header h3{
-    margin-bottom: 10px;
-}
 .form form{
     display: flex;
     flex-direction: column;
