@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate,useLocation } from 'react-router-dom';
 import './App.css';
 import { Login } from './components/login/Login';
@@ -17,6 +17,7 @@ import {Payment} from  './components/Payment/Payment'
 function App() {
   const navigate = useNavigate();
   const location = useLocation();
+  const [isAuth,setAuth] = useState(false);
 
   // List of routes where you want to hide the SideNav
   const excludedRoutes = ['login','/register', '*'];
@@ -34,11 +35,11 @@ function App() {
     <div className="App">
       {!isExcludedRoute && <SideNav />}
       <Routes>
-      <Route exact path='login' element={<Login/>}/>
+      <Route exact path='login' element={<Login  setAuth = {setAuth}/>} />
       <Route path='register' element={<Register/>}/>
       <Route path='dashboard' element={<Dashboard/>}/>
       <Route path='writers' element={<Writers/>} />
-      <Route path='orders' element={<Orders/>}/>
+      <Route path='orders' element={<Orders  isAuth={isAuth}/>}/>
       <Route path='orders/add-order' element={<AddOrder/>}/>
       <Route path='orders/order-details/:id' element={<OrderDetails/>}/>
       <Route path='messages' element={<Messages/>}/>

@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import './Orders.css'
 import { DataGrid } from '@mui/x-data-grid';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {TopNav}  from '../topnav/TopNav'
 import axios from "axios"
-export const Orders = () => {
+export const Orders = ({isAuth}) => {
 
   const[orders,setOrders] = useState([])
+  const navigate = useNavigate();
     const columns = [
     { field: 'id', headerName: 'ID', width: 150 },
     { field: 'level', headerName: 'Level', width: 150 },
@@ -37,49 +38,66 @@ export const Orders = () => {
 
   }))
   const getOrders = async ()=>{
-    await axios.get("http://localhost:5000/orders/getOrders").then(res=>{
+   try{
+    const token = localStorage.getItem('token');
+    if(!token){
+    redirectToLogin()
+    }
+    await axios.get("http://localhost:5000/orders/getOrders",{
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }).then(res=>{
       console.log(res.data)
       setOrders(res.data)
     })
+   }
+   catch(error){
+    console.log(error)
+   }
+  }
+
+  const redirectToLogin = () =>{
+       navigate("/login")
   }
   useEffect(()=>{
     getOrders() 
-  },[])
+  },[isAuth])
 
   return (
-    <div className='orders-section'>
-      <TopNav />
-     {<div>
-      <div className='orders-header'>
-        <h4>Orders</h4>
-        <Link className='link' to="add-order"><button className='add-order-btn'>Add Order</button></Link>
-      </div>
-      <div className='order-filters'>
-        <a>Available<span>0</span></a>
-        <a>Assigned</a>
-        <a>Pending</a>
-        <a>Completed</a>
-        <a>Revision</a>
-        <a>Progress</a>
-        <a>Cancelled</a>
-        <a>Approved</a>
-      </div>
-      <div className='orders-list'>
-      <div style={{ height: 350, width: '100%' }}>
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        initialState={{
-          pagination: {
-            paginationModel: { page: 0, pageSize: 5 },
-          },
-        }}
-        pageSizeOptions={[5, 10]}
-        checkboxSelection
-      />
-    </div>
-      </div>
-     </div>}
-    </div>
+   isAuth ?   <div className='orders-section'>
+   <TopNav />
+  {<div>
+   <div className='orders-header'>
+     <h4>Orders</h4>
+     <Link className='link' to="add-order"><button className='add-order-btn'>Add Order</button></Link>
+   </div>
+   <div className='order-filters'>
+     <a>Available<span>0</span></a>
+     <a>Assigned</a>
+     <a>Pending</a>
+     <a>Completed</a>
+     <a>Revision</a>
+     <a>Progress</a>
+     <a>Cancelled</a>
+     <a>Approved</a>
+   </div>
+   <div className='orders-list'>
+   <div style={{ height: 350, width: '100%' }}>
+   <DataGrid
+     rows={rows}
+     columns={columns}
+     initialState={{
+       pagination: {
+         paginationModel: { page: 0, pageSize: 5 },
+       },
+     }}
+     pageSizeOptions={[5, 10]}
+     checkboxSelection
+   />
+ </div>
+   </div>
+  </div>}
+ </div> : redirectToLogin()
   )
 }

@@ -4,7 +4,7 @@ import landingimage from '../../assets/images/login.webp'
 import notepad from '../../assets/images/notepad.png'
 import {useNavigate} from 'react-router-dom'
 import axios from 'axios'
-export const Login = () => {
+export const Login = ({setAuth}) => {
   const [email,setEmail] = useState()
   const [password,setPassword] = useState()
   const navigate = useNavigate()
@@ -15,8 +15,9 @@ export const Login = () => {
       })
       .then((res)=>{
         if(res.status == 200){
-            localStorage.setItem("token",res.data.token)
+            localStorage.setItem('token',res.data.token)
             window.alert("login successfull")
+            setAuth(true)
             navigate("/dashboard");
         }
         else{
