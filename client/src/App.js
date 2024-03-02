@@ -31,6 +31,16 @@ function App() {
       navigate('/login');
     }
   }, [location.pathname, navigate]);
+
+  useEffect(() => {
+    // Check for the presence of the authentication token in local storage
+    const authToken = localStorage.getItem('token');
+
+    // If the token is not present, redirect to the login page
+    if (!authToken) {
+      navigate('/login');
+    }
+  }, [navigate]);
   return (
     <div className="App">
       {!isExcludedRoute && <SideNav />}

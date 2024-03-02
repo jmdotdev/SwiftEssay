@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import './TopNav.css'
 import { IoSettingsOutline } from "react-icons/io5";
 import { BiMessageDetail } from "react-icons/bi";
@@ -14,8 +14,9 @@ import { useNavigate } from 'react-router-dom';
 export const TopNav = () => {
   const navigate = useNavigate()
   const logout =() =>{
-     navigate('/')
-  }
+    localStorage.removeItem('token')
+    navigate("/login")
+   }
   return (
     <div className='topnavigation'>
         <form>
