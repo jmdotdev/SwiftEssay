@@ -48,6 +48,10 @@
 .link{
     text-decoration-line: none;
 }
+.order-detail-icon{
+    font-size: 15px;
+    color: #03264D;
+}
 @media screen and (max-width:768px) {
     .order-filters{
         display: flex;

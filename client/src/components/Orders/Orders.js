@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./Orders.css";
 import { DataGrid } from "@mui/x-data-grid";
 import CircularProgress from "@mui/material/CircularProgress";
+import { AiOutlineSend } from "react-icons/ai";
 import Box from "@mui/material/Box";
 import { Link, useNavigate } from "react-router-dom";
 import { TopNav } from "../topnav/TopNav";
@@ -23,7 +24,9 @@ export const Orders = ({ isAuth }) => {
       width: 150,
       renderCell: (params) => (
         <Link to={`/orders/order-details/${params.row.id}`}>
-          <button className="edit-order-btn">View Order</button>
+        <div className="order-detail-icon">
+        <AiOutlineSend />
+        </div>
         </Link>
       ),
     },
