@@ -1,50 +1,63 @@
-import Order from '../models/Order.js'
-
+import Order from "../models/Order.js";
 
 export const createOrder = async (req, res) => {
   try {
     const orderDetails = req.body;
 
     // Extract uploaded files from request
-    const files = req.files['files'] || [];
+    const files = req.files["files"] || [];
     // const submittedFiles = req.files['submitted_files'] || [];
 
     // Construct order object with file data
     const order = new Order({
       ...orderDetails,
-      files: files.map(file => file.buffer) // Store file buffers in the database
+      files: files.map((file) => file.buffer), // Store file buffers in the database
       // submitted_files: submittedFiles.map(file => file.buffer), // Store file buffers in the database
     });
     // Save order to the database
     await order.save();
 
-    res.status(201).json({ message: 'Order created successfully' });
+    res.status(201).json({ message: "Order created successfully" });
   } catch (error) {
     res.status(500).json({ error: error });
   }
 };
 
-
-
-export const getOrders = async (req,res) =>{
-  try{
-    const orders = await Order.find();
-    return res.status(200).json(orders)
+export const getOrders = async (req, res) => {
+  try {
+    const orders = await Order.find()
+      .populate("assigned_to")
+      .populate("submitted_by");
+    return res.status(200).json(orders);
+  } catch (error) {
+    return res.status(500).json({ error: error });
   }
-  catch(error){
-     return res.status(500).json({error:error})
-  }
+};
 
-}
-
-export const getSingleOrder = async (req,res) =>{
-  try{
-    const id= req.params.id;
-    const order = await Order.findById(id);
-    return res.status(200).json(order)
+export const getSingleOrder = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const order = await Order.findById(id)
+    .populate("assigned_to")
+    .populate("submitted_by");
+    return res.status(200).json(order);
+  } catch (error) {
+    return res.status(500).json({ error: error });
   }
-  catch(error){
-     return res.status(500).json({error:error})
-  }
+};
 
-}
+export const assignOrder = async (req, res) => {
+  try {
+      const id = req.params.id;
+      const writer = req.body;
+      await Order.findByIdAndUpdate(
+        id,
+        { assigned_to: writer },
+        // To get the updated document
+        // { new: true }
+      );
+      return res.status(200).json({ message: "order updated successfully" }); 
+  } catch (error) {
+    return res.status(500).json({ error: error });
+  }
+};

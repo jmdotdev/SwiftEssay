@@ -5,19 +5,47 @@ import './OrderDetails.css'
 export const OrderDetails = () => {
   const { id } = useParams();
   const [order, setOrder] = useState();
+  const [writers,setWriters] = useState();
+  const [assignedTo, setAssignedTo] = useState();
+  const [writersList, setWritersList] = useState([]);
 
+  const getWriters = async () => {
+    await axios.get("http://localhost:5000/writers/getWriters").then((res) => {
+      setWritersList(res.data);
+      console.log("writers", writersList);
+    });
+  };
   const getOrder = async ()=>{
     await axios.get(`http://localhost:5000/orders/getSingleOrder/${id}`).then(res=>{
       setOrder(res.data)
       console.log(res.data)
     })
   }
+
+  const assignOrder = async() =>{
+       const assignedWriter = writersList.find(writer => writer._id === assignedTo)
+       console.log("assignedWriter",assignedWriter)
+      await axios.patch(`http://localhost:5000/orders/assignOrder/${id}`,assignedWriter)
+      .then(res=>console.log(res));
+  }
   useEffect(()=>{
-     getOrder()
+     getOrder();
+     getWriters();
   },[])
+  const submitHandler = async (e) =>{
+    e.preventDefault();
+    assignOrder();
+  }
   return (
     <div className='order-detail'>
       <h3>Order Details</h3>
+      <form onSubmit={submitHandler}>
+        <label>Assigned To:</label>
+        <select value={assignedTo} onChange={(e)=>setAssignedTo(e.target.value)}>
+         {writersList.map(writer=> <option key={writer._id} value={writer._id}>{writer.email}</option>)}
+        </select>
+        <button>assign</button>
+        </form>
       <table>
   <thead>
     <tr>
@@ -26,6 +54,10 @@ export const OrderDetails = () => {
     </tr>
   </thead>
   {order ?  <tbody>
+    <tr>
+      <td className="fixed-column">Assigned To</td>
+      <td>{order.assigned_to.email}</td>
+    </tr>
     <tr>
       <td className="fixed-column">Academic Level</td>
       <td>{order.academic_level}</td>
