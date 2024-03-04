@@ -39,12 +39,14 @@ export const OrderDetails = () => {
   return (
     <div className='order-detail'>
       <h3>Order Details</h3>
-      <form onSubmit={submitHandler}>
+      <form onSubmit={submitHandler} className='assign-form'>
+        <div className='input-dropdown'>
         <label>Assigned To:</label>
         <select value={assignedTo} onChange={(e)=>setAssignedTo(e.target.value)}>
          {writersList.map(writer=> <option key={writer._id} value={writer._id}>{writer.email}</option>)}
         </select>
-        <button>assign</button>
+        </div>
+        <button className='btn'>assign</button>
         </form>
       <table>
   <thead>
@@ -132,6 +134,7 @@ export const OrderDetails = () => {
     </tr>
   </tbody>:"loading order..."}
 </table>
+ <button className='btn'>Claim Order</button>
     </div>
   )
 }

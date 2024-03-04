@@ -29,3 +29,26 @@ table {
     left: 0;
     background-color: #f2f2f2;
   }
+  
+  .assign-form{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 20px;
+    margin-top: 10px;
+  }
+  .assign-form .input-dropdown{
+    width: 100%;
+  }
+  
+ .btn{
+  margin-top: 20px;
+  color: #FFF;
+  background-color: #03264D;
+  padding: 12px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  width: 15% !important;
+  border-radius: 5px;
+ }
