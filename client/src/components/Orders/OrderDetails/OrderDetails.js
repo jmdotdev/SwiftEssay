@@ -2,23 +2,27 @@ import {React, useEffect, useState} from 'react'
 import { useParams } from 'react-router-dom';
 import axios from 'axios'
 import './OrderDetails.css'
+import { isExpired, decodeToken } from "react-jwt";
 export const OrderDetails = () => {
   const { id } = useParams();
   const [order, setOrder] = useState();
-  const [writers,setWriters] = useState();
   const [assignedTo, setAssignedTo] = useState();
   const [writersList, setWritersList] = useState([]);
+  const [loggedInWriter,setLoggedInWriter] = useState();
+  
+  const myDecodedToken = decodeToken(localStorage.getItem('token'));
+  const isMyTokenExpired = isExpired(localStorage.getItem('token'));
+
+
 
   const getWriters = async () => {
     await axios.get("http://localhost:5000/writers/getWriters").then((res) => {
       setWritersList(res.data);
-      console.log("writers", writersList);
     });
   };
   const getOrder = async ()=>{
     await axios.get(`http://localhost:5000/orders/getSingleOrder/${id}`).then(res=>{
       setOrder(res.data)
-      console.log(res.data)
     })
   }
 
@@ -28,7 +32,14 @@ export const OrderDetails = () => {
       await axios.patch(`http://localhost:5000/orders/assignOrder/${id}`,assignedWriter)
       .then(res=>console.log(res));
   }
+
+  const claimOrder = async() =>{
+   const writer = writersList.find(writer =>writer._id == loggedInWriter.userId);
+   await axios.patch(`http://localhost:5000/orders/assignOrder/${id}`,writer)
+   .then(res=>console.log(res));
+}
   useEffect(()=>{
+     setLoggedInWriter(myDecodedToken.payload)
      getOrder();
      getWriters();
   },[])
@@ -58,7 +69,7 @@ export const OrderDetails = () => {
   {order ?  <tbody>
     <tr>
       <td className="fixed-column">Assigned To</td>
-      <td>{order.assigned_to.email}</td>
+      <td>{order.assigned_to?.email}</td>
     </tr>
     <tr>
       <td className="fixed-column">Academic Level</td>
@@ -134,7 +145,7 @@ export const OrderDetails = () => {
     </tr>
   </tbody>:"loading order..."}
 </table>
- <button className='btn'>Claim Order</button>
+ <button className='btn' onClick={claimOrder}>Claim Order</button>
     </div>
   )
 }
