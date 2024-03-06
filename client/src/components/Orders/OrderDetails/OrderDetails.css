@@ -52,3 +52,6 @@ table {
   width: 15% !important;
   border-radius: 5px;
  }
+ textarea{
+  width: 100%;
+ }

@@ -2,6 +2,7 @@ import { registrationAuth } from "../helpers/joiauth.js";
 import User from '../models/Writer.js'
 import jwt from "jsonwebtoken"
 import bcrypt from "bcrypt"
+import WriterRating from "../models/writerRatings.js";
 
 export const registerWriterController = async (req, res) => {
   try {
@@ -63,4 +64,22 @@ export const loginUser = async (req,res) =>{
   catch (err) {
     res.status(500).json({error:err})
   }
+}
+
+export const rateWriter = async (req,res) =>{
+    try {
+      const {writer_id,task_id,rating,comment } = req.body;
+      const writeRating = new WriterRating({
+       writer_id,
+       task_id,
+       rating,
+       rated:true,
+       comment
+      });
+      await writeRating.save();
+      return res.status(201).json({message:"rating added successfully"})
+    } catch (error) {
+      return res.status(500).json({error:error})
+    }
+
 }
