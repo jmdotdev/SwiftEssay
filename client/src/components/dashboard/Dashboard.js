@@ -10,19 +10,36 @@ import repeatIcon from '../../assets/images/repeat.svg'
 import { DataGrid } from "@mui/x-data-grid";
 import {TopNav} from '../topnav/TopNav'
 import { useJwt } from "react-jwt";
+import axios from 'axios'
 export const Dashboard = () => {
     const [tabvalue, setTabValue] = useState(0);
     const { decodedToken, isExpired } = useJwt(localStorage.getItem("token"));
     const handleChange = (event, newValue) => {
       setTabValue(newValue);
     };
+    const [latestOrders,setLatestOrders] = useState([])
+    const latestOrderColumns = [
+      { field: 'id', headerName: 'ID', width: 70 },
+      { field: 'client', headerName: 'Client', width: 130 },
+      { field: 'writer', headerName: 'Writer', width: 130 },
+      { field: 'rating', headerName: 'Rating', width: 130 },
+      { field: 'rated', headerName: 'Rated', width: 130 },
+    ];
     const columns = [
       { field: 'id', headerName: 'ID', width: 70 },
       { field: 'client', headerName: 'Client', width: 130 },
       { field: 'writer', headerName: 'Writer', width: 130 },
       { field: 'comment', headerName: 'Comment', width: 130 },
     ];
-    
+    const latestOrderRow = latestOrders.map((ord,index)=>(
+      {
+        id:index +1,
+        client:ord.client,
+        writer:ord.writer,
+        rating:ord.rating,
+        rated:ord.rated ? "rated" : "not rated",
+      }
+    ))
     const rows = [
       { id: 1, writer: 'Snow', client: 'Jon', comment: 35 },
       { id: 2, writer: 'Lannister', client: 'Cersei', comment: 42 },
@@ -34,9 +51,14 @@ export const Dashboard = () => {
       { id: 8, writer: 'Frances', client: 'Rossini', comment: 36 },
       { id: 9, writer: 'Roxie', client: 'Harvey', comment: 65 },
     ];
-
+    
+    const getWritersRatings = async () => {
+      await axios.get("http://localhost:5000/writers/getWriterRatings").then((res) => {
+        setLatestOrders(res.data)
+      });
+    };
      useEffect(()=>{
-      console.log("decodedToken",decodedToken)
+      getWritersRatings()
      })
   return (
     <div className='dashboard-content'>
@@ -83,16 +105,16 @@ export const Dashboard = () => {
         <div className='tabs'>
         <Box sx={{ width: '100%', bgcolor: 'background.paper' }}>
       <Tabs value={tabvalue} onChange={handleChange} centered>
+        <Tab label="Latest Orders" />
         <Tab label="Approval Comments" />
         <Tab label="Revision Requests" />
-        <Tab label="Order Disputes" />
       </Tabs>
     </Box>
     <div className='tabs-info'>
       {tabvalue == 0 && <div style={{ height: 350, width: "100%", padding:"10px" }}>
           <DataGrid
-            rows={rows}
-            columns={columns}
+            rows={latestOrderRow}
+            columns={latestOrderColumns}
             initialState={{
               pagination: {
                 paginationModel: { page: 0, pageSize: 5 },

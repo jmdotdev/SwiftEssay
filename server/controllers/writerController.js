@@ -3,6 +3,7 @@ import User from '../models/Writer.js'
 import jwt from "jsonwebtoken"
 import bcrypt from "bcrypt"
 import WriterRating from "../models/writerRatings.js";
+import Order from "../models/Order.js";
 
 export const registerWriterController = async (req, res) => {
   try {
@@ -82,4 +83,29 @@ export const rateWriter = async (req,res) =>{
       return res.status(500).json({error:error})
     }
 
+}
+
+export const getWriterRatings = async (req,res) =>{
+  try {
+     const writerRatings = await WriterRating.find();
+     const payload = await Promise.all(
+      writerRatings.map( async (wr)=>{
+        const writer = await User.findById(wr.writer_id)
+        const task  = await Order.findById(wr.task_id)
+        const rating = wr.rating
+        const rated = wr.rated
+
+        return {
+          writer:writer.username,
+          task:task.topic,
+          rating,
+          rated
+        }
+       })
+     )
+
+     return res.status(200).json(payload)
+  } catch (error) {
+    return res.status(500).json({error:error})
+  }
 }

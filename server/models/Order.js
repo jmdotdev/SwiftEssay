@@ -52,6 +52,12 @@ const orderSchema = new Schema({
     type:Date,
     required:true,
   },
+  //update logic to allow this column
+  posted_by:{
+    type:mongoose.Schema.Types.ObjectId,
+    ref:"User",
+    required:true,
+  },
   assigned_to:{
     type:mongoose.Schema.Types.ObjectId,
     ref:"User",
@@ -60,11 +66,6 @@ const orderSchema = new Schema({
   submitted_files:{
     type:[Buffer], //Buffer type for binary data (files)
     required:false,
-  },
-  submitted_by: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: false,
   },
   created_at: {
     type: Date,
