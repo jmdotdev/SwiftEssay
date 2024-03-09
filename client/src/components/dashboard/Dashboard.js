@@ -105,7 +105,7 @@ export const Dashboard = () => {
         <div className='tabs'>
         <Box sx={{ width: '100%', bgcolor: 'background.paper' }}>
       <Tabs value={tabvalue} onChange={handleChange} centered>
-        <Tab label="Latest Orders" />
+        <Tab label="Latest Rated Orders" />
         <Tab label="Approval Comments" />
         <Tab label="Revision Requests" />
       </Tabs>

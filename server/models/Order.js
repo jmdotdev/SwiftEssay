@@ -54,9 +54,8 @@ const orderSchema = new Schema({
   },
   //update logic to allow this column
   posted_by:{
-    type:mongoose.Schema.Types.ObjectId,
-    ref:"User",
-    required:true,
+    type:String,
+    required:true
   },
   assigned_to:{
     type:mongoose.Schema.Types.ObjectId,
@@ -66,6 +65,19 @@ const orderSchema = new Schema({
   submitted_files:{
     type:[Buffer], //Buffer type for binary data (files)
     required:false,
+  },
+  status:{
+    type:String,
+    enum:["available","assigned","completed","revision","progress","cancelled"],
+    default:"available"
+  },
+  revision_comment :{
+    type:String,
+    required:false
+  },
+  cancel_comment:{
+    type:String,
+    required:false
   },
   created_at: {
     type: Date,

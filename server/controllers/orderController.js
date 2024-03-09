@@ -27,7 +27,7 @@ export const getOrders = async (req, res) => {
   try {
     const orders = await Order.find()
       .populate("assigned_to")
-      .populate("submitted_by");
+      // .populate("submitted_by");
     return res.status(200).json(orders);
   } catch (error) {
     return res.status(500).json({ error: error });
@@ -39,7 +39,7 @@ export const getSingleOrder = async (req, res) => {
     const id = req.params.id;
     const order = await Order.findById(id)
     .populate("assigned_to")
-    .populate("submitted_by");
+    // .populate("submitted_by");
     return res.status(200).json(order);
   } catch (error) {
     return res.status(500).json({ error: error });
