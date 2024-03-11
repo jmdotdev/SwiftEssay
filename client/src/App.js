@@ -13,6 +13,7 @@ import { AddOrder } from './components/Orders/AddOrder/AddOrder';
 import {OrderDetails} from './components/Orders/OrderDetails/OrderDetails'
 import {Messages} from  './components/messages/Messages'
 import {Payment} from  './components/Payment/Payment'
+import { Profile } from './components/profile/Profile';
 
 function App() {
   const navigate = useNavigate();
@@ -49,6 +50,7 @@ function App() {
       <Route path='register' element={<Register/>}/>
       <Route path='dashboard' element={<Dashboard/>}/>
       <Route path='writers' element={<Writers/>} />
+      <Route path='profile' element={<Profile/>}/>
       <Route path='orders' element={<Orders  isAuth={isAuth}/>}/>
       <Route path='orders/add-order' element={<AddOrder/>}/>
       <Route path='orders/order-details/:id' element={<OrderDetails/>}/>

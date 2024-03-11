@@ -11,6 +11,7 @@ import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import { CiSearch } from "react-icons/ci";
 import { useNavigate } from 'react-router-dom';
+import {Link} from 'react-router-dom'
 export const TopNav = () => {
   const navigate = useNavigate()
   const logout =() =>{
@@ -47,10 +48,12 @@ export const TopNav = () => {
          <IoMdLogOut/>
          logout
          </div>
+         <Link to='/profile'>
          <div className='account'>
           <img src={avatar} alt='avatar.png'/>
          Admin
          </div>
+         </Link>
         </div>
     </div>
   )
