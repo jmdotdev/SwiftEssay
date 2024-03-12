@@ -14,6 +14,7 @@ import {OrderDetails} from './components/Orders/OrderDetails/OrderDetails'
 import {Messages} from  './components/messages/Messages'
 import {Payment} from  './components/Payment/Payment'
 import { Profile } from './components/profile/Profile';
+import { SendMessage } from './components/messages/sendMessage/SendMessage';
 
 function App() {
   const navigate = useNavigate();
@@ -55,6 +56,7 @@ function App() {
       <Route path='orders/add-order' element={<AddOrder/>}/>
       <Route path='orders/order-details/:id' element={<OrderDetails/>}/>
       <Route path='messages' element={<Messages/>}/>
+      <Route path='sendmessage' element={<SendMessage/>}/>
       <Route path='payments' element={<Payment/>}/>
       <Route path='*' element={<NotFound/>}/>
       </Routes>

@@ -8,6 +8,7 @@ import emailIcon from "../../assets/images/email.svg";
 import messagesIcon from "../../assets/images/message.svg";
 import { DataGrid } from "@mui/x-data-grid";
 import {TopNav}  from '../topnav/TopNav'
+import { Link } from "react-router-dom";
 export const Messages = () => {
   const [tabvalue, setTabValue] = useState(0);
 
@@ -40,10 +41,12 @@ export const Messages = () => {
       </div>
       <div className="messages-content-cards">
         <div className="messages-card">
+          <Link to="/sendmessage">
           <div className="left-section">
             <h2>Onsite</h2>
             <h4>messages</h4>
           </div>
+          </Link>
           <div className="right-section">
             <img src={messagesIcon} alt="messages.svg" />
           </div>
