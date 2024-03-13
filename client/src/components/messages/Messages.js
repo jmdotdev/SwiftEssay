@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React, useEffect, useState } from "react";
 import "./Messages.css";
 import Box from "@mui/material/Box";
 import Tabs from "@mui/material/Tabs";
@@ -9,9 +9,10 @@ import messagesIcon from "../../assets/images/message.svg";
 import { DataGrid } from "@mui/x-data-grid";
 import {TopNav}  from '../topnav/TopNav'
 import { Link } from "react-router-dom";
+import axios from 'axios'
 export const Messages = () => {
   const [tabvalue, setTabValue] = useState(0);
-
+  const [messages,setMessages] = useState([]);
   const handleChange = (event, newValue) => {
     setTabValue(newValue);
   };
@@ -33,6 +34,19 @@ export const Messages = () => {
     { id: 8, writer: "Frances", client: "Rossini", comment: 36 },
     { id: 9, writer: "Roxie", client: "Harvey", comment: 65 },
   ];
+
+
+  const getInAppMessages = async() =>{
+    await axios.get('http://localhost:5000/messages/getMessages').then(
+      (res)=>{
+        console.log(res)
+      }
+    )
+  }
+
+  useEffect(() =>{
+    getInAppMessages()
+  },[])
   return (
     <div className="messages-content">
       <TopNav/>
