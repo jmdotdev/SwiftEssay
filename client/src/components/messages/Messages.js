@@ -20,26 +20,27 @@ export const Messages = () => {
     { field: "id", headerName: "ID", width: 70 },
     { field: "client", headerName: "Client", width: 130 },
     { field: "writer", headerName: "Writer", width: 130 },
-    { field: "comment", headerName: "Comment", width: 130 },
+    { field: "message", headerName: "Message", width: 130 },
+    { field: "sent_on", headerName: "Sent_On", width: 130 },
+    { field: "is_read", headerName: "Is_Read", width: 130 },
   ];
 
-  const rows = [
-    { id: 1, writer: "Snow", client: "Jon", comment: 35 },
-    { id: 2, writer: "Lannister", client: "Cersei", comment: 42 },
-    { id: 3, writer: "Lannister", client: "Jaime", comment: 45 },
-    { id: 4, writer: "Stark", client: "Arya", comment: 16 },
-    { id: 5, writer: "Targaryen", client: "Daenerys", comment: null },
-    { id: 6, writer: "Melisandre", client: null, comment: 150 },
-    { id: 7, writer: "Clifford", client: "Ferrara", comment: 44 },
-    { id: 8, writer: "Frances", client: "Rossini", comment: 36 },
-    { id: 9, writer: "Roxie", client: "Harvey", comment: 65 },
-  ];
+  const rows =messages.map((m,i)=>(
+    {
+      id:i+1,
+      client:m.from,
+      writer:m.sent_to,
+      message:m.message,
+      sent_on:m.sent_on,
+      is_read:m.is_read ? 1: 0
+    }
+  ))
 
 
   const getInAppMessages = async() =>{
     await axios.get('http://localhost:5000/messages/getMessages').then(
       (res)=>{
-        console.log(res)
+        setMessages(res.data.payload)
       }
     )
   }
