@@ -47,7 +47,7 @@ export const getInAppMessages = async (req,res) =>{
 
 export const getUserInAppmessages = async (req,res) =>{
    try {
-      const user_id = req.body;
+      const user_id = req.params.id;
       const userMessages = await Message.find().where(to == user_id);
       const payload = await Promise.all(
          userMessages.map(async(am)=>{

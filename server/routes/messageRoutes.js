@@ -6,4 +6,4 @@ export const messageRouter = Router();
 
 messageRouter.post('/sendMessage',sendInAppMessage)
 messageRouter.get('/getMessages',getInAppMessages)
-messageRouter.get('/getUserMessages',getUserInAppmessages)
+messageRouter.get('/getUserMessages/:id',getUserInAppmessages)
