@@ -11,8 +11,8 @@ import { DataGrid } from "@mui/x-data-grid";
 import {TopNav} from '../topnav/TopNav'
 import { useJwt } from "react-jwt";
 import axios from 'axios'
-const token = localStorage.getItem("token")
 export const Dashboard = () => {
+    const token = localStorage.getItem("token")
     const [tabvalue, setTabValue] = useState(0);
     const { decodedToken, isExpired } = useJwt(token);
     const [loggedInUser,SetLoggedInUser] = useState('')
@@ -60,19 +60,19 @@ export const Dashboard = () => {
       });
     };
 
-    const getUserInAppmessages = async () =>{
-      const user_id = loggedInUser.userId
-      await axios.get(`http://localhost:5000/messages/getUserMessages/${user_id}`)
-      .then(res=>{
-          console.log(res)
-      })
-  }
-  
-  
+  //   const getUserInAppmessages = async () =>{
+  //     const user_id = loggedInUser.userId
+  //     await axios.get(`http://localhost:5000/messages/getUserMessages/${user_id}`)
+  //     .then(res=>{
+  //         console.log(res)
+  //     })
+  // }
+   
      useEffect(() => {
       getWritersRatings()
-      getUserInAppmessages()
-      SetLoggedInUser(decodedToken.payload)
+      console.log(decodedToken)
+      // getUserInAppmessages()
+      // SetLoggedInUser(!decodedToken.payload)
      },[])
   return (
     <div className='dashboard-content'>
