@@ -11,11 +11,14 @@ import { DataGrid } from "@mui/x-data-grid";
 import {TopNav} from '../topnav/TopNav'
 import { useJwt } from "react-jwt";
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom';
 export const Dashboard = () => {
-    const token = localStorage.getItem("token")
+    const token = localStorage.getItem('token')
     const [tabvalue, setTabValue] = useState(0);
     const { decodedToken, isExpired } = useJwt(token);
     const [loggedInUser,SetLoggedInUser] = useState('')
+    const [isLoggedIn,setIsLoggedIn] = useState(false)
+    const navigate = useNavigate();
     const handleChange = (event, newValue) => {
       setTabValue(newValue);
     };
@@ -60,25 +63,38 @@ export const Dashboard = () => {
       });
     };
 
-  //   const getUserInAppmessages = async () =>{
-  //     const user_id = loggedInUser.userId
-  //     await axios.get(`http://localhost:5000/messages/getUserMessages/${user_id}`)
-  //     .then(res=>{
-  //         console.log(res)
-  //     })
-  // }
+    const verifyToken = async () => {
+      const token = localStorage.getItem("token");
+      await axios
+        .post("http://localhost:5000/writers/verifyToken", { token })
+        .then((res) => {
+          SetLoggedInUser(res.data.payload)
+          setIsLoggedIn(true)
+        })
+        .catch((error) => {
+          setIsLoggedIn(false)
+          navigate('/')
+        });
+    };
+
+    const getUserInAppmessages = async () =>{
+      await axios.get(`http://localhost:5000/messages/getUserMessages/${loggedInUser.userId}`)
+      .then(res=>{
+          console.log(res)
+      })
+  }
    
      useEffect(() => {
       getWritersRatings()
-      console.log(decodedToken)
-      // getUserInAppmessages()
-      // SetLoggedInUser(!decodedToken.payload)
-     },[])
+      verifyToken()
+      getUserInAppmessages()
+     },[isLoggedIn])
   return (
     <div className='dashboard-content'>
       <TopNav />
         <div className='dashboard-content-title'>
             <h3>Dashboard</h3>
+            <h4>welcome back {loggedInUser.userId}</h4>
         </div>
         <div className='dashboard-content-cards'>
             <div className='dashboard-card'>

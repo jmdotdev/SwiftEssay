@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken"
 import bcrypt from "bcrypt"
 import WriterRating from "../models/writerRatings.js";
 import Order from "../models/Order.js";
+import { verifyToken } from "../helpers/verifyToken.js";
 
 export const registerWriterController = async (req, res) => {
   try {
@@ -60,7 +61,7 @@ export const loginUser = async (req,res) =>{
      const token = jwt.sign({payload},"mysecretkey",{
       expiresIn:"1h"
      });
-     res.status(200).json({token,user:payload})
+     res.status(200).json({token,payload})
   }
   catch (err) {
     res.status(500).json({error:err})
@@ -109,3 +110,14 @@ export const getWriterRatings = async (req,res) =>{
     return res.status(500).json({error:error})
   }
 }
+
+export const verifyUserToken = async (req, res) => {
+  const token = req.body.token || req.headers.authorization.split(" ")[1];
+  try {
+    const result = await verifyToken(token);
+    return res.json(result);
+  } catch (error) {
+    return res.status(403).json({ message: error });
+  }
+};
+
