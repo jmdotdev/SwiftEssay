@@ -12,11 +12,10 @@ import {TopNav} from '../topnav/TopNav'
 import { useJwt } from "react-jwt";
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom';
+import verifyToken from '../../utils/verifyToken';
 export const Dashboard = () => {
-    const token = localStorage.getItem('token')
     const [tabvalue, setTabValue] = useState(0);
-    const { decodedToken, isExpired } = useJwt(token);
-    const [loggedInUser,SetLoggedInUser] = useState('')
+    const [loggedInUser,setLoggedInUser] = useState(null)
     const [isLoggedIn,setIsLoggedIn] = useState(false)
     const navigate = useNavigate();
     const handleChange = (event, newValue) => {
@@ -63,38 +62,19 @@ export const Dashboard = () => {
       });
     };
 
-    const verifyToken = async () => {
-      const token = localStorage.getItem("token");
-      await axios
-        .post("http://localhost:5000/writers/verifyToken", { token })
-        .then((res) => {
-          SetLoggedInUser(res.data.payload)
-          setIsLoggedIn(true)
-        })
-        .catch((error) => {
-          setIsLoggedIn(false)
-          navigate('/')
-        });
+  useEffect(() => {
+    const fetchData = async () => {
+      await verifyToken(setLoggedInUser, setIsLoggedIn, navigate);
+      await getWritersRatings();
     };
 
-    const getUserInAppmessages = async () =>{
-      await axios.get(`http://localhost:5000/messages/getUserMessages/${loggedInUser.userId}`)
-      .then(res=>{
-          console.log(res)
-      })
-  }
-   
-     useEffect(() => {
-      getWritersRatings()
-      verifyToken()
-      getUserInAppmessages()
-     },[isLoggedIn])
+    fetchData();
+  }, [isLoggedIn]);
   return (
     <div className='dashboard-content'>
-      <TopNav />
+      <TopNav/>
         <div className='dashboard-content-title'>
             <h3>Dashboard</h3>
-            <h4>welcome back {loggedInUser.userId}</h4>
         </div>
         <div className='dashboard-content-cards'>
             <div className='dashboard-card'>

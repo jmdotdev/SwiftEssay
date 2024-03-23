@@ -12,12 +12,35 @@ import IconButton from '@mui/material/IconButton';
 import { CiSearch } from "react-icons/ci";
 import { useNavigate } from 'react-router-dom';
 import {Link} from 'react-router-dom'
+import verifyToken from '../../utils/verifyToken';
+import axios from 'axios'
 export const TopNav = () => {
-  const navigate = useNavigate()
+  const [loggedInUser,setLoggedInUser] = useState(null)
+  const [isLoggedIn,setIsLoggedIn] = useState(false)
+  const [userNotifications,setUserNotifications] = useState([])
+  const navigate = useNavigate();
   const logout =() =>{
     localStorage.removeItem('token')
     navigate("/login")
    }
+   const getUserInAppmessages = async () =>{
+    await axios.get(`http://localhost:5000/messages/getUserMessages/${loggedInUser?.userId}`)
+    .then(res=>{
+      setUserNotifications(res.data.payload)
+        console.log(res.data.payload)
+    })
+    .catch(err=>{
+      console.log(err)
+    })
+}
+   useEffect(() => {
+    const fetchData = async () => {
+      await verifyToken(setLoggedInUser, setIsLoggedIn, navigate);
+      await getUserInAppmessages();
+    };
+
+    fetchData();
+  }, [isLoggedIn]);
   return (
     <div className='topnavigation'>
         <form>
@@ -36,12 +59,7 @@ export const TopNav = () => {
     </Paper>
         </form>
         <div className='profile-section'>
-         <div className='settings'>
-         <IoSettingsOutline />
-         <p>settings</p>
-         </div>
-         <div className='notifications'>
-         <BiMessageDetail />
+         <div className={userNotifications.length > 0 ? 'notifications active' : 'notifications'}>
          <VscBellDot/>
          </div>
          <div className='logout' onClick={logout}>
@@ -51,7 +69,7 @@ export const TopNav = () => {
          <Link to='/profile'>
          <div className='account'>
           <img src={avatar} alt='avatar.png'/>
-         Admin
+         {loggedInUser?.username}
          </div>
          </Link>
         </div>

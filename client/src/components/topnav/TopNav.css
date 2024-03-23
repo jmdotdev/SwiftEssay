@@ -19,6 +19,10 @@
   display: flex;
   align-items: center;
   cursor: pointer;
+  font-size: 20px;
+}
+.notifications.active{
+  color: red;
 }
 .profile-section .logout {
   display: flex;
