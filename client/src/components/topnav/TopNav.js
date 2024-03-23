@@ -18,7 +18,13 @@ export const TopNav = () => {
   const [loggedInUser,setLoggedInUser] = useState(null)
   const [isLoggedIn,setIsLoggedIn] = useState(false)
   const [userNotifications,setUserNotifications] = useState([])
+  const [showDropdown, setShowDropdown] = useState(false);
   const navigate = useNavigate();
+
+
+  const toggleDropdown = () => {
+      setShowDropdown(!showDropdown);
+  };
   const logout =() =>{
     localStorage.removeItem('token')
     navigate("/login")
@@ -59,8 +65,15 @@ export const TopNav = () => {
     </Paper>
         </form>
         <div className='profile-section'>
-         <div className={userNotifications.length > 0 ? 'notifications active' : 'notifications'}>
+         <div className={userNotifications.length > 0 ? 'notifications active' : 'notifications'} onClick={toggleDropdown}>
          <VscBellDot/>
+         {showDropdown && (
+                <div className="dropdown-content">
+                    {userNotifications.map(notification => (
+                        <p key={notification.id}>{notification.message}</p>
+                    ))}
+                </div>
+            )}
          </div>
          <div className='logout' onClick={logout}>
          <IoMdLogOut/>
