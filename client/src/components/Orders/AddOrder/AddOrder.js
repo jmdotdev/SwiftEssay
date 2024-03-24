@@ -19,7 +19,7 @@ export const AddOrder = () => {
     single_or_double: "",
     sourcesToCite: 0,
     powerpointSlides: 0,
-    posted_by:userId,
+    posted_by:getUserId(),
     deadline: "",
   });
   const handleFileChange = (e) => {
@@ -50,24 +50,14 @@ export const AddOrder = () => {
       for (let [key, value] of formData.entries()) {
         console.log(`${key}: ${value}`);
       }
-      await axios.post("http://localhost:5000/orders/createOrder",formData)
-      .then(res=>console.log(res))
+      // await axios.post("http://localhost:5000/orders/createOrder",formData)
+      // .then(res=>console.log(res))
 
       // console.log("Order submitted successfully!");
     } catch (error) {
       console.error("Error submitting order:", error);
     }
   };
-
-
- useEffect(()=>{
-  const fetchUserId = async () =>{
-    const Id = await getUserId();
-    setUserId(Id)
-  }
-
-  fetchUserId();
- },[])
   return (
     <div className="main-container">
       <TopNav />

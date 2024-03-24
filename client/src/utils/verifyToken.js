@@ -13,7 +13,7 @@ export const verifyToken = async (SetLoggedInUser, setIsLoggedIn, navigate) => {
 };
 
 
-export const getUserId = async() =>{
+export const getUserId = () =>{
    const token = localStorage.getItem('token')
    const decodedToken = atob(token.split('.')[1])
    const userData= JSON.parse(decodedToken)
