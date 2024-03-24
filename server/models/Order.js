@@ -23,7 +23,7 @@ const orderSchema = new Schema({
     required:true
   },
   files:{
-    type: [Buffer], // Buffer type for binary data (files)
+    type: [],
     required:true,
   },
   page_format:{
@@ -63,7 +63,7 @@ const orderSchema = new Schema({
     required:false,
   },
   submitted_files:{
-    type:[Buffer], //Buffer type for binary data (files)
+    type:String,
     required:false,
   },
   status:{

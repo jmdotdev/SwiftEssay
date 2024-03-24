@@ -121,13 +121,16 @@ export const OrderDetails = () => {
     <tr>
       <td className="fixed-column">Files</td>
       <td>
-    {order.files ? (
-      <ul>
-        {order.files.map((file, index) => (
-          <li key={index}>{file.name}</li>
-        ))}
-      </ul>
-    ) : null}
+      {order.files ? (
+  <ul>
+    {order.files.map((file, index) => (
+      <li key={index}>
+        <a href={`http://localhost:5000/${file.path}`} download>{file.originalname}</a>
+      </li>
+    ))}
+  </ul>
+) : null}
+
   </td>
     </tr>
     <tr>

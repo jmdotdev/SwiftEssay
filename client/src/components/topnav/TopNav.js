@@ -12,7 +12,7 @@ import IconButton from '@mui/material/IconButton';
 import { CiSearch } from "react-icons/ci";
 import { useNavigate } from 'react-router-dom';
 import {Link} from 'react-router-dom'
-import verifyToken from '../../utils/verifyToken';
+import {verifyToken} from '../../utils/verifyToken';
 import axios from 'axios'
 export const TopNav = () => {
   const [loggedInUser,setLoggedInUser] = useState(null)

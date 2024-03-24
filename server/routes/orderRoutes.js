@@ -7,4 +7,4 @@ export const orderRouter = express.Router();
 orderRouter.get('/getSingleOrder/:id',getSingleOrder);
 orderRouter.patch('/assignOrder/:id',assignOrder);
 orderRouter.post('/createOrder',uploadFiles,createOrder);
-orderRouter.get('/getOrders',verifyToken,getOrders);
+orderRouter.get('/getOrders',getOrders);

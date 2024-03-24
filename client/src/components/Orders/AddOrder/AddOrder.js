@@ -1,10 +1,12 @@
-import {React,useState} from "react";
+import {React,useEffect,useState} from "react";
 import { TopNav } from "../../topnav/TopNav";
 import "./AddOrder.css";
 import {orderDiscipline,paperTypes,citationOptions,academicLevels} from './AddOrderFormOptions'
 import paypalImage from '../../../../src/assets/images/paypal.png'
+import {getUserId} from '../../../utils/verifyToken'
 import axios from 'axios'
 export const AddOrder = () => {
+  const [userId,setUserId] = useState()
   const [orderDetails, setOrderDetails] = useState({
     academic_level: "",
     type: "",
@@ -17,9 +19,9 @@ export const AddOrder = () => {
     single_or_double: "",
     sourcesToCite: 0,
     powerpointSlides: 0,
+    posted_by:userId,
     deadline: "",
   });
-
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
     setOrderDetails({ ...orderDetails, files });
@@ -58,6 +60,14 @@ export const AddOrder = () => {
   };
 
 
+ useEffect(()=>{
+  const fetchUserId = async () =>{
+    const Id = await getUserId();
+    setUserId(Id)
+  }
+
+  fetchUserId();
+ },[])
   return (
     <div className="main-container">
       <TopNav />

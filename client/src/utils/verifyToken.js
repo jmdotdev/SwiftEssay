@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const verifyToken = async (SetLoggedInUser, setIsLoggedIn, navigate) => {
+export const verifyToken = async (SetLoggedInUser, setIsLoggedIn, navigate) => {
   const token = localStorage.getItem("token");
   try {
     const res = await axios.post("http://localhost:5000/writers/verifyToken", { token });
@@ -12,4 +12,10 @@ const verifyToken = async (SetLoggedInUser, setIsLoggedIn, navigate) => {
   }
 };
 
-export default verifyToken;
+
+export const getUserId = async() =>{
+   const token = localStorage.getItem('token')
+   const decodedToken = atob(token.split('.')[1])
+   const userData= JSON.parse(decodedToken)
+   return userData?.payload?.userId
+}

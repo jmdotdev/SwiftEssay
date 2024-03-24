@@ -3,8 +3,8 @@ import User from '../models/Writer.js'
 import jwt from "jsonwebtoken"
 import bcrypt from "bcrypt"
 import WriterRating from "../models/writerRatings.js";
-import Order from "../models/Order.js";
 import { verifyToken } from "../helpers/verifyToken.js";
+import Order from "../models/Order.js"
 
 export const registerWriterController = async (req, res) => {
   try {

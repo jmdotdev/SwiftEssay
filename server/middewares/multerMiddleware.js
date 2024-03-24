@@ -1,14 +1,20 @@
 import multer from "multer";
+import { v4 as uuidv4 } from 'uuid';
+import path from 'path'
 
-// Define storage for uploaded files
-const storage = multer.memoryStorage();
+const storage = multer.diskStorage({
+  destination:function(req,file,cb){
+    cb(null,'orderfiles')
+  },
+  filename:function(req,file,cb){
+    cb(null,file.originalname)
+    // cb(null,uuidv4() + '-',Date.now() + path.extname(file.originalname))
+  }
+});
 
-// Create multer instance with desired configuration
 const upload = multer({ storage: storage });
 
-// Middleware function to handle file uploads
 export const uploadFiles = upload.fields([
-  { name: 'files', maxCount: 5 }, // adjust maxCount as needed
-  // { name: 'submitted_files', maxCount: 5 }, // adjust maxCount as needed
+  { name: 'files', maxCount: 5 },
 ]);
 

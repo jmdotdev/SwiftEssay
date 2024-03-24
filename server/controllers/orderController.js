@@ -6,13 +6,11 @@ export const createOrder = async (req, res) => {
 
     // Extract uploaded files from request
     const files = req.files["files"] || [];
-    // const submittedFiles = req.files['submitted_files'] || [];
 
     // Construct order object with file data
     const order = new Order({
       ...orderDetails,
-      files: files.map((file) => file.buffer), // Store file buffers in the database
-      // submitted_files: submittedFiles.map(file => file.buffer), // Store file buffers in the database
+      files: files.map((file) => file), 
     });
     // Save order to the database
     await order.save();
