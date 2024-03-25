@@ -17,8 +17,8 @@ export const AddOrder = () => {
     page_format: "",
     pages: 0,
     single_or_double: "",
-    sourcesToCite: 0,
-    powerpointSlides: 0,
+    citations: 0,
+    slides: 0,
     posted_by:getUserId(),
     deadline: "",
   });
@@ -50,10 +50,10 @@ export const AddOrder = () => {
       for (let [key, value] of formData.entries()) {
         console.log(`${key}: ${value}`);
       }
-      // await axios.post("http://localhost:5000/orders/createOrder",formData)
-      // .then(res=>console.log(res))
+      await axios.post("http://localhost:5000/orders/createOrder",formData)
+      .then(res=>console.log(res))
 
-      // console.log("Order submitted successfully!");
+      console.log("Order submitted successfully!");
     } catch (error) {
       console.error("Error submitting order:", error);
     }
@@ -115,11 +115,11 @@ export const AddOrder = () => {
               </div>
               <div className="input-control">
                 <label>Sources To Cite:</label>
-                <input type="number" placeholder="cited sources" onChange={handleInputChange} value={orderDetails.sourcesToCite} name="sourcesToCite"/>
+                <input type="number" placeholder="cited sources" onChange={handleInputChange} value={orderDetails.citations} name="citations"/>
               </div>
               <div className="input-control">
                 <label>Powerpoint Slides:</label>
-                <input type="number" placeholder="powerpoint slides" onChange={handleInputChange} value={orderDetails.powerpointSlides} name="powerpointSlides"/>
+                <input type="number" placeholder="powerpoint slides" onChange={handleInputChange} value={orderDetails.slides} name="slides"/>
               </div>
               <div className="input-control">
                 <label>Deadline:</label>

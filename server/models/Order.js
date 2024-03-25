@@ -63,7 +63,7 @@ const orderSchema = new Schema({
     required:false,
   },
   submitted_files:{
-    type:String,
+    type: [],
     required:false,
   },
   status:{
