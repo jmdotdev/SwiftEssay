@@ -12,7 +12,7 @@ import {TopNav} from '../topnav/TopNav'
 import { useJwt } from "react-jwt";
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom';
-import {verifyToken,getUserId} from '../../utils/verifyToken';
+import {verifyToken} from '../../utils/verifyToken';
 export const Dashboard = () => {
     const [tabvalue, setTabValue] = useState(0);
     const [loggedInUser,setLoggedInUser] = useState(null)
@@ -71,7 +71,6 @@ export const Dashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       await verifyToken(setLoggedInUser, setIsLoggedIn, navigate);
-      console.log(await getUserId())
       // await getWritersRatings();
       // await getOrders();
     };
