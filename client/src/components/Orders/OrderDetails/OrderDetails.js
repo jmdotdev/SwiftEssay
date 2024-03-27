@@ -6,6 +6,8 @@ import { isExpired, decodeToken } from "react-jwt";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
+import moment from "moment"
+import { getUserById } from '../../../utils/getUserData';
 const style = {
   position: "absolute",
   top: "50%",
@@ -56,8 +58,11 @@ export const OrderDetails = () => {
 }
   useEffect(()=>{
      setLoggedInWriter(myDecodedToken.payload)
-     getOrder();
-     getWriters();
+     const fetchData = async () => {
+     await getOrder();
+     await getWriters(); 
+    }
+     fetchData();
   },[])
   const submitHandler = async (e) =>{
     e.preventDefault();
@@ -96,7 +101,7 @@ export const OrderDetails = () => {
   {order ?  <tbody>
     <tr>
       <td className="fixed-column">Assigned To</td>
-      <td>{order.assigned_to?.email}</td>
+      <td>{order.assigned_to ? order.assigned_to.email : <p style={{color:'red'}}>Not Assigned</p>}</td>
     </tr>
     <tr>
       <td className="fixed-column">Academic Level</td>
@@ -108,11 +113,11 @@ export const OrderDetails = () => {
     </tr>
     <tr>
       <td className="fixed-column">Created On</td>
-      <td>{order.created_at}</td>
+      <td>{moment(order.created_at).format('dddd, MMMM Do YYYY')}</td>
     </tr>
     <tr>
       <td className="fixed-column">Deadline</td>
-      <td>{order.deadline}</td>
+      <td>{moment(order.deadline).format('dddd, MMMM Do YYYY')}</td>
     </tr>
     <tr>
       <td className="fixed-column">Discipline</td>
@@ -143,11 +148,16 @@ export const OrderDetails = () => {
     </tr>
     <tr>
       <td className="fixed-column">Pages</td>
-      <td>Display Color Value</td>
+      <td>{order.pages}</td>
     </tr>
     <tr>
+      <td className="fixed-column">Posted By</td>
+      <td>{order.posted_by}</td>
+    </tr>
+    <tr>
+      
       <td className="fixed-column">Slides</td>
-      <td>{order.pages}</td>
+      <td>{order.slides}</td>
     </tr>
     <tr>
       <td className="fixed-column">Submitted Files</td>
