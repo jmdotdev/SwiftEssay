@@ -65,6 +65,13 @@ export const Orders = ({ isAuth }) => {
       setLoading(false);
     }
   };
+  const filterOrder = (filter) =>{
+     console.log(Orders)
+    const filteredOrders = Orders.map(ord => ord.status == filter)
+    //  setOrders(filteredOrders)
+     console.log("filter",filteredOrders)
+
+  } 
 
   const redirectToLogin = () => {
     navigate("/login");
@@ -85,16 +92,16 @@ export const Orders = ({ isAuth }) => {
             </Link>
           </div>
           <div className="order-filters">
-            <a>
+            <a onClick={()=>filterOrder('available')}>
               Available<span>0</span>
             </a>
-            <a>Assigned</a>
-            <a>Pending</a>
-            <a>Completed</a>
-            <a>Revision</a>
-            <a>Progress</a>
-            <a>Cancelled</a>
-            <a>Approved</a>
+            <a onClick={()=>filterOrder('assigned')}>Assigned</a>
+            <a onClick={()=>filterOrder('Pending')}>Pending</a>
+            <a onClick={()=>filterOrder('Completed')}>Completed</a>
+            <a onClick={()=>filterOrder('Revision')}>Revision</a>
+            <a onClick={()=>filterOrder('Progress')}>Progress</a>
+            <a onClick={()=>filterOrder('Cancelled')}>Cancelled</a>
+            <a onClick={()=>filterOrder('Approved')}>Approved</a>
           </div>
           <div className="orders-list">
             <div style={{ height: 350, width: "100%" }}>
