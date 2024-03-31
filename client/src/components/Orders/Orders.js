@@ -24,9 +24,9 @@ export const Orders = ({ isAuth }) => {
       width: 150,
       renderCell: (params) => (
         <Link to={`/orders/order-details/${params.row.id}`}>
-        <div className="order-detail-icon">
-        <AiOutlineSend />
-        </div>
+          <div className="order-detail-icon">
+            <AiOutlineSend />
+          </div>
         </Link>
       ),
     },
@@ -55,7 +55,6 @@ export const Orders = ({ isAuth }) => {
           },
         })
         .then((res) => {
-          console.log(res.data);
           setOrders(res.data);
         });
     } catch (error) {
@@ -65,13 +64,13 @@ export const Orders = ({ isAuth }) => {
       setLoading(false);
     }
   };
-  const filterOrder = (filter) =>{
-     console.log(Orders)
-    const filteredOrders = Orders.map(ord => ord.status == filter)
-    //  setOrders(filteredOrders)
-     console.log("filter",filteredOrders)
-
-  } 
+  const filterOrder = (filter) => {
+    const filteredOrders = orders.filter(
+      (order) => order.status == filter
+    );
+    console.log(filteredOrders)
+    setOrders(filteredOrders)
+  };
 
   const redirectToLogin = () => {
     navigate("/login");
@@ -92,21 +91,28 @@ export const Orders = ({ isAuth }) => {
             </Link>
           </div>
           <div className="order-filters">
-            <a onClick={()=>filterOrder('available')}>
+            <a onClick={() => filterOrder("available")}>
               Available<span>0</span>
             </a>
-            <a onClick={()=>filterOrder('assigned')}>Assigned</a>
-            <a onClick={()=>filterOrder('Pending')}>Pending</a>
-            <a onClick={()=>filterOrder('Completed')}>Completed</a>
-            <a onClick={()=>filterOrder('Revision')}>Revision</a>
-            <a onClick={()=>filterOrder('Progress')}>Progress</a>
-            <a onClick={()=>filterOrder('Cancelled')}>Cancelled</a>
-            <a onClick={()=>filterOrder('Approved')}>Approved</a>
+            <a onClick={() => filterOrder("assigned")}>Assigned</a>
+            <a onClick={() => filterOrder("Pending")}>Pending</a>
+            <a onClick={() => filterOrder("Completed")}>Completed</a>
+            <a onClick={() => filterOrder("Revision")}>Revision</a>
+            <a onClick={() => filterOrder("Progress")}>Progress</a>
+            <a onClick={() => filterOrder("Cancelled")}>Cancelled</a>
+            <a onClick={() => filterOrder("Approved")}>Approved</a>
           </div>
           <div className="orders-list">
             <div style={{ height: 350, width: "100%" }}>
               {loading ? (
-                <Box sx={{ display: "flex",alignItems:"center",justifyContent:"center",height:"100%" }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    height: "100%",
+                  }}
+                >
                   <CircularProgress />
                 </Box>
               ) : (
