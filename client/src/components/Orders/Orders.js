@@ -9,6 +9,7 @@ import { TopNav } from "../topnav/TopNav";
 import axios from "axios";
 export const Orders = ({ isAuth }) => {
   const [orders, setOrders] = useState([]);
+  const [filteredOrders,setFilteredOrders] = useState([])
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const columns = [
@@ -55,7 +56,7 @@ export const Orders = ({ isAuth }) => {
           },
         })
         .then((res) => {
-          setOrders(res.data);
+          setFilteredOrders(res.data)
         });
     } catch (error) {
       console.log(error);
@@ -65,11 +66,11 @@ export const Orders = ({ isAuth }) => {
     }
   };
   const filterOrder = (filter) => {
-    const filteredOrders = orders.filter(
-      (order) => order.status == filter
+    const filterOrders = filteredOrders.filter(
+      (order) => order.status === filter
     );
-    console.log(filteredOrders)
-    setOrders(filteredOrders)
+    console.log(filterOrders)
+    setOrders(filterOrders)
   };
 
   const redirectToLogin = () => {
