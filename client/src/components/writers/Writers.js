@@ -5,6 +5,8 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { TopNav } from "../topnav/TopNav";
+import { IconButton, Menu, MenuItem } from "@mui/material";
+import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 import axios from "axios";
 
 const style = {
@@ -26,6 +28,38 @@ export const Writers = () => {
   const [password, setPassword] = useState();
   const [writersList, setWritersList] = useState([]);
   const [newWriterAdded,setNewWriterAdded] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+
+ 
+  const CustomActionCell = ({ row }) => (
+    <div>
+      <IconButton
+        aria-label="more"
+        aria-controls="action-menu"
+        aria-haspopup="true"
+        onClick={handleMenuOpen}
+      >
+        <MoreVertIcon />
+      </IconButton>
+      <Menu
+        id="action-menu"
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleMenuClose}
+      >
+        <MenuItem>Edit</MenuItem>
+        <MenuItem>Delete</MenuItem>
+      </Menu>
+    </div>
+  );
+
+  const handleMenuOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
 
   const fetchWriters = async () => {
     await axios.get("http://localhost:5000/writers/getWriters").then((res) => {
@@ -52,7 +86,7 @@ export const Writers = () => {
     fetchWriters();
   }, [newWriterAdded]);
   const columns = [
-    { field: "id", headerName: "ID", width: 150 },
+    { field: "id", headerName: "SN", width: 150 },
     { field: "username", headerName: "Username", width: 150 },
     { field: "email", headerName: "Email", width: 150 },
     { field: "phone", headerName: "Phone", width: 150 },
@@ -63,7 +97,12 @@ export const Writers = () => {
       width: 150,
     },
     { field: "assigned", headerName: "Assigned", type: "boolean", width: 150 },
-    { field: "joined", headerName: "Joined", type: "Date", width: 150 },
+    {
+      field: "action",
+      headerName: "Action",
+      width: 150,
+      renderCell: CustomActionCell,
+    },
   ];
   const rows = writersList
     .filter((writer) => writer.role == "writer")
@@ -73,8 +112,7 @@ export const Writers = () => {
       email: writer.email,
       phone: writer.phone,
       tasks_done: writer.assigned_tasks.length,
-      assigned: writer.is_assigned ? 1 : 0,
-      joined: new Date(writer.created_at).toLocaleDateString()
+      assigned: writer.is_assigned ? 1 : 0
     }));
   return (
     <div className="writers-section">
@@ -150,6 +188,7 @@ export const Writers = () => {
       <div className="writers-list">
         <div style={{ height: 350, width: "100%" }}>
           <DataGrid
+            rowSelection= {false}
             rows={rows}
             columns={columns}
             initialState={{
@@ -158,7 +197,6 @@ export const Writers = () => {
               },
             }}
             pageSizeOptions={[5, 10]}
-            checkboxSelection
           />
         </div>
       </div>
