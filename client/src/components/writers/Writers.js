@@ -48,11 +48,19 @@ export const Writers = () => {
         onClose={handleMenuClose}
       >
         <MenuItem>Edit</MenuItem>
-        <MenuItem>Delete</MenuItem>
+        <MenuItem onClick={()=>deleteWriter(row)}>Delete</MenuItem>
       </Menu>
     </div>
   );
-
+ 
+  
+  const deleteWriter = async (row) =>{
+    console.log(row)
+      await axios.delete(`http://localhost:5000/writers/deleteWriter/${row.id}`)
+      .then(res=>{
+        console.log(res)
+      })
+  }
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -107,7 +115,7 @@ export const Writers = () => {
   const rows = writersList
     .filter((writer) => writer.role == "writer")
     .map((writer, index) => ({
-      id: writer._id ? index + 1 : 0,
+      id: writer._id,
       username: writer.username,
       email: writer.email,
       phone: writer.phone,

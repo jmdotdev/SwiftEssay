@@ -1,5 +1,5 @@
 import express from "express"
-import { getWriters, registerWriterController,loginUser,rateWriter,getWriterRatings, verifyUserToken } from "../controllers/writerController.js";
+import { getWriters, registerWriterController,loginUser,rateWriter,getWriterRatings, verifyUserToken, deleteWriter } from "../controllers/writerController.js";
 export const writerRouter = express.Router();
 
 writerRouter.post('/registerWriter',registerWriterController),
@@ -8,3 +8,5 @@ writerRouter.get('/getWriters',getWriters)
 writerRouter.post('/rateWriter',rateWriter)
 writerRouter.get('/getWriterRatings',getWriterRatings)
 writerRouter.post('/verifyToken',verifyUserToken)
+writerRouter.delete('/deleteWriter/:id',deleteWriter)
+
