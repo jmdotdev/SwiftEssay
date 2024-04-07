@@ -94,7 +94,8 @@ export const Writers = () => {
     fetchWriters();
   }, [newWriterAdded]);
   const columns = [
-    { field: "id", headerName: "SN", width: 150 },
+    { field: "sn", headerName: "SN", width: 150 },
+    { field: "id", headerName: "ID", width: 150},
     { field: "username", headerName: "Username", width: 150 },
     { field: "email", headerName: "Email", width: 150 },
     { field: "phone", headerName: "Phone", width: 150 },
@@ -115,6 +116,7 @@ export const Writers = () => {
   const rows = writersList
     .filter((writer) => writer.role == "writer")
     .map((writer, index) => ({
+      sn:index,
       id: writer._id,
       username: writer.username,
       email: writer.email,
@@ -196,6 +198,9 @@ export const Writers = () => {
       <div className="writers-list">
         <div style={{ height: 350, width: "100%" }}>
           <DataGrid
+            columnVisibilityModel={{
+              id:false
+            }}
             rowSelection= {false}
             rows={rows}
             columns={columns}
