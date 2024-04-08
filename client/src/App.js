@@ -34,15 +34,6 @@ function App() {
     }
   }, [location.pathname, navigate]);
 
-  // useEffect(() => {
-  //   // Check for the presence of the authentication token in local storage
-  //   const authToken = localStorage.getItem('token');
-
-  //   // If the token is not present, redirect to the login page
-  //   if (!authToken) {
-  //     navigate('/login');
-  //   }
-  // }, [navigate]);
   return (
     <div className="App">
       {!isExcludedRoute && <SideNav />}
@@ -51,7 +42,7 @@ function App() {
       <Route path='register' element={<Register/>}/>
       <Route path='dashboard' element={<Dashboard/>}/>
       <Route path='writers' element={<Writers/>} />
-      <Route path='profile' element={<Profile/>}/>
+      <Route path='profile/:id' element={<Profile/>}/>
       <Route path='orders' element={<Orders  isAuth={isAuth}/>}/>
       <Route path='orders/add-order' element={<AddOrder/>}/>
       <Route path='orders/order-details/:id' element={<OrderDetails/>}/>

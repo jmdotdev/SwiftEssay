@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import "./Writers.css";
 import { DataGrid } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
@@ -47,7 +48,7 @@ export const Writers = () => {
         open={Boolean(anchorEl)}
         onClose={handleMenuClose}
       >
-        <MenuItem>Edit</MenuItem>
+        <MenuItem><Link to={`/profile/${row.id}`}>View</Link></MenuItem>
         <MenuItem onClick={()=>deleteWriter(row)}>Delete</MenuItem>
       </Menu>
     </div>
