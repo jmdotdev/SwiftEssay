@@ -19,7 +19,6 @@ export const Profile = () => {
     const fetchData =async () => {
       await getWriterData();
     }
-
     fetchData();
   },[])
 
@@ -32,7 +31,7 @@ export const Profile = () => {
         <div className="profile-header">
           <img src={avatar} alt="Profile Picture" />
           <h1>{userData?.username}</h1>
-          <p>Freelance Writer</p>
+          <p>{userData?.email}</p>
         </div>
         <div className="profile-bio">
           <h2>About Me</h2>
@@ -56,7 +55,7 @@ export const Profile = () => {
           <h2>Task Statistics</h2>
           <ul>
             <li>
-              <strong>Completed Tasks:</strong> 50
+              <strong>Completed Tasks:</strong> {userData?.assigned_tasks?.length}
             </li>
             <li>
               <strong>In Progress:</strong> 10
