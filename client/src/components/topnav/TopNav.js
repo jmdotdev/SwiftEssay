@@ -79,7 +79,7 @@ export const TopNav = () => {
          <IoMdLogOut/>
          logout
          </div>
-         <Link to='/profile'>
+         <Link>
          <div className='account'>
           <img src={avatar} alt='avatar.png'/>
          {loggedInUser?.username}
