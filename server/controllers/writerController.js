@@ -5,7 +5,7 @@ import bcrypt from "bcrypt";
 import WriterRating from "../models/writerRatings.js";
 import { verifyToken } from "../helpers/verifyToken.js";
 import Order from "../models/Order.js";
-
+import { sendEmail } from "../services/sendEmail.js";
 export const registerWriterController = async (req, res) => {
   try {
     const { username, email, phone, password } = req.body;
@@ -57,6 +57,10 @@ export const loginUser = async (req, res) => {
       posted_jobs: user.posted_jobs,
       role: user.role,
     };
+    const templatePath = './emailTemplates/welcome.html';
+    const recipient = 'johnmwanikig30@gmail.com';
+    const username = payload.username;
+    await sendEmail(templatePath,recipient,username)
     const token = jwt.sign({ payload }, "mysecretkey", {
       expiresIn: "1h",
     });
