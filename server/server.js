@@ -22,6 +22,8 @@ const connectDb = () => {
         console.log("db connected");
     }).catch(err => console.log({"error": err}));
 }
+// Set the view engine to EJS
+app.set('view engine', 'ejs');
 
 app.use('/users',userRouter)
 app.use('/clients',clientRouter)

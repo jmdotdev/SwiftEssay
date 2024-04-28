@@ -57,16 +57,15 @@ export const loginUser = async (req, res) => {
       posted_jobs: user.posted_jobs,
       role: user.role,
     };
-    const templatePath = './emailTemplates/welcome.html';
     const recipient = 'johnmwanikig30@gmail.com';
     const username = payload.username;
-    await sendEmail(templatePath,recipient,username)
+    await sendEmail(recipient,username)
     const token = jwt.sign({ payload }, "mysecretkey", {
       expiresIn: "1h",
     });
-    res.status(200).json({ token, payload });
+    return res.status(200).json({ token, payload });
   } catch (err) {
-    res.status(500).json({ error: err });
+    return res.status(500).json({ error: err });
   }
 };
 
