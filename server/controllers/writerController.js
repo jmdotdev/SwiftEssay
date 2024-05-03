@@ -22,6 +22,8 @@ export const registerWriterController = async (req, res) => {
       role: "writer",
     });
     await user.save();
+    const recipient = email;
+    await sendEmail(recipient,username)
     return res.status(200).json({ message: "Writer Created Successfully" });
   } catch (err) {
     res.status(500).json({ error: err });
@@ -57,9 +59,6 @@ export const loginUser = async (req, res) => {
       posted_jobs: user.posted_jobs,
       role: user.role,
     };
-    const recipient = 'johnmwanikig30@gmail.com';
-    const username = payload.username;
-    await sendEmail(recipient,username)
     const token = jwt.sign({ payload }, "mysecretkey", {
       expiresIn: "1h",
     });

@@ -10,11 +10,6 @@ import fs from 'fs/promises';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 export async function sendEmail(recipient,username) {
-    // Read the HTML template and image file
-    // const htmlTemplate = await readFileAsync(path, 'utf-8');
-    // const imageAttachment = await readFileAsync('path/to/your/image.png');
-
-    // const updatedhtmlTemplate = htmlTemplate.replace('[Recipient]',username)
 
    try {
     const htmlTemplatePath = `./emailTemplates/welcome.ejs`;
