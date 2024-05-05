@@ -21,9 +21,9 @@ export const registerWriterController = async (req, res) => {
       password: hashedPassword,
       role: "writer",
     });
-    await user.save();
     const recipient = email;
     await sendEmail(recipient,username)
+    await user.save();
     return res.status(200).json({ message: "Writer Created Successfully" });
   } catch (err) {
     res.status(500).json({ error: err });
