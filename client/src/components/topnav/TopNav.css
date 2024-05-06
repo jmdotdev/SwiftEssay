@@ -15,17 +15,6 @@
   align-items: center;
   cursor: pointer;
 }
-
-.profile-section .notifications {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  cursor: pointer;
-  font-size: 20px;
-}
-.notifications.active{
-  color: red;
-}
 .dropdown-content{
   background-color: #fff;
 }
