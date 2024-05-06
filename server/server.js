@@ -7,7 +7,6 @@ import { fileURLToPath } from 'url';
 import { clientRouter } from "./routes/clientRoutes.js";
 import { writerRouter } from "./routes/writerRoutes.js";
 import { orderRouter } from "./routes/orderRoutes.js";
-import { messageRouter } from "./routes/messageRoutes.js";
 import { userRouter } from "./routes/userRoutes.js";
 const app = express()
 dotenv.config();
@@ -31,7 +30,6 @@ app.use('/writers',writerRouter)
 app.use('/orders',orderRouter)
 // Serve static files from the 'orderfiles' directory
 app.use('/orderfiles', express.static(path.join(__dirname, 'orderfiles')));
-app.use('/messages',messageRouter)
 
 app.listen(PORT, () => {
   connectDb();
