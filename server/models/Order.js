@@ -34,6 +34,11 @@ const orderSchema = new Schema({
     type:Number,
     required:true,
   },
+  price_per_page:{
+    type: Number,
+    required: false,
+    default: 0
+  }
   single_or_double: {
     type:String,
     required: true,
