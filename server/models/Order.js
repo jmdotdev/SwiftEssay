@@ -38,7 +38,11 @@ const orderSchema = new Schema({
     type: Number,
     required: false,
     default: 0
-  }
+  },
+  amount_payable:{
+   type: Number,
+   required: true
+  },
   single_or_double: {
     type:String,
     required: true,
@@ -57,10 +61,10 @@ const orderSchema = new Schema({
     type:Date,
     required:true,
   },
-  //update logic to allow this column
   posted_by:{
-    type:String,
-    required:true
+    type:mongoose.Schema.Types.ObjectId,
+    ref:"User",
+    required:false,
   },
   assigned_to:{
     type:mongoose.Schema.Types.ObjectId,

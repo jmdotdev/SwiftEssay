@@ -7,6 +7,7 @@ import {getUserId} from '../../../utils/getUserData'
 import axios from 'axios'
 export const AddOrder = () => {
   const [userId,setUserId] = useState()
+  const [pages,setPages] = useState();
   const [orderDetails, setOrderDetails] = useState({
     academic_level: "",
     type: "",
@@ -29,6 +30,8 @@ export const AddOrder = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+    name == 'pages' && setPages(value)
+    console.log("pages",pages)
     setOrderDetails({ ...orderDetails, [name]: value });
   };
 
@@ -142,12 +145,12 @@ export const AddOrder = () => {
 
             <div className="paper-cost">
               <div className="subtotal">
-                <p>1 page * USD 3</p>
-                <p>USD 3.00</p>
+                <p>{pages} pages </p>
+                <p>* ksh 300</p>
               </div>
               <div className="total">
                 <p><b>Total Price</b></p>
-                <p><b>USD 3.00</b></p>
+                <p><b>{pages * 300}</b></p>
               </div>
               <div className="card-footer">
                 <p>Secure payments via:</p>
