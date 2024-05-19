@@ -151,6 +151,10 @@ export const OrderDetails = () => {
       <td>{order.pages}</td>
     </tr>
     <tr>
+      <td className="fixed-column">Amount Payable</td>
+      <td>{order.amount_payable}</td>
+    </tr>
+    <tr>
       <td className="fixed-column">Posted By</td>
       <td>{order.posted_by}</td>
     </tr>

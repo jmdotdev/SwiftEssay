@@ -56,7 +56,7 @@ export const Orders = ({ isAuth }) => {
           },
         })
         .then((res) => {
-          setFilteredOrders(res.data)
+          setOrders(res.data)
         });
     } catch (error) {
       console.log(error);

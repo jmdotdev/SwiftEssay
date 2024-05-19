@@ -17,7 +17,7 @@ export const AddOrder = () => {
     files: [],
     page_format: "",
     pages: 0,
-    single_or_double: "",
+    amount_payable: "",
     citations: 0,
     slides: 0,
     posted_by:getUserId(),
@@ -31,9 +31,9 @@ export const AddOrder = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     name == 'pages' && setPages(value)
-    console.log("pages",pages)
     setOrderDetails({ ...orderDetails, [name]: value });
   };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -49,7 +49,6 @@ export const AddOrder = () => {
           formData.append(key, value);
         }
       });
-      console.log("orderdetals",orderDetails)
       for (let [key, value] of formData.entries()) {
         console.log(`${key}: ${value}`);
       }
@@ -111,10 +110,6 @@ export const AddOrder = () => {
               <div className="input-control">
                 <label>Pages:</label>
                 <input type="number" placeholder="number of pages" onChange={handleInputChange} value={orderDetails.pages} name="pages"/>
-              </div>
-              <div className="input-control">
-                <label>Double/Single:</label>
-                <input type="text" placeholder="double or single" onChange={handleInputChange} value={orderDetails.single_or_double} name="single_or_double"/>
               </div>
               <div className="input-control">
                 <label>Sources To Cite:</label>

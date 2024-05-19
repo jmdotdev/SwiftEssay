@@ -3,6 +3,7 @@ import Order from "../models/Order.js";
 export const createOrder = async (req, res) => {
   try {
     const orderDetails = req.body;
+    orderDetails.amount_payable = orderDetails.pages * 300
 
     // Extract uploaded files from request
     const files = req.files["files"] || [];
