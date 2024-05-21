@@ -33,7 +33,7 @@ export const Orders = ({ isAuth }) => {
     },
   ];
   const rows = orders.map((order, index) => ({
-    id: order._id,
+    id: order.order_id,
     level: order.academic_level,
     discipline: order.discipline,
     topic: order.topic,

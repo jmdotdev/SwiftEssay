@@ -156,7 +156,7 @@ export const OrderDetails = () => {
     </tr>
     <tr>
       <td className="fixed-column">Posted By</td>
-      <td>{order.posted_by}</td>
+      <td>{order.posted_by?.email}</td>
     </tr>
     <tr>
       

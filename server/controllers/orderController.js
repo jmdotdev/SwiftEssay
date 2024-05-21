@@ -37,7 +37,8 @@ export const getSingleOrder = async (req, res) => {
   try {
     const id = req.params.id;
     const order = await Order.findById(id)
-    .populate("assigned_to")
+    .populate("assigned_to").populate("posted_by")
+
     // .populate("submitted_by");
     return res.status(200).json(order);
   } catch (error) {

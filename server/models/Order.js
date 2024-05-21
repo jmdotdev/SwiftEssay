@@ -2,6 +2,10 @@ import mongoose from "mongoose";
 const {Schema}  = mongoose;
 
 const orderSchema = new Schema({
+  order_id:{
+    type:Number,
+    default: Math.ceil(Math.random() * 1000)
+  },
   academic_level:{
     type:String,
     required:true
