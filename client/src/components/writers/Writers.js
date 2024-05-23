@@ -117,7 +117,7 @@ export const Writers = () => {
   const rows = writersList
     .filter((writer) => writer.role == "writer")
     .map((writer, index) => ({
-      sn:index,
+      sn: index,
       id: writer._id,
       username: writer.username,
       email: writer.email,

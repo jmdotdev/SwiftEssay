@@ -13,7 +13,7 @@ export const Orders = ({ isAuth }) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const columns = [
-    { field: "id", headerName: "ID", width: 150 },
+    { field: "id", headerName: "OrderID", width: 150 },
     { field: "level", headerName: "Level", width: 150 },
     { field: "discipline", headerName: "Discipline", width: 150 },
     { field: "topic", headerName: "Topic", width: 150 },
@@ -45,9 +45,9 @@ export const Orders = ({ isAuth }) => {
   const getOrders = async () => {
     try {
       const token = localStorage.getItem("token");
-      if (!token) {
-        redirectToLogin();
-      }
+      // if (!token) {
+      //   redirectToLogin();
+      // }
       setLoading(true);
       await axios
         .get("http://localhost:5000/orders/getOrders", {
@@ -118,6 +118,7 @@ export const Orders = ({ isAuth }) => {
                 </Box>
               ) : (
                 <DataGrid
+                  rowSelection = {false}
                   rows={rows}
                   columns={columns}
                   initialState={{
@@ -126,7 +127,6 @@ export const Orders = ({ isAuth }) => {
                     },
                   }}
                   pageSizeOptions={[5, 10]}
-                  checkboxSelection
                 />
               )}
             </div>
