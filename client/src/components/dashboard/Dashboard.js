@@ -14,6 +14,7 @@ import axios from 'axios'
 import { Link,useNavigate } from 'react-router-dom';
 import {verifyToken} from '../../utils/verifyToken';
 import { AiOutlineSend } from "react-icons/ai";
+import { OrderCard } from '../../shared/OrderCard';
 
 export const Dashboard = () => {
     const [tabvalue, setTabValue] = useState(0);
@@ -78,40 +79,10 @@ export const Dashboard = () => {
             <h3>Dashboard</h3>
         </div>
         <div className='dashboard-content-cards'>
-            <div className='dashboard-card'>
-                <div className='left-section'>
-                   <h2>26</h2>
-                   <h4>Pending Orders</h4>
-                </div>
-                <div className='right-section'>
-                   <img src={pendingIcon} alt='orders-image.png'/>
-                </div>
-            </div>
-            <div className='dashboard-card'>
-                <div className='left-section'>
-                   <h2>18</h2>
-                   <h4>Orders Inprogress</h4>
-                </div>
-                <div className='right-section'>
-                   <img src={progressIcon} alt='orders-image.png'/>
-                </div>
-            </div> <div className='dashboard-card'>
-                <div className='left-section'>
-                   <h2>10</h2>
-                   <h4>Completed Orders</h4>
-                </div>
-                <div className='right-section'>
-                   <img src={completedIcon} alt='orders-image.png'/>
-                </div>
-            </div> <div className='dashboard-card'>
-                <div className='left-section'>
-                   <h2>5</h2>
-                   <h4>Revision Orders</h4>
-                </div>
-                <div className='right-section'>
-                   <img src={repeatIcon} alt='orders-image.png'/>
-                </div>
-            </div>
+          <OrderCard orderCount={(latestOrders.filter(ord=>ord.status == 'available')).length} orderType='Available' Icon={pendingIcon}/>
+          <OrderCard orderCount={(latestOrders.filter(ord=>ord.status == 'pending')).length} orderType='Pending' Icon={pendingIcon}/>
+          <OrderCard orderCount={(latestOrders.filter(ord=>ord.status == 'inprogress')).length} orderType='In Progress' Icon={pendingIcon}/>
+          <OrderCard orderCount={(latestOrders.filter(ord=>ord.status == 'completed')).length} orderType='Completed' Icon={pendingIcon}/>
         </div>
         <div className='tabs'>
         <Box sx={{ width: '100%', bgcolor: 'background.paper' }}>
