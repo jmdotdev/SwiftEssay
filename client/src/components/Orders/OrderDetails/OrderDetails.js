@@ -143,6 +143,10 @@ export const OrderDetails = () => {
       <td>{order.instructions}</td>
     </tr>
     <tr>
+      <td className="fixed-column">Order ID</td>
+      <td>{order.order_id}</td>
+    </tr>
+    <tr>
       <td className="fixed-column">Page Format</td>
       <td>{order.page_format}</td>
     </tr>

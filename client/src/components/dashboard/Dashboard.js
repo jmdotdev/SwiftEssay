@@ -11,68 +11,62 @@ import { DataGrid } from "@mui/x-data-grid";
 import {TopNav} from '../topnav/TopNav'
 import { useJwt } from "react-jwt";
 import axios from 'axios'
-import { useNavigate } from 'react-router-dom';
+import { Link,useNavigate } from 'react-router-dom';
 import {verifyToken} from '../../utils/verifyToken';
+import { AiOutlineSend } from "react-icons/ai";
+
 export const Dashboard = () => {
     const [tabvalue, setTabValue] = useState(0);
     const [loggedInUser,setLoggedInUser] = useState(null)
     const [isLoggedIn,setIsLoggedIn] = useState(false)
     const navigate = useNavigate();
-    const handleChange = (event, newValue) => {
-      setTabValue(newValue);
-    };
     const [latestOrders,setLatestOrders] = useState([])
     const latestOrderColumns = [
-      { field: 'id', headerName: 'ID', width: 70 },
-      { field: 'client', headerName: 'Client', width: 130 },
-      { field: 'writer', headerName: 'Writer', width: 130 },
-      { field: 'rating', headerName: 'Rating', width: 130 },
-      { field: 'rated', headerName: 'Rated', width: 130 },
-    ];
-    const columns = [
-      { field: 'id', headerName: 'ID', width: 70 },
-      { field: 'client', headerName: 'Client', width: 130 },
-      { field: 'writer', headerName: 'Writer', width: 130 },
-      { field: 'comment', headerName: 'Comment', width: 130 },
-    ];
-    const latestOrderRow = latestOrders.map((ord,index)=>(
+      { field: "id", headerName: "ID", width: 150 },
+      { field: "sn", headerName: "SN", width: 150 },
+      { field: "level", headerName: "Level", width: 150 },
+      { field: "discipline", headerName: "Discipline", width: 150 },
+      { field: "topic", headerName: "Topic", width: 150 },
+      { field: "type", headerName: "Type", width: 150 },
+      { field: "deadline", headerName: "Deadline", width: 150 },
       {
-        id:index +1,
-        client:ord.client,
-        writer:ord.writer,
-        rating:ord.rating,
-        rated:ord.rated ? "rated" : "not rated",
+        field: "actions",
+        headerName: "Actions",
+        width: 150,
+        renderCell: (params) => (
+          <Link to={`/orders/order-details/${params.row.id}`}>
+            <div className="order-detail-icon">
+              <AiOutlineSend />
+            </div>
+          </Link>
+        ),
+      },
+    ];
+    const latestOrderRow = latestOrders.filter(order => order.status == 'available')
+    .map((order,index)=>(
+      {
+        id: order._id,
+        sn:index + 1,
+        level: order.academic_level,
+        discipline: order.discipline,
+        topic: order.topic,
+        type: order.type,
+        single_double: order.single_or_double,
+        files: order.files,
+        deadline: order.deadline,
       }
     ))
-    const rows = [
-      { id: 1, writer: 'Snow', client: 'Jon', comment: 35 },
-      { id: 2, writer: 'Lannister', client: 'Cersei', comment: 42 },
-      { id: 3, writer: 'Lannister', client: 'Jaime', comment: 45 },
-      { id: 4, writer: 'Stark', client: 'Arya', comment: 16 },
-      { id: 5, writer: 'Targaryen', client: 'Daenerys', comment: null },
-      { id: 6, writer: 'Melisandre', client: null, comment: 150 },
-      { id: 7, writer: 'Clifford', client: 'Ferrara', comment: 44 },
-      { id: 8, writer: 'Frances', client: 'Rossini', comment: 36 },
-      { id: 9, writer: 'Roxie', client: 'Harvey', comment: 65 },
-    ];
-    
-    const getWritersRatings = async () => {
-      await axios.get("http://localhost:5000/writers/getWriterRatings").then((res) => {
-        setLatestOrders(res.data)
-      });
-    };
 
     const getOrders = async () =>{
       await axios.get("http://localhost:5000/orders/getOrders").then((res) => {
-        // setLatestOrders(res.data)
+        setLatestOrders(res.data)
       });
     }
 
   useEffect(() => {
     const fetchData = async () => {
       await verifyToken(setLoggedInUser, setIsLoggedIn, navigate);
-      // await getWritersRatings();
-      // await getOrders();
+      await getOrders();
     };
 
     fetchData();
@@ -121,15 +115,16 @@ export const Dashboard = () => {
         </div>
         <div className='tabs'>
         <Box sx={{ width: '100%', bgcolor: 'background.paper' }}>
-      <Tabs value={tabvalue} onChange={handleChange} centered>
+      <Tabs centered>
         <Tab label="Latest Rated Orders" />
-        <Tab label="Approval Comments" />
-        <Tab label="Revision Requests" />
       </Tabs>
     </Box>
     <div className='tabs-info'>
-      {tabvalue == 0 && <div style={{ height: 350, width: "100%", padding:"10px" }}>
+        <div style={{ height: 350, width: "100%", padding:"10px" }}>
           <DataGrid
+            columnVisibilityModel={{
+              id: false,
+            }}
             rows={latestOrderRow}
             columns={latestOrderColumns}
             initialState={{
@@ -138,36 +133,8 @@ export const Dashboard = () => {
               },
             }}
             pageSizeOptions={[5, 10]}
-            checkboxSelection
           />
-        </div>}
-      {tabvalue == 1 && <div style={{ height: 300, width: "100%" }}>
-          <DataGrid
-            rows={rows}
-            columns={columns}
-            initialState={{
-              pagination: {
-                paginationModel: { page: 0, pageSize: 5 },
-              },
-            }}
-            pageSizeOptions={[5, 10]}
-            checkboxSelection
-          />
-        </div>}
-      {tabvalue == 2 && <div style={{ height: 300, width: "100%" }}>
-          <DataGrid
-            rows={rows}
-            columns={columns}
-            initialState={{
-              pagination: {
-                paginationModel: { page: 0, pageSize: 5 },
-              },
-            }}
-            pageSizeOptions={[5, 10]}
-            checkboxSelection
-          />
-        </div>}
-      
+        </div>
     </div>
         </div>
     </div>

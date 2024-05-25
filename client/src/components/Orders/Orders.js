@@ -13,7 +13,8 @@ export const Orders = ({ isAuth }) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const columns = [
-    { field: "id", headerName: "OrderID", width: 150 },
+    { field: "id", headerName: "ID", width: 150 },
+    { field: "sn", headerName: "SN", width: 150 },
     { field: "level", headerName: "Level", width: 150 },
     { field: "discipline", headerName: "Discipline", width: 150 },
     { field: "topic", headerName: "Topic", width: 150 },
@@ -33,7 +34,8 @@ export const Orders = ({ isAuth }) => {
     },
   ];
   const rows = orders.map((order, index) => ({
-    id: order.order_id,
+    id: order._id,
+    sn:index + 1,
     level: order.academic_level,
     discipline: order.discipline,
     topic: order.topic,
@@ -80,7 +82,7 @@ export const Orders = ({ isAuth }) => {
     getOrders();
   }, [isAuth]);
 
-  return isAuth ? (
+  return (
     <div className="orders-section">
       <TopNav />
       {
@@ -118,6 +120,9 @@ export const Orders = ({ isAuth }) => {
                 </Box>
               ) : (
                 <DataGrid
+                  columnVisibilityModel={{
+                    id:false,
+                  }}
                   rowSelection = {false}
                   rows={rows}
                   columns={columns}
@@ -134,7 +139,5 @@ export const Orders = ({ isAuth }) => {
         </div>
       }
     </div>
-  ) : (
-    redirectToLogin()
-  );
+  ) 
 };
