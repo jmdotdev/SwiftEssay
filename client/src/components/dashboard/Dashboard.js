@@ -80,9 +80,9 @@ export const Dashboard = () => {
         </div>
         <div className='dashboard-content-cards'>
           <OrderCard orderCount={(latestOrders.filter(ord=>ord.status == 'available')).length} orderType='Available' Icon={pendingIcon}/>
-          <OrderCard orderCount={(latestOrders.filter(ord=>ord.status == 'pending')).length} orderType='Pending' Icon={pendingIcon}/>
-          <OrderCard orderCount={(latestOrders.filter(ord=>ord.status == 'inprogress')).length} orderType='In Progress' Icon={pendingIcon}/>
-          <OrderCard orderCount={(latestOrders.filter(ord=>ord.status == 'completed')).length} orderType='Completed' Icon={pendingIcon}/>
+          <OrderCard orderCount={(latestOrders.filter(ord=>ord.status == 'revision')).length} orderType='Revision' Icon={repeatIcon}/>
+          <OrderCard orderCount={(latestOrders.filter(ord=>ord.status == 'inprogress')).length} orderType='In Progress' Icon={progressIcon}/>
+          <OrderCard orderCount={(latestOrders.filter(ord=>ord.status == 'completed')).length} orderType='Completed' Icon={completedIcon}/>
         </div>
         <div className='tabs'>
         <Box sx={{ width: '100%', bgcolor: 'background.paper' }}>
