@@ -63,6 +63,39 @@ export const assignOrder = async (req, res) => {
 };
 
 
+export const updateOrder = async (req, res) => {
+  try {
+    const orderDetails = req.body;
+    if (!orderDetails.pages || typeof orderDetails.pages !== 'number') {
+      return res.status(400).json({ error: 'Invalid number of pages' });
+    }
+    
+    orderDetails.amount_payable = orderDetails.pages * 300;
+
+    // Extract uploaded files from request
+    const files = req.files?.files || [];
+
+    // Add files to orderDetails
+    orderDetails.files = files.map(file => file);
+
+    const id = req.params.id;
+    if (!id) {
+      return res.status(400).json({ error: 'Order ID is required' });
+    }
+
+    const updatedOrder = await Order.findByIdAndUpdate(id, orderDetails, { new: true });
+
+    if (!updatedOrder) {
+      return res.status(404).json({ error: 'Order not found' });
+    }
+
+    return res.status(200).json(updatedOrder);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
+
+
 export const deleteOrder = async (req,res) => {
    try {
     const id = req.params.id;

@@ -43,6 +43,7 @@ function App() {
       <Route path='profile/:id' element={<Profile/>}/>
       <Route path='orders' element={<Orders  isAuth={isAuth}/>}/>
       <Route path='orders/add-order' element={<AddOrder/>}/>
+      <Route path='orders/add-order/:id' element={<AddOrder/>}/>
       <Route path='orders/order-details/:id' element={<OrderDetails/>}/>
       <Route path='payments' element={<Payment/>}/>
       <Route path='*' element={<NotFound/>}/>

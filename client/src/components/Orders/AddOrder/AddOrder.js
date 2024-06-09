@@ -1,4 +1,5 @@
 import {React,useEffect,useState} from "react";
+import { useParams } from "react-router-dom";
 import { TopNav } from "../../topnav/TopNav";
 import "./AddOrder.css";
 import {orderDiscipline,paperTypes,citationOptions,academicLevels} from './AddOrderFormOptions'
@@ -6,8 +7,10 @@ import paypalImage from '../../../../src/assets/images/paypal.png'
 import {getUserId} from '../../../utils/getUserData'
 import axios from 'axios'
 export const AddOrder = () => {
+  const params = useParams()
   const [userId,setUserId] = useState()
   const [pages,setPages] = useState();
+  const [isUpdate,setIsUpdate] = useState(false);
   const [orderDetails, setOrderDetails] = useState({
     academic_level: "",
     type: "",
@@ -60,17 +63,37 @@ export const AddOrder = () => {
       console.error("Error submitting order:", error);
     }
   };
+
+  const updateOrder = async (e) =>{
+    e.preventDefault();
+    await axios.put(`http://localhost:5000/orders/updateOrder/${params.id}`,orderDetails)
+    .then(res => console.log(res))
+  }
+
+  const getOrderById = async () => {
+     await axios.get(`http://localhost:5000/orders/getSingleOrder/${params.id}`)
+     .then(res=>
+      // console.log(res.data)
+      setOrderDetails(res.data)
+     )
+  }
+
+  useEffect(()=>{
+    (async()=>{
+      await getOrderById();
+    }) ();
+  },[])
   return (
     <div className="main-container">
       <TopNav />
       <div className="add-order-container">
         <div className="add-order-form">
           <div className="header">
-            <h2>Place an Order</h2>
+            <h2>{params.id ? 'Edit an Order' : 'Place an Order'} </h2>
             <p>Fast,Secure and Reliable</p>
           </div>
           <div className="order-form">
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={params.id ? updateOrder : handleSubmit}>
               <div className="input-control">
                 <label>Academic Level:</label>
                 <select onChange={handleInputChange} value={orderDetails.academic_level} name="academic_level">

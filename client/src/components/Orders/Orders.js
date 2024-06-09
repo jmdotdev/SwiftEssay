@@ -32,6 +32,7 @@ export const Orders = ({ isAuth }) => {
         onClose={handleMenuClose}
       >
         <MenuItem><Link to={`/orders/order-details/${row.id}`}>View</Link></MenuItem>
+        <MenuItem><Link to={`/orders/add-order/${row.id}`}>Edit</Link></MenuItem>
         <MenuItem onClick={()=>{deleteOrder(row.id)}}>Delete</MenuItem>
       </Menu>
     </div>
