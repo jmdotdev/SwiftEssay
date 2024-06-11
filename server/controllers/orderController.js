@@ -52,7 +52,7 @@ export const assignOrder = async (req, res) => {
       const writer = req.body;
       await Order.findByIdAndUpdate(
         id,
-        { assigned_to: writer },
+        { assigned_to: writer,status:"progress"},
         // To get the updated document
         // { new: true }
       );

@@ -73,7 +73,6 @@ export const AddOrder = () => {
   const getOrderById = async () => {
      await axios.get(`http://localhost:5000/orders/getSingleOrder/${params.id}`)
      .then(res=>
-      // console.log(res.data)
       setOrderDetails(res.data)
      )
   }
