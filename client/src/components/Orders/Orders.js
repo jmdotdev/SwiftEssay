@@ -137,7 +137,6 @@ export const Orders = ({ isAuth }) => {
             <a onClick={() => filterOrder("Revision")}>Revision</a>
             <a onClick={() => filterOrder("Progress")}>Progress</a>
             <a onClick={() => filterOrder("Cancelled")}>Cancelled</a>
-            <a onClick={() => filterOrder("Approved")}>Approved</a>
           </div>
           <div className="orders-list">
             <div style={{ height: 350, width: "100%" }}>
