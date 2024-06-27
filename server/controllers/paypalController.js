@@ -37,6 +37,6 @@ export const paymentSuccess = async (req, res) => {
   };
   
 const paymentCancel = (req, res) => {
-    res.status(200).json({ message: 'Payment cancelled' })
+    res.status(500).json({ message: 'Payment cancelled' })
 };
   
