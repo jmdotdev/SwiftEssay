@@ -1,11 +1,18 @@
 import Order from "../models/Order.js";
 
+
 export const createOrder = async (req, res) => {
   try {
     const orderDetails = req.body;
     orderDetails.amount_payable = orderDetails.pages * 300;
     // Extract uploaded files from request
     const files = req.files["files"] || [];
+
+     // Store order details in session
+     req.session.orderDetails = {
+      ...orderDetails,
+      amount_payable: amountPayable
+    };
     // Construct order object with file data
     // const order = new Order({
     //   ...orderDetails,
