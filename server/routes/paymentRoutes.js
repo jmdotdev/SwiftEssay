@@ -1,9 +1,7 @@
 import express from 'express'
-import paymentController from '../controllers/paypalController'
-const paymentRouter = express.Router();
+import { paymentSuccess, paymentCancel } from '../controllers/paypalController.js'
+export const paymentRouter = express.Router();
 
+paymentRouter.get('/success', paymentSuccess);
+paymentRouter.get('/cancel', paymentCancel);
 
-router.get('/success', paymentController.paymentSuccess);
-router.get('/cancel', paymentController.paymentCancel);
-
-module.exports = router;

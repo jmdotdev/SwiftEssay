@@ -28,6 +28,7 @@ export const paymentSuccess = async (req, res) => {
           });
   
           await order.save();
+          req.session.orderDetails = null; 
           res.status(201).json({ message: "Order created successfully", payment });
         } catch (err) {
           res.status(500).json({ error: err });
@@ -36,7 +37,7 @@ export const paymentSuccess = async (req, res) => {
     });
   };
   
-const paymentCancel = (req, res) => {
+export const paymentCancel = (req, res) => {
     res.status(500).json({ message: 'Payment cancelled' })
 };
   

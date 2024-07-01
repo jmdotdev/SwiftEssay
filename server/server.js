@@ -8,6 +8,9 @@ import { clientRouter } from "./routes/clientRoutes.js";
 import { writerRouter } from "./routes/writerRoutes.js";
 import { orderRouter } from "./routes/orderRoutes.js";
 import { userRouter } from "./routes/userRoutes.js";
+import { paymentRouter } from "./routes/paymentRoutes.js";
+import session from "express-session"
+import MongoStore from "connect-mongo"
 const app = express()
 dotenv.config();
 app.use(cors());
@@ -21,6 +24,17 @@ const connectDb = () => {
         console.log("db connected");
     }).catch(err => console.log({"error": err}));
 }
+// Set up session middleware
+app.use(session({
+  secret: 'test-key-here', // Replace with a strong secret key
+  resave: false,
+  saveUninitialized: true,
+  store: MongoStore.create({
+    mongoUrl: url // Replace with your MongoDB connection string
+  }),
+  cookie: { secure: false } // Set to true if using HTTPS
+}));
+
 // Set the view engine to EJS
 app.set('view engine', 'ejs');
 
@@ -30,6 +44,7 @@ app.use('/writers',writerRouter)
 app.use('/orders',orderRouter)
 // Serve static files from the 'orderfiles' directory
 app.use('/orderfiles', express.static(path.join(__dirname, 'orderfiles')));
+app.use('/payment',paymentRouter)
 
 app.listen(PORT, () => {
   connectDb();

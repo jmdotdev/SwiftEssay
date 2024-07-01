@@ -78,7 +78,7 @@ export const AddOrder = () => {
   }
 
   useEffect(()=>{
-    (async()=>{
+    params.id !== undefined && (async()=>{
       await getOrderById();
     }) ();
   },[])
