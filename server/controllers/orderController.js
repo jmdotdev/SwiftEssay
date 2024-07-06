@@ -8,11 +8,13 @@ export const createOrder = async (req, res) => {
     // Extract uploaded files from request
     const files = req.files["files"] || [];
 
-     // Store order details in session
-     req.session.orderDetails = {
-      ...orderDetails,
-      amount_payable: amountPayable
-    };
+    const order = new Order({
+        ...orderDetails,
+        files: files.map((file) => file),
+      });
+    //  Store order details in session
+     req.session.order = order;
+     console.log(req.session.orderDetails,"orderDetails");
     // Construct order object with file data
     // const order = new Order({
     //   ...orderDetails,
@@ -57,7 +59,7 @@ export const createOrder = async (req, res) => {
       }
     });
   } catch (error) {
-    res.status(500).json({ error: error });
+    res.status(500).json({ error: error + "here" });
   }
 };
 
