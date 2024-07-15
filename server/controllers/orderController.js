@@ -1,67 +1,69 @@
 import Order from "../models/Order.js";
+import paypal from 'paypal-rest-sdk'
+paypal.configure({
+    'mode': 'sandbox', //sandbox or live
+    'client_id': process.env.CLIENT_ID,
+    'client_secret': process.env.CLIENT_SECRET
+  });
 
 
-export const createOrder = async (req, res) => {
-  try {
-    const orderDetails = req.body;
-    orderDetails.amount_payable = orderDetails.pages * 300;
-    // Extract uploaded files from request
-    const files = req.files["files"] || [];
-
-    const order = new Order({
+  export const createOrder = async (req, res) => {
+    try {
+      const orderDetails = req.body;
+      orderDetails.amount_payable = orderDetails.pages * 300;
+  
+      const files = req.files["files"] || [];
+  
+      const order = new Order({
         ...orderDetails,
         files: files.map((file) => file),
       });
-    //  Store order details in session
-     req.session.order = order;
-     console.log(req.session.orderDetails,"orderDetails");
-    // Construct order object with file data
-    // const order = new Order({
-    //   ...orderDetails,
-    //   files: files.map((file) => file),
-    // });
-    // Save order to the database
-    // await order.save();
-
-    // Step 1: Create PayPal payment
-    const create_payment_json = {
-      intent: "sale",
-      payer: {
-        payment_method: "paypal",
-      },
-      redirect_urls: {
-        return_url: "http://localhost:5000/payment/success",
-        cancel_url: "http://localhost:5000/payment/cancel",
-      },
-      transactions: [
-        {
-          amount: {
-            currency: "USD",
-            total: orderDetails.amount_payable.toFixed(2),
-          },
-          description: `Order ${order.id} payment` ,
+  
+      // Save order to the database
+      await order.save();
+      req.session.order = order;
+  
+      console.log("Order saved:", order);
+  
+      const create_payment_json = {
+        intent: "sale",
+        payer: {
+          payment_method: "paypal",
         },
-      ],
-    };
-
-    paypal.payment.create(create_payment_json, function (error, payment) {
-      if (error) {
-        console.log(error);
-        res.status(500).json({ error: "Payment creation failed" });
-      } else {
-        for (let i = 0; i < payment.links.length; i++) {
-          if (payment.links[i].rel === "approval_url") {
-            // Step 2: Redirect user to PayPal approval URL
-            return res.redirect(payment.links[i].href);
+        redirect_urls: {
+          return_url: "http://localhost:5000/payment/success",
+          cancel_url: "http://localhost:5000/payment/cancel",
+        },
+        transactions: [
+          {
+            amount: {
+              currency: "USD",
+              total: orderDetails.amount_payable.toFixed(2),
+            },
+            description: `Order ${order.id} payment`,
+          },
+        ],
+      };
+  
+      paypal.payment.create(create_payment_json, function (error, payment) {
+        if (error) {
+          console.log("Error creating payment:", error);
+          res.status(500).json({ error: "Payment creation failed" });
+        } else {
+          console.log("Payment created successfully:", payment);
+          for (let i = 0; i < payment.links.length; i++) {
+            if (payment.links[i].rel === "approval_url") {
+              return res.redirect(payment.links[i].href);
+            }
           }
+          res.status(500).json({ error: "No approval URL found" });
         }
-        res.status(500).json({ error: "No approval URL found" });
-      }
-    });
-  } catch (error) {
-    res.status(500).json({ error: error + "here" });
-  }
-};
+      });
+    } catch (error) {
+      console.error("Error creating order:", error);
+      res.status(500).json({ error: "Order creation failed" });
+    }
+  };
 
 export const getOrders = async (req, res) => {
   try {
