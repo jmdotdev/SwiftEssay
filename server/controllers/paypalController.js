@@ -17,7 +17,6 @@ export const paymentSuccess = async (req, res) => {
         },
       ],
     };
-<<<<<<< HEAD
 
     paypal.payment.execute(
       paymentId,
@@ -37,29 +36,6 @@ export const paymentSuccess = async (req, res) => {
             console.error("Error saving order:", err);
             res.status(500).json({ error: "Order saving failed" });
           }
-=======
-  
-    paypal.payment.execute(paymentId, execute_payment_json, async function (error, payment) {
-      if (error) {
-        console.log(error.response);
-        res.status(500).json({ error: 'Payment execution failed' });
-      } else {
-        try {
-          const orderDetails = req.body; // You might want to use sessions or another way to store and retrieve order details
-          orderDetails.amount_payable = orderDetails.pages * 300;
-  
-          const files = req.files["files"] || [];
-          const order = new Order({
-            ...orderDetails,
-            files: files.map((file) => file),
-          });
-  
-          await order.save();
-          req.session.order = null; 
-          res.status(201).json({ message: "Order created successfully", payment });
-        } catch (err) {
-          res.status(500).json({ error: err });
->>>>>>> 515757710647572ccd5cd79986269221dc65af17
         }
       }
     );
