@@ -56,7 +56,10 @@ export const AddOrder = () => {
         console.log(`${key}: ${value}`);
       }
       await axios.post("http://localhost:5000/orders/createOrder",formData)
-      .then(res=>console.log(res))
+      .then(res=>{
+        window.location.href = res.data?.redirectionLink
+        console.log('redirecting...')
+      })
 
       console.log("Order submitted successfully!");
     } catch (error) {

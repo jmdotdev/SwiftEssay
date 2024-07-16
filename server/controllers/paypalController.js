@@ -12,7 +12,7 @@ export const paymentSuccess = async (req, res) => {
         {
           amount: {
             currency: "USD",
-            total: order.amount_payable.toFixed(2), // You might want to dynamically set this based on your orderDetails
+            total: order.amount_payable.toFixed(2),
           },
         },
       ],

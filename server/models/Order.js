@@ -83,6 +83,10 @@ const orderSchema = new Schema({
     type:String,
     required:false
   },
+  isPaid:{
+     type: Boolean,
+     default: false
+  },
   created_at: {
     type: Date,
     default: Date.now,

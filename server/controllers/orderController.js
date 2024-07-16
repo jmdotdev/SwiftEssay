@@ -53,7 +53,7 @@ paypal.configure({
           console.log("Payment created successfully:", payment);
           for (let i = 0; i < payment.links.length; i++) {
             if (payment.links[i].rel === "approval_url") {
-              return res.redirect(payment.links[i].href);
+              return res.json({redirectionLink: payment.links[i].href});
             }
           }
           res.status(500).json({ error: "No approval URL found" });
