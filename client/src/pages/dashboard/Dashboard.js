@@ -8,13 +8,13 @@ import progressIcon from '../../assets/images/progress.jpg'
 import completedIcon from '../../assets/images/complete.jpg'
 import repeatIcon from '../../assets/images/repeat.svg'
 import { DataGrid } from "@mui/x-data-grid";
-import {TopNav} from '../topnav/TopNav'
+import { TopNav } from "../../components/topnav/TopNav";
 import { useJwt } from "react-jwt";
 import axios from 'axios'
 import { Link,useNavigate } from 'react-router-dom';
 import {verifyToken} from '../../utils/verifyToken';
 import { AiOutlineSend } from "react-icons/ai";
-import { OrderCard } from '../../shared/OrderCard';
+import { OrderCard } from "../../components/OrderCard";
 
 export const Dashboard = () => {
     const [tabvalue, setTabValue] = useState(0);

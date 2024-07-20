@@ -5,7 +5,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import { TopNav } from "../topnav/TopNav";
+import { TopNav } from "../../components/topnav/TopNav";
 import { IconButton, Menu, MenuItem } from "@mui/material";
 import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 import axios from "axios";
