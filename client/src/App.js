@@ -1,18 +1,18 @@
 import { useEffect, useState } from 'react';
 import { useNavigate,useLocation } from 'react-router-dom';
 import './App.css';
-import { Login } from './components/login/Login';
-import { Register } from './components/register/Register';
-import { NotFound } from './components/notfound/NotFound'
+import { Login } from './pages/login/Login';
+import { Register } from './pages/register/Register';
+import { NotFound } from './pages/notfound/NotFound'
 import { Routes, Route } from "react-router-dom";
 import { SideNav } from './components/sidenav/SideNav';
-import { Dashboard } from './components/dashboard/Dashboard';
-import { Writers } from './components/writers/Writers';
-import {Orders} from './components/Orders/Orders'
-import { AddOrder } from './components/Orders/AddOrder/AddOrder';
-import {OrderDetails} from './components/Orders/OrderDetails/OrderDetails'
-import {Payment} from  './components/Payment/Payment'
-import { Profile } from './components/profile/Profile';
+import { Dashboard } from './pages/dashboard/Dashboard';
+import { Writers } from './pages/writers/Writers';
+import {Orders} from './pages/Orders/Orders'
+import { AddOrder } from './pages/Orders/AddOrder/AddOrder';
+import {OrderDetails} from './pages/Orders/OrderDetails/OrderDetails'
+import {Payment} from  './pages/Payment/Payment'
+import { Profile } from './pages/profile/Profile';
 
 function App() {
   const navigate = useNavigate();

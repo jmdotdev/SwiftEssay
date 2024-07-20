@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./Profile.css";
-import { TopNav } from "../topnav/TopNav.js";
+import { TopNav } from "../../components/topnav/TopNav";
 import {useParams } from 'react-router-dom';
 import  axios  from "axios";
 import avatar from "../../assets/images/avatar.png"

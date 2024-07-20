@@ -6,7 +6,7 @@ import { IconButton, Menu, MenuItem } from "@mui/material";
 import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 import Box from "@mui/material/Box";
 import { Link, useNavigate } from "react-router-dom";
-import { TopNav } from "../topnav/TopNav";
+import { TopNav } from "../../components/topnav/TopNav";
 import axios from "axios";
 export const Orders = ({ isAuth }) => {
   const [orders, setOrders] = useState([]);
