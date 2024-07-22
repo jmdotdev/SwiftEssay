@@ -44,11 +44,11 @@ export const loginUser = async (req, res) => {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
     if (!user) {
-      res.status(401).json({ error: "Authentication failed" });
+      return res.status(401).json({ error: "Authentication failed" });
     }
     const passwordMatch = await bcrypt.compare(password, user.password);
     if (!passwordMatch) {
-      res.status(401).json({ error: "Authentication failed" });
+      return res.status(401).json({ error: "Authentication failed" });
     }
     const payload = {
       userId: user._id,
@@ -64,7 +64,7 @@ export const loginUser = async (req, res) => {
     });
     return res.status(200).json({ token, payload });
   } catch (err) {
-    return res.status(500).json({ error: err });
+    return res.status(500).json({ error: err.message });
   }
 };
 
