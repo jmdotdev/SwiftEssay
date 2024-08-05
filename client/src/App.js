@@ -13,6 +13,8 @@ import { AddOrder } from './pages/Orders/AddOrder/AddOrder';
 import {OrderDetails} from './pages/Orders/OrderDetails/OrderDetails'
 import {Payment} from  './pages/Payment/Payment'
 import { Profile } from './pages/profile/Profile';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const navigate = useNavigate();
@@ -34,6 +36,7 @@ function App() {
 
   return (
     <div className="App">
+            <ToastContainer />
       {!isExcludedRoute && <SideNav />}
       <Routes>
       <Route exact path='login' element={<Login  setAuth = {setAuth}/>} />

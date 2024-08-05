@@ -4,6 +4,7 @@ import landingimage from '../../assets/images/login.webp'
 import notepad from '../../assets/images/notepad.png'
 import {useNavigate} from 'react-router-dom'
 import axios from 'axios'
+import { toast } from 'react-toastify';
 export const Login = ({setAuth}) => {
   const [email,setEmail] = useState()
   const [password,setPassword] = useState()
@@ -14,15 +15,13 @@ export const Login = ({setAuth}) => {
         email,password
       })
       .then((res)=>{
-        if(res.status == 200){
             localStorage.setItem('token',res.data.token)
-            window.alert("login successfull")
             setAuth(true)
+            toast.success("Login Successfull")
             navigate("/dashboard");
-        }
-        else{
-          window.alert("login failed")
-        }
+      })
+      .catch(error =>{
+        toast.error("Login Failed")
       })
   }
 
