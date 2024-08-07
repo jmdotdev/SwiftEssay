@@ -9,6 +9,7 @@ import { TopNav } from "../../components/topnav/TopNav";
 import { IconButton, Menu, MenuItem } from "@mui/material";
 import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 import axios from "axios";
+import { toast } from 'react-toastify';
 
 const style = {
   position: "absolute",
@@ -58,8 +59,11 @@ export const Writers = () => {
   const deleteWriter = async (row) =>{
     console.log(row)
       await axios.delete(`http://localhost:5000/writers/deleteWriter/${row.id}`)
-      .then(res=>{
-        console.log(res)
+      .then(async res=>{
+        await fetchWriters();
+        toast.success("writer deleted successfully")
+      }).catch(error=>{
+        toast.error(error.message)
       })
   }
   const handleMenuOpen = (event) => {
@@ -73,8 +77,9 @@ export const Writers = () => {
   const fetchWriters = async () => {
     await axios.get("http://localhost:5000/writers/getWriters").then((res) => {
       setWritersList(res.data);
-      console.log("writers", writersList);
-    });
+    }).catch(error=>{
+      toast.error("error fetching writers")
+    })
   };
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -86,9 +91,9 @@ export const Writers = () => {
         password,
       })
       .then((res) => {
-        console.log(res);
         setNewWriterAdded(!newWriterAdded)
-      });
+        toast.success("writer added successfully")
+      }).catch(error => toast.error("error adding writer"))
   };
 
   useEffect(() => {

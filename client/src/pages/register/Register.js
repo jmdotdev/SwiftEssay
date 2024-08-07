@@ -3,6 +3,7 @@ import './Register.css'
 import landingimage from '../../assets/images/login.webp'
 import notepad from '../../assets/images/notepad.png'
 import axios from 'axios'
+import { toast } from 'react-toastify';
 export const Register = () => {
   const[username,setUserName] = useState();
   const[email,setEmail]=useState();
@@ -28,10 +29,11 @@ export const Register = () => {
       await axios.post('http://localhost:5000/clients/registerClient',{
         username,email,password
       }).then(res=>{
-        console.log(res)
+        toast.success("registration successfull")
       })
       .catch(err=>console.log(err))
       clearFields()
+      toast.error("registration failed")
      }
   }
   return (

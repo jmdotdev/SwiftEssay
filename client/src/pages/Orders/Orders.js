@@ -8,6 +8,7 @@ import Box from "@mui/material/Box";
 import { Link, useNavigate } from "react-router-dom";
 import { TopNav } from "../../components/topnav/TopNav";
 import axios from "axios";
+import { toast } from 'react-toastify';
 export const Orders = ({ isAuth }) => {
   const [orders, setOrders] = useState([]);
   const [filteredOrders,setFilteredOrders] = useState([])
@@ -58,7 +59,7 @@ export const Orders = ({ isAuth }) => {
           setOrders(res.data)
         });
     } catch (error) {
-      console.log(error);
+      toast.error("error fetching orders")
     } finally {
       // Set loading to false whether the request is successful or not
       setLoading(false);
@@ -69,12 +70,15 @@ export const Orders = ({ isAuth }) => {
     try{
         console.log("id",id)
        await axios.delete(`http://localhost:5000/orders/deleteOrder/${id}`)
-       .then(res=>{
-        console.log(res);
+       .then( async res=>{
+         await getOrders();
+        toast.success("order deleted successfully")
+       }).catch(error =>{
+        toast.error("error deleting order")
        })
     }
     catch(error){
-      console.log(error)
+      toast.error("error deleting order")
     }
   }
 
