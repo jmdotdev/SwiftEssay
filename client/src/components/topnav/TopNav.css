@@ -3,11 +3,12 @@
   width: 100%;
   align-items: center;
   justify-content: space-between;
+  padding: 0 20px;
 }
 .topnavigation .profile-section {
   display: flex;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: end;
   width: 40%;
 }
 .profile-section .settings {
@@ -24,15 +25,11 @@
   border-bottom: 1px solid grey;
 }
 
-.profile-section .logout {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-}
 .profile-section .account {
   display: flex;
   align-items: center;
   cursor: pointer;
+  margin: 0 10px;
 }
 .account img {
   height: 30px;

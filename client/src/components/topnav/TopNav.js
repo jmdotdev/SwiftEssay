@@ -49,10 +49,6 @@ export const TopNav = () => {
          <VscBellDot/>
         
          </div>
-         <div className='logout' onClick={logout}>
-         <IoMdLogOut/>
-         logout
-         </div>
          <Link>
          <div className='account'>
           <img src={avatar} alt='avatar.png'/>
