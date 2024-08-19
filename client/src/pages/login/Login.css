@@ -4,6 +4,7 @@
     justify-content: center;
     height: 100vh;
     width: 100%;
+    overflow-y: hidden;
 }
 .main .left-section{
     display: flex;
@@ -100,6 +101,9 @@ form label{
 .form h4{
     margin-top: 20px;
     color: #EFA80B;
+}
+.error{
+    color: red;
 }
 /* responsivity */
 @media screen and (max-width:768px) {
