@@ -4,13 +4,14 @@ import { TopNav } from "../../../components/topnav/TopNav";
 import "./AddOrder.css";
 import {orderDiscipline,paperTypes,citationOptions,academicLevels} from './AddOrderFormOptions'
 import paypalImage from '../../../../src/assets/images/paypal.png'
-import {getUserId} from '../../../utils/getUserData'
+import {getUserData} from '../../../utils/getUserData'
 import axios from 'axios'
 export const AddOrder = () => {
   const params = useParams()
   const [userId,setUserId] = useState()
   const [pages,setPages] = useState();
   const [isUpdate,setIsUpdate] = useState(false);
+  const [userpayload, setUserPayload] = useState(null)
   const [orderDetails, setOrderDetails] = useState({
     academic_level: "",
     type: "",
@@ -23,7 +24,7 @@ export const AddOrder = () => {
     amount_payable: "",
     citations: 0,
     slides: 0,
-    posted_by:getUserId(),
+    // posted_by:userData.id,
     deadline: "",
   });
   const handleFileChange = (e) => {
@@ -33,8 +34,9 @@ export const AddOrder = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    name == 'pages' && setPages(value)
-    setOrderDetails({ ...orderDetails, [name]: value });
+    name === 'pages' && setPages(value)
+    console.log(name,value)
+    setOrderDetails({ ...orderDetails, [name]: +value });
   };
 
 
@@ -81,9 +83,11 @@ export const AddOrder = () => {
   }
 
   useEffect(()=>{
-    params.id !== undefined && (async()=>{
+    setUserPayload(getUserData())
+     // eslint-disable-next-line no-unused-expressions
+     params.id ? (async()=>{
       await getOrderById();
-    }) ();
+    }) (): '';
   },[])
   return (
     <div className="main-container">
@@ -165,12 +169,12 @@ export const AddOrder = () => {
 
             <div className="paper-cost">
               <div className="subtotal">
-                <p>{pages} pages </p>
+                <p>{orderDetails.pages} pages  </p>
                 <p>* ksh 300</p>
               </div>
               <div className="total">
                 <p><b>Total Price</b></p>
-                <p><b>{pages * 300}</b></p>
+                <p><b>{orderDetails.pages * 300}</b></p>
               </div>
               <div className="card-footer">
                 <p>Secure payments via:</p>
