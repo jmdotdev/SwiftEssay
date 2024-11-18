@@ -133,7 +133,10 @@ export const deleteWriter = async (req, res) => {
 export const getSingleWriter = async (req, res) => {
   try {
     const id = req.params.id;
+
     const user = await User.findById(id);
+    const assignedOrders = await Order.find({assigned_to: user._id})
+    user.assigned_tasks = assignedOrders;
     if (!user) {
       return res.status(404).json({ message: "writer not found" });
     }
