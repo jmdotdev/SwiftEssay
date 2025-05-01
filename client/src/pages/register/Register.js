@@ -79,7 +79,6 @@ export const Register = () => {
               <button>Sign Up         
               </button>
             </form>
-            <h4>Forgot Password?</h4>
           </div>
           </div>
         </div>
