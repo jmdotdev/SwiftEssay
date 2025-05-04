@@ -35,7 +35,7 @@ app.use(session({
   cookie: { secure: false } // Set to true if using HTTPS
 }));
 
-// Set the view engine to EJS
+//view engine to EJS
 app.set('view engine', 'ejs');
 
 app.use('/users',userRouter)
