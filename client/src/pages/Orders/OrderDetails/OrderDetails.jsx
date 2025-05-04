@@ -7,7 +7,6 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import moment from "moment"
-import { getUserById } from '../../../utils/getUserData';
 const style = {
   position: "absolute",
   top: "50%",
