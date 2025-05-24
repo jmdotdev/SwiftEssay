@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import './Register.css'
 import landingimage from '../../assets/images/login.webp'
 import notepad from '../../assets/images/notepad.png'
 import axios from 'axios'
