@@ -72,7 +72,7 @@ form textarea{
 form textarea:focus{
  outline: none;
 }
-form button {
+/* form button {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -83,7 +83,7 @@ form button {
   background-color: #03264d;
   border-radius: 5px;
   width: 20%;
-}
+} */
 .checkout-section .checkout-card {
   display: flex;
   flex-direction: column;
