@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import landingimage from '../../assets/images/login.webp'
 import notepad from '../../assets/images/notepad.png'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { toast } from 'react-toastify';
 
@@ -79,13 +79,13 @@ export const Login = ({ setAuth }: Props) => {
         </div>
       </div>
       <div className="flex w-full items-center justify-start md:w-1/2 p-4 md:p-8">
-      <div className="flex flex-col">
+      <div className="flex flex-col w-[90vw] md:w-[40vw]">
           <div className="flex items-center justify-start p-0">
           <img className="h-12 w-12 -ml-1" src={notepad} alt="notepad.png" />
           <h3 className="text-2xl font-bold text-darkBlue ml-1">Welcome Back!!</h3>
         </div>
         <div className="flex flex-col">
-          <h3 className="text-xl font-semibold">Signin</h3>
+          <h3 className="text-xl font-semibold text-darkBlue">Signin</h3>
           <p className="text-md">Access the academic writing portal using your email and password.</p>
         </div>
         <div className="flex flex-col">
@@ -93,7 +93,7 @@ export const Login = ({ setAuth }: Props) => {
             <div className="w-full text-start my-2">
                 <label className="font-semibold">Email:</label>
             </div>
-            <div className="flex w-full input-control border-2 border-red-300">
+            <div className="flex flex-col w-full">
               <input
                 className="shadow-2xl h-12 w-full rounded-md px-2 focus:outline-0"
                 type="email"
@@ -108,7 +108,7 @@ export const Login = ({ setAuth }: Props) => {
             <div className="w-full text-start my-2">
                 <label className="font-semibold">Password:</label>
             </div>
-            <div className="flex w-full input-control">
+            <div className="flex flex-col w-full ">
               <input
                 className="shadow-2xl h-12 w-full rounded-md px-2 focus:outline-0"
                 type="password"
@@ -124,7 +124,15 @@ export const Login = ({ setAuth }: Props) => {
             <button className="bg-darkBlue text-white rounded-md mt-2 w-1/2 md:w-1/4 px-4 py-2 cursor-pointer">Sign In</button>
             </div>
           </form>
-          <h4 className="my-2 cursor-pointer">Forgot Password?</h4>
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between w-full ">         
+             <h4 className="my-2 cursor-pointer">Forgot Password?</h4>
+             <Link to="/register">
+                <h4 className="my-2 cursor-pointer">
+                  Don't have an account?{" "}
+                  <a className="underline underline-offset-1">register</a>
+                </h4>
+              </Link>
+        </div>
         </div>
       </div>
       </div>
