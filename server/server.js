@@ -17,8 +17,8 @@ app.use(cors());
 app.use(express.json());
 const PORT = process.env.PORT || 5000;
 const url = process.env.mongoDbUrl;
-const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
-const __dirname = path.dirname(__filename); // get the name of the directory
+const __filename = fileURLToPath(import.meta.url); 
+const __dirname = path.dirname(__filename);
 const connectDb = () => {
     mongoose.connect(url).then(() => {
         console.log("db connected");
@@ -26,13 +26,13 @@ const connectDb = () => {
 }
 // Set up session middleware
 app.use(session({
-  secret: 'test-key-here', // Replace with a strong secret key
+  secret: process.env.JWT_SECRET,
   resave: false,
   saveUninitialized: true,
   store: MongoStore.create({
-    mongoUrl: url // Replace with your MongoDB connection string
+    mongoUrl: url 
   }),
-  cookie: { secure: false } // Set to true if using HTTPS
+ // cookie: { secure: false }
 }));
 
 //view engine to EJS
