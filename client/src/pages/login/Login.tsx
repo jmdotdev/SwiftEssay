@@ -1,79 +1,35 @@
-import React, { useState, useEffect } from "react";
-import landingimage from '../../assets/images/login.webp'
-import notepad from '../../assets/images/notepad.png'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { toast } from 'react-toastify';
+import { SubmitHandler, useForm } from "react-hook-form";
 
-type Props = {
-  setAuth: boolean
+type LoginFormInputs = {
+  email: string;
+  password: string;
 }
-export const Login = ({ setAuth }: Props) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [errors, setErrors] = useState({});
-  const [touched, setTouched] = useState({});
+export const Login = () => {
   const navigate = useNavigate();
+  const { handleSubmit, register, formState: {errors} } = useForm<LoginFormInputs>();
 
-  const validate = () => {
-    const errors = {};
-
-    if (touched.email) {
-      if (!email) {
-        errors.email = "Email is required";
-      } else if (!/\S+@\S+\.\S+/.test(email)) {
-        errors.email = "Email is invalid";
-      }
-    }
-
-    if (touched.password) {
-      if (!password) {
-        errors.password = "Password is required";
-      } else if (password.length < 4) {
-        errors.password = "Password must be at least 4 characters";
-      }
-    }
-
-    setErrors(errors);
-  };
-
-  useEffect(() => {
-    validate();
-  }, [email, password, touched]);
-
-  const handleBlur = (e) => {
-    setTouched({
-      ...touched,
-      [e.target.name]: true
-    });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setTouched({ email: true, password: true });
-
-    if (Object.keys(errors).length === 0 && email && password) {
-      try {
+  const loginUser: SubmitHandler<LoginFormInputs> = async (value) => {
+     try {
         const res = await axios.post('http://localhost:5000/writers/login', {
-          email, password
+          email: value.email, password: value.password
         });
         localStorage.setItem('token', res.data.token);
-        setAuth(true);
+        // setAuth(true);
         toast.success("Login Successful");
         navigate("/dashboard");
       } catch (error) {
         toast.error("Login Failed");
       }
-    } else {
-      toast.error("Please fix the errors before submitting");
-    }
   };
 
   return (
     <div className="flex w-full min-w-screen h-full min-h-screen overflow-y-hidden">
       <div className="hidden md:flex items-center justify-center h-full md:w-1/2 bg-darkBlue text-white text-center">
         <div className="flex flex-col items-center h-1/2">
-          <img src={landingimage} alt="reader.png" />
+          <img src="/images/login.webp" alt="reader.png" />
           <h3 className="font-bold text-3xl">SwiftEssay</h3>
           <p className="w-4/5 my-4">Even if you don’t have sufficient statistics or ratings, we’ve got your back You will still be able to get plenty of orders any time.</p>
         </div>
@@ -81,7 +37,7 @@ export const Login = ({ setAuth }: Props) => {
       <div className="flex w-full items-center justify-start md:w-1/2 p-4 md:p-8">
       <div className="flex flex-col w-[90vw] md:w-[40vw]">
           <div className="flex items-center justify-start p-0">
-          <img className="h-12 w-12 -ml-1" src={notepad} alt="notepad.png" />
+          <img className="h-12 w-12 -ml-1" src="/images/notepad.png" alt="notepad.png" />
           <h3 className="text-2xl font-bold text-darkBlue ml-1">Welcome Back!!</h3>
         </div>
         <div className="flex flex-col">
@@ -89,7 +45,7 @@ export const Login = ({ setAuth }: Props) => {
           <p className="text-md">Access the academic writing portal using your email and password.</p>
         </div>
         <div className="flex flex-col">
-          <form onSubmit={handleSubmit} >
+          <form onSubmit={handleSubmit(loginUser)} >
             <div className="w-full text-start my-2">
                 <label className="font-semibold">Email:</label>
             </div>
@@ -99,11 +55,9 @@ export const Login = ({ setAuth }: Props) => {
                 type="email"
                 name="email"
                 placeholder="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                onBlur={handleBlur}
+                {...register('email',{required: 'Email is required'})}
               />
-              {touched.email && errors.email && <p className="text-red-500">{errors.email}</p>}
+              {errors.email && <span className='w-full text-start text-red-500 mt-2 text-sm'>{ errors.email.message }</span>}
             </div>
             <div className="w-full text-start my-2">
                 <label className="font-semibold">Password:</label>
@@ -114,14 +68,12 @@ export const Login = ({ setAuth }: Props) => {
                 type="password"
                 name="password"
                 placeholder="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                onBlur={handleBlur}
+                {...register('password',{required: 'Password is required'})}
               />
-              {touched.password && errors.password && <p className="text-red-500">{errors.password}</p>}
+              {errors.password && <span className='w-full text-start text-red-500 mt-2 text-sm'>{ errors.password.message }</span>}
             </div>
             <div className="w-full text-start"> 
-            <button className="bg-darkBlue text-white rounded-md mt-2 w-1/2 md:w-1/4 px-4 py-2 cursor-pointer">Sign In</button>
+            <button className="bg-darkBlue text-white rounded-md mt-2 w-1/2 md:w-1/4 px-4 py-2 cursor-pointer" type="submit">Sign In</button>
             </div>
           </form>
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between w-full ">         

@@ -39,7 +39,7 @@ function App() {
             <ToastContainer />
       {!isExcludedRoute && <SideNav />}
       <Routes>
-      <Route exact path='login' element={<Login  setAuth = {setAuth}/>} />
+      <Route path='login' element={<Login />} />
       <Route path='register' element={<Register/>}/>
       <Route path='dashboard' element={<Dashboard/>}/>
       <Route path='writers' element={<Writers/>} />
