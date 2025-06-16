@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate,useLocation } from 'react-router-dom';
 import './App.css';
-import { Login } from './pages/login/Login';
-import { Register } from './pages/register/Register';
+import { Login } from './pages/Login';
+import { Register } from './pages/Register';
 import { NotFound } from './pages/notfound/NotFound'
 import { Routes, Route } from "react-router-dom";
 import { SideNav } from './components/sidenav/SideNav';
