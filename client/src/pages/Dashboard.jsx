@@ -1,26 +1,17 @@
-import {React,useEffect,useState} from 'react'
-import './Dashboard.css'
+import {useEffect,useState} from 'react'
 import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import pendingIcon from '../../assets/images/pending.svg'
-import progressIcon from '../../assets/images/progress.jpg'
-import completedIcon from '../../assets/images/complete.jpg'
-import repeatIcon from '../../assets/images/repeat.svg'
 import { DataGrid } from "@mui/x-data-grid";
-import { TopNav } from "../../components/topnav/TopNav";
+import { TopNav } from "../components/TopNav";
 import { useJwt } from "react-jwt";
 import axios from 'axios'
 import { Link,useNavigate } from 'react-router-dom';
-import {verifyToken} from '../../utils/verifyToken';
-import { AiOutlineSend } from "react-icons/ai";
-import { OrderCard } from "../../components/OrderCard";
+import {verifyToken} from '../utils/verifyToken';
+import { OrderCard } from "../components/OrderCard";
+import { SendHorizontal } from 'lucide-react';
 
 export const Dashboard = () => {
-    const [tabvalue, setTabValue] = useState(0);
-    const [loggedInUser,setLoggedInUser] = useState(null)
-    const [isLoggedIn,setIsLoggedIn] = useState(false)
-    const navigate = useNavigate();
     const [latestOrders,setLatestOrders] = useState([])
     const latestOrderColumns = [
       { field: "id", headerName: "ID", width: 150 },
@@ -37,7 +28,7 @@ export const Dashboard = () => {
         renderCell: (params) => (
           <Link to={`/orders/order-details/${params.row.id}`}>
             <div className="order-detail-icon">
-              <AiOutlineSend />
+              <SendHorizontal  className='h-4 w-4'/>
             </div>
           </Link>
         ),
@@ -58,33 +49,34 @@ export const Dashboard = () => {
       }
     ))
 
-    const getOrders = async () =>{
-      await axios.get("http://localhost:5000/orders/getOrders").then((res) => {
-        setLatestOrders(res.data)
-      });
-    }
+    // const getOrders = async () =>{
+    //   await axios.get("http://localhost:5000/orders/getOrders").then((res) => {
+    //     setLatestOrders(res.data)
+    //   });
+    // }
 
   useEffect(() => {
     const fetchData = async () => {
-      await verifyToken(setLoggedInUser, setIsLoggedIn, navigate);
-      await getOrders();
+      // await verifyToken(setLoggedInUser, setIsLoggedIn, navigate);
+      // await getOrders();
     };
 
     fetchData();
-  }, [isLoggedIn]);
+  }, []);
   return (
-    <div className='dashboard-content'>
+    <div className='flex flex-col w-full h-[calc(100vh-100px)] p-5'>
       <TopNav/>
-        <div className='dashboard-content-title'>
+        {/* <div className='flex w-full items-start my-5 mx-0'>
             <h3>Dashboard</h3>
+        </div> */}
+        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 justify-between h-auto w-full my-6'>
+          <OrderCard orderCount={(latestOrders.filter(ord=>ord.status === 'available')).length} orderType='Available' Icon='/images/pending.svg'/>
+          <OrderCard orderCount={(latestOrders.filter(ord=>ord.status === 'revision')).length} orderType='Revision' Icon='/images/repeat.svg'/>
+          <OrderCard orderCount={(latestOrders.filter(ord=>ord.status === 'progress')).length} orderType='In Progress' Icon='/images/progress.jpg'/>
+          <OrderCard orderCount={(latestOrders.filter(ord=>ord.status === 'canceled')).length} orderType='Canceled' Icon='/images/cancel.png'/>
+          <OrderCard orderCount={(latestOrders.filter(ord=>ord.status === 'completed')).length} orderType='Completed' Icon='/images/complete.jpg'/>
         </div>
-        <div className='dashboard-content-cards'>
-          <OrderCard orderCount={(latestOrders.filter(ord=>ord.status === 'available')).length} orderType='Available' Icon={pendingIcon}/>
-          <OrderCard orderCount={(latestOrders.filter(ord=>ord.status === 'revision')).length} orderType='Revision' Icon={repeatIcon}/>
-          <OrderCard orderCount={(latestOrders.filter(ord=>ord.status === 'progress')).length} orderType='In Progress' Icon={progressIcon}/>
-          <OrderCard orderCount={(latestOrders.filter(ord=>ord.status === 'completed')).length} orderType='Completed' Icon={completedIcon}/>
-        </div>
-        <div className='tabs'>
+        <div className='flex flex-col h-auto w-full bg-white'>
         <Box sx={{ width: '100%', bgcolor: 'background.paper' }}>
       <Tabs centered>
         <Tab label="Latest Rated Orders" />
