@@ -40,7 +40,7 @@ export const Register = () => {
             </p>
           </div>
         </div>
-        <div className="flex w-full items-center md:w-1/2 p-4 md:p-8">
+        <div className="flex w-full items-center md:w-1/2 p-4 md:p-8 bg-siteBackground">
           <div className="flex flex-col w-[90vw] md:w-[40vw]">
             <div className="flex items-center justify-start p-0">
               <img

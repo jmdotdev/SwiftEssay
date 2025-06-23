@@ -4,12 +4,11 @@
 @theme {
     --color-darkBlue: #03264D;
     --color-inputBackground: #E5E5E5;
+    --color-siteBackground: #F7F8F9
 }
 *{
     font-family: 'Roboto', sans-serif;
 }
-.App{
-    display: flex;
-    height: calc(100vh - 100px);
-    background-color: #F7F8F9;
+.app{
+    height: calc(100vh - 80px);
 }

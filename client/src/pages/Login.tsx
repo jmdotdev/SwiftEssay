@@ -34,7 +34,7 @@ export const Login = () => {
           <p className="w-4/5 my-4">Even if you don’t have sufficient statistics or ratings, we’ve got your back You will still be able to get plenty of orders any time.</p>
         </div>
       </div>
-      <div className="flex w-full items-center justify-start md:w-1/2 p-4 md:p-8">
+      <div className="flex w-full items-center justify-start md:w-1/2 p-4 md:p-8 bg-siteBackground">
       <div className="flex flex-col w-[90vw] md:w-[40vw]">
           <div className="flex items-center justify-start p-0">
           <img className="h-12 w-12 -ml-1" src="/images/notepad.png" alt="notepad.png" />
