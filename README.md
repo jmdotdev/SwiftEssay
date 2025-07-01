@@ -1,7 +1,7 @@
 # Swift Essay 
 Swift Essay is an academic writing platform built with MERN Stack, where clients can post academic writing tasks and writers can bid on and complete them. This project streamlines the process of connecting clients with skilled writers for academic assignments.
 
-## Table of Contents
+## Table of Contents 
 
 - [Features](#features)
 - [Installation](#installation)
