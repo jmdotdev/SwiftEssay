@@ -66,7 +66,7 @@ export const Dashboard = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      await verifyToken(setLoggedInUser, setIsLoggedIn, navigate);
+      // await verifyToken(setLoggedInUser, setIsLoggedIn, navigate);
       await getOrders();
     };
 
@@ -78,16 +78,17 @@ export const Dashboard = () => {
         <div className='dashboard-content-title'>
             <h3>Dashboard</h3>
         </div>
-        <div className='dashboard-content-cards'>
-          <OrderCard orderCount={(latestOrders.filter(ord=>ord.status === 'available')).length} orderType='Available' Icon={pendingIcon}/>
-          <OrderCard orderCount={(latestOrders.filter(ord=>ord.status === 'revision')).length} orderType='Revision' Icon={repeatIcon}/>
-          <OrderCard orderCount={(latestOrders.filter(ord=>ord.status === 'progress')).length} orderType='In Progress' Icon={progressIcon}/>
-          <OrderCard orderCount={(latestOrders.filter(ord=>ord.status === 'completed')).length} orderType='Completed' Icon={completedIcon}/>
+        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 justify-between h-auto w-full my-6'>
+          <OrderCard orderCount={(latestOrders.filter(ord=>ord.status === 'available')).length} orderType='Available' Icon='/images/pending.svg'/>
+          <OrderCard orderCount={(latestOrders.filter(ord=>ord.status === 'revision')).length} orderType='Revision' Icon='/images/repeat.svg'/>
+          <OrderCard orderCount={(latestOrders.filter(ord=>ord.status === 'progress')).length} orderType='In Progress' Icon='/images/progress.jpg'/>
+          <OrderCard orderCount={(latestOrders.filter(ord=>ord.status === 'canceled')).length} orderType='Canceled' Icon='/images/cancel.svg'/>
+          <OrderCard orderCount={(latestOrders.filter(ord=>ord.status === 'completed')).length} orderType='Completed' Icon='/images/complete.jpg'/>
         </div>
         <div className='tabs'>
         <Box sx={{ width: '100%', bgcolor: 'background.paper' }}>
       <Tabs centered>
-        <Tab label="Latest Rated Orders" />
+        <Tab label="Latest Orders" />
       </Tabs>
     </Box>
     <div className='tabs-info'>
