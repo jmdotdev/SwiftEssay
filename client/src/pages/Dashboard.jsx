@@ -49,16 +49,16 @@ export const Dashboard = () => {
       }
     ))
 
-    // const getOrders = async () =>{
-    //   await axios.get("http://localhost:5000/orders/getOrders").then((res) => {
-    //     setLatestOrders(res.data)
-    //   });
-    // }
+    const getOrders = async () =>{
+      await axios.get("http://localhost:5000/orders/getOrders").then((res) => {
+        setLatestOrders(res.data)
+      });
+    }
 
   useEffect(() => {
     const fetchData = async () => {
       // await verifyToken(setLoggedInUser, setIsLoggedIn, navigate);
-      // await getOrders();
+      await getOrders();
     };
 
     fetchData();
@@ -79,7 +79,7 @@ export const Dashboard = () => {
         <div className='flex flex-col h-auto w-full bg-white'>
         <Box sx={{ width: '100%', bgcolor: 'background.paper' }}>
       <Tabs centered>
-        <Tab label="Latest Rated Orders" />
+        <Tab label="Latest Orders" />
       </Tabs>
     </Box>
     <div className='tabs-info'>
