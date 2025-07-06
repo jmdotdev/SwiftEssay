@@ -6,10 +6,10 @@ import { IconButton, Menu, MenuItem } from "@mui/material";
 import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 import Box from "@mui/material/Box";
 import { Link, useNavigate } from "react-router-dom";
-import { TopNav } from "../../components/topnav/TopNav";
+import { TopNav } from "../../components/TopNav";
 import axios from "axios";
 import { toast } from 'react-toastify';
-export const Orders = ({ isAuth }) => {
+export const Orders = () => {
   const [orders, setOrders] = useState([]);
   const [filteredOrders,setFilteredOrders] = useState([])
   const navigate = useNavigate();
@@ -91,7 +91,7 @@ export const Orders = ({ isAuth }) => {
   };
   useEffect(() => {
     getOrders();
-  }, [isAuth]);
+  }, []);
 
   const columns = [
     { field: "id", headerName: "ID", width: 150 },

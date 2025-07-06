@@ -8,7 +8,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { DataGrid } from "@mui/x-data-grid";
-import { TopNav } from "../../components/topnav/TopNav";
+import { TopNav } from "../../components/TopNav";
 export const Payment = () => {
   const [age, setAge] = React.useState("");
 
