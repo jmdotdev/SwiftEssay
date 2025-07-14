@@ -5,7 +5,7 @@ import { Register } from './pages/Register';
 import { NotFound } from './pages/notfound/NotFound'
 import { Routes, Route } from "react-router-dom";
 import { SideNav } from './components/sidenav/SideNav';
-import { Writers } from './pages/writers/Writers';
+import { Writers } from './pages/Writers';
 import {Orders} from './pages/Orders/Orders'
 import { AddOrder } from './pages/Orders/AddOrder/AddOrder';
 import {OrderDetails} from './pages/Orders/OrderDetails/OrderDetails'

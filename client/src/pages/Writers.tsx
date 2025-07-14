@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import "./Writers.css";
 import { DataGrid } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import { TopNav } from "../../components/TopNav";
+import { TopNav } from "../components/TopNav";
 import { IconButton, Menu, MenuItem } from "@mui/material";
 import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 import axios from "axios";
@@ -19,6 +18,7 @@ const style = {
   width: 400,
   bgcolor: "#FFFF",
   p: 4,
+  borderRadius: "10px"
 };
 export const Writers = () => {
   const [open, setOpen] = useState(false);
@@ -141,67 +141,71 @@ export const Writers = () => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <h3 style={{ marginBottom: "20px" }}>Add New Writer:</h3>
+          <h3 className="mb-5 text-lg font-semibold">Add New Writer:</h3>
           <form onSubmit={submitHandler}>
-            <Typography id="modal-modal-title" variant="h6" component="h2">
+            <Typography className="flex flex-col items-start" variant="h6" component="h2">
               <label>Username:</label>
-              <input
+              <input 
+                className="h-6 px-2 py-4 w-full border-[1px] border-gray-600 rounded-lg focus: outline-0"
                 type="text"
                 placeholder="username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
               />
             </Typography>
-            <Typography id="modal-modal-title" variant="h6" component="h2">
+            <Typography className="flex flex-col items-start" variant="h6" component="h2">
               <label>Email:</label>
               <input
+               className="h-6 px-2 py-4 w-full border-[1px] border-gray-600 rounded-lg focus: outline-0"
                 type="email"
                 placeholder="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
             </Typography>
-            <Typography id="modal-modal-title" variant="h6" component="h2">
+            <Typography className="flex flex-col items-start" variant="h6" component="h2">
               <label>Phone:</label>
               <input
+              className="h-6 px-2 py-4 w-full border-[1px] border-gray-600 rounded-lg focus: outline-0"
                 type="text"
                 placeholder="phone"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
               />
-            </Typography>
-            <Typography id="modal-modal-title" variant="h6" component="h2">
+            </Typography >
+            <Typography className="flex flex-col items-start" variant="h6" component="h2">
               <label>Password</label>
               <input
+              className="h-6 px-2 py-4 w-full border-[1px] border-gray-600 rounded-lg focus: outline-0"
                 type="password"
                 placeholder="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
             </Typography>
-            <button className="add-writer-btn">Add Writer</button>
+            <button  className="bg-darkBlue text-white text-sm px-4 py-2 my-2 rounded-lg cursor-pointer">Add Writer</button>
           </form>
         </Box>
       </Modal>
       {/* End of modal to add user */}
       <div className="flex items-center justify-between my-5 mx-0 text-xl font-semibold">
         <h4>Writers</h4>
-        <button className="add-writer-btn" onClick={handleOpen}>
+        <button className="bg-darkBlue text-white text-sm px-4 py-2 rounded-lg cursor-pointer" onClick={handleOpen}>
           Add Writer
         </button>
       </div>
-      <div className="flex items-center justify-between bg-white w-full h-12 cursor-pointer">
-        <a className="my-5 mx-0">
-          Assigned<span>0</span>
+      <div className="flex flex-col md:flex-row items-center justify-between bg-white w-full h-auto md:h-12 cursor-pointer px-2 py-7 rounded-lg">
+        <a className="my-5 mx-0 relative">
+          Assigned<span className="absolute bottom-2 ms-[0.5px] text-sm text-red-600">0</span>
         </a>
         <a className="my-5 mx-0">Unassigned</a>
         <a className="my-5 mx-0">Active</a>
         <a className="my-5 mx-0">Inactive</a>
-        <form>
-          <input className="h-10 p-4 border-[1px] border-gray-600" type="text" placeholder="search" />
+        <form className="mb-6 md:mb-0">
+          <input className="h-6 p-4 border-[1px] border-gray-600 rounded-lg focus: outline-0" type="text" placeholder="search" />
         </form>
       </div>
-      <div className="my-4 h-1/2 w-full p-6 bg-white">
+      <div className="my-4 h-1/2 w-full p-6 bg-white rounded-lg">
         <div style={{ height: 350, width: "100%" }}>
           <DataGrid
             columnVisibilityModel={{
