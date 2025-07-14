@@ -131,7 +131,7 @@ export const Writers = () => {
       assigned: writer.is_assigned ? 1 : 0
     }));
   return (
-    <div className="writers-section">
+    <div className="flex flex-col w-full h-[calc(100vh-100px)] p-5">
       <TopNav />
       {/* Modal to add writer */}
       <Modal
@@ -184,24 +184,24 @@ export const Writers = () => {
         </Box>
       </Modal>
       {/* End of modal to add user */}
-      <div className="writers-header">
+      <div className="flex items-center justify-between my-5 mx-0 text-xl font-semibold">
         <h4>Writers</h4>
         <button className="add-writer-btn" onClick={handleOpen}>
           Add Writer
         </button>
       </div>
-      <div className="writers-filters">
-        <a>
+      <div className="flex items-center justify-between bg-white w-full h-12 cursor-pointer">
+        <a className="my-5 mx-0">
           Assigned<span>0</span>
         </a>
-        <a>Unassigned</a>
-        <a>Active</a>
-        <a>Inactive</a>
+        <a className="my-5 mx-0">Unassigned</a>
+        <a className="my-5 mx-0">Active</a>
+        <a className="my-5 mx-0">Inactive</a>
         <form>
-          <input type="text" placeholder="search" />
+          <input className="h-10 p-4 border-[1px] border-gray-600" type="text" placeholder="search" />
         </form>
       </div>
-      <div className="writers-list">
+      <div className="my-4 h-1/2 w-full p-6 bg-white">
         <div style={{ height: 350, width: "100%" }}>
           <DataGrid
             columnVisibilityModel={{

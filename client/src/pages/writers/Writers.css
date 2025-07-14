@@ -1,18 +1,18 @@
-.writers-section{
+/* .writers-section{
     display: flex;
     flex-direction: column;
     height: calc(100vh - 100px);
     width: 100%;
     padding: 20px;
-}
-.writers-section .writers-header{
+} */
+/* .writers-section .writers-header{
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin: 20px 0;
     font-size: 20px;
-}
-.writers-section .writers-filters{
+} */
+/* .writers-section .writers-filters{
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -21,10 +21,10 @@
     width: 100%;
     height: 10% !important;
     padding: 5px;
-}
-.writers-filters a{
+} */
+/* .writers-filters a{
     margin: 20px 0;
-}
+} */
 .writers-filters input{
     height: 30px;
     padding: 5px;

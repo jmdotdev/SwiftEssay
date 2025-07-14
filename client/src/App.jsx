@@ -5,7 +5,6 @@ import { Register } from './pages/Register';
 import { NotFound } from './pages/notfound/NotFound'
 import { Routes, Route } from "react-router-dom";
 import { SideNav } from './components/sidenav/SideNav';
-import { Dashboard } from './pages/Dashboard';
 import { Writers } from './pages/writers/Writers';
 import {Orders} from './pages/Orders/Orders'
 import { AddOrder } from './pages/Orders/AddOrder/AddOrder';
@@ -14,6 +13,7 @@ import {Payment} from  './pages/Payment/Payment'
 import { Profile } from './pages/profile/Profile';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Dashboard } from './pages/Dashboard';
 
 function App() {
   const location = useLocation();
