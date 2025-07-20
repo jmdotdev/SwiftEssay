@@ -205,7 +205,7 @@ export const Writers = () => {
           <input className="h-6 p-4 border-[1px] border-gray-600 rounded-lg focus: outline-0" type="text" placeholder="search" />
         </form>
       </div>
-      <div className="my-4 h-1/2 w-full p-6 bg-white rounded-lg">
+      <div className="my-4 h-full w-full p-6 bg-white rounded-lg">
         <div style={{ height: 350, width: "100%" }}>
           <DataGrid
             columnVisibilityModel={{
