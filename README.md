@@ -80,6 +80,10 @@ Swift Essay is an academic writing platform built with MERN Stack, where clients
 - **Database:**
   - MongoDb
 
+- **DevOps & Cloud**
+  - Azure DevOps
+  - Azure
+
 ## Contributing
 
 We welcome contributions! Please follow our [contribution guidelines](CONTRIBUTING.md) to contribute to Swift Essay.
