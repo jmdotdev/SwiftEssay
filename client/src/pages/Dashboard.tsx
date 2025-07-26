@@ -8,8 +8,8 @@ import { useJwt } from "react-jwt";
 import axios from 'axios'
 import { Link,useNavigate } from 'react-router-dom';
 import {verifyToken} from '../utils/verifyToken';
-import { OrderCard } from "../components/OrderCard";
 import { SendHorizontal } from 'lucide-react';
+import { OrderCard } from '../components/OrderCard';
 
 export const Dashboard = () => {
     const [latestOrders,setLatestOrders] = useState([])

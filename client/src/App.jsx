@@ -4,7 +4,7 @@ import { Login } from './pages/Login';
 import { Register } from './pages/Register';
 import { NotFound } from './pages/notfound/NotFound'
 import { Routes, Route } from "react-router-dom";
-import { SideNav } from './components/sidenav/SideNav';
+import { SideNav } from './components/SideNav';
 import { Writers } from './pages/Writers';
 import { AddOrder } from './pages/Orders/AddOrder/AddOrder';
 import {OrderDetails} from './pages/Orders/OrderDetails/OrderDetails'
