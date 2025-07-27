@@ -4,7 +4,6 @@ import { DataGrid } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import { TopNav } from "../components/TopNav";
 import { IconButton, Menu, MenuItem } from "@mui/material";
 import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 import axios from "axios";
@@ -132,7 +131,6 @@ export const Writers = () => {
     }));
   return (
     <div className="flex flex-col w-full h-[calc(100vh-100px)] p-5">
-      <TopNav />
       {/* Modal to add writer */}
       <Modal
         open={open}

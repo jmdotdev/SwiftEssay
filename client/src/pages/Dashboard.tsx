@@ -3,7 +3,6 @@ import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import { DataGrid } from "@mui/x-data-grid";
-import { TopNav } from "../components/TopNav";
 import { useJwt } from "react-jwt";
 import axios from 'axios'
 import { Link,useNavigate } from 'react-router-dom';
@@ -65,7 +64,6 @@ export const Dashboard = () => {
   }, []);
   return (
     <div className='flex flex-col w-full h-[calc(100vh-100px)] p-5'>
-      <TopNav/>
         {/* <div className='flex w-full items-start my-5 mx-0'>
             <h3>Dashboard</h3>
         </div> */}

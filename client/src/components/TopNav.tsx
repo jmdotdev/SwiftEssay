@@ -2,7 +2,11 @@ import { BellDot } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 // import { verifyToken } from "../../utils/verifyToken";
-export const TopNav = () => {
+
+type TopNavProps = {
+  header: string;
+}
+export const TopNav = ({header}: TopNavProps) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
 
@@ -21,7 +25,7 @@ export const TopNav = () => {
   return (
     <div className="flex items-center justify-between">
       <div>
-        <h2 className="text-xl font-semibold">Dashboard</h2>
+        <h2 className="text-xl font-semibold">{header.charAt(0).toUpperCase() + header.slice(1)}</h2>
       </div>
       <div className="flex items-center">
         <BellDot className="h-6 w-6 text-gray-950 mx-2" />
