@@ -6,24 +6,34 @@ import { useEffect, useState } from "react"
 export const DashboardLayout = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [header, setHeader]= useState<string>('Dashboard');
+  const [header, setHeader] = useState<string>('Dashboard');
   const [isSideNavOpen, setIsSideNavOpen] = useState(false)
+  const toggleNav = () => {
+    setIsSideNavOpen(prev => !prev)
+  }
   useEffect(() => {
     setHeader(location.pathname.slice(1))
-    if(location.pathname !== '/') return;
+    if (location.pathname !== '/') return;
     navigate('dashboard')
-  },[location.pathname])
+  }, [location.pathname])
   return (
     <div className="flex w-full min-h-screen">
-         <div className="hidden lg:block w-1/7">
-            <SideNav />
-         </div>
-         <div className="flex flex-col w-full lg:w-6/7">
-             <div className="w-full px-4 pt-2">
-              <TopNav header={header}/>
-             </div>
-            <Outlet />
-         </div>
+      {/* Sidebar for large screens */}
+      <div className="hidden lg:block w-1/7">
+        <SideNav />
+      </div>
+      {/* Sidebar for small screens */}
+      {isSideNavOpen && (
+        <div className="block lg:hidden fixed inset-y-0 left-0 z-50 w-2/3 shadow-lg">
+          <SideNav onToggle={() => setIsSideNavOpen(false)} />
+        </div>
+      )}
+      <div className="flex flex-col w-full lg:w-6/7">
+        <div className="w-full px-4 pt-2">
+          <TopNav header={header} toggleNav={toggleNav} />
+        </div>
+        <Outlet />
+      </div>
     </div>
   )
 }
