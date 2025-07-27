@@ -5,7 +5,6 @@ import { IconButton, Menu, MenuItem } from "@mui/material";
 import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 import Box from "@mui/material/Box";
 import { Link, useNavigate } from "react-router-dom";
-import { TopNav } from "../components/TopNav";
 import axios from "axios";
 import { toast } from 'react-toastify';
 export const Orders = () => {
@@ -121,7 +120,6 @@ export const Orders = () => {
 
   return (
     <div className="flex flex-col h-[calc(100vh-100px)] w-full p-5">
-      <TopNav />
       {
         <div>
           <div className="flex items-center justify-between text-md my-5 mx-0">

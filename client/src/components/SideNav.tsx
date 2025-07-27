@@ -1,22 +1,29 @@
 import { Link } from 'react-router-dom'
-import { Banknote, GraduationCap, LayoutDashboard, ShoppingBag } from 'lucide-react';
+import { Icon, X } from 'lucide-react';
+import { sideNavLinks } from '../data/sideNavLinks';
 
-
-export const SideNav = () => {
+type SideNavProps = {
+  onToggle?: () => void
+}
+export const SideNav = ({ onToggle }: SideNavProps) => {
 
   return (
-    <div className='hidden md:flex flex-col items-center px-1 py-4 text-white h-screen w-1/6 bg-darkBlue'>
-     <div className='d-flex items-center w-auto'>
-     <img className='h-12'  src='/images/notepad.png' alt="notepad.png"/>
-            <b><h3>SwiftEssay</h3></b>
-     </div>
+    <div className='flex flex-col items-center px-1 py-4 text-white min-h-screen h-auto bg-darkBlue'>
+      {/* Close button for mobile */}
+      <button
+        className='absolute top-7 right-2 text-white lg:hidden'
+        onClick={onToggle}
+      >
+        <X size={24} />
+      </button>
+      <div className='flex items-center w-auto'>
+        <img className='h-12' src='/images/notepad.png' alt="notepad.png" />
+        <b><h3>SwiftEssay</h3></b>
+      </div>
       <div className='mt-2'>
-        <Link className='flex items-center my-6' to="dashboard"><div className='text-md'><LayoutDashboard className='mr-2' /></div>Dashboard</Link>
-        <Link className='flex items-center my-6' to="writers"><div className='text-md'><GraduationCap className='mr-2'/></div>Writers</Link>
-        <Link className='flex items-center my-6' to="orders"><div className='text-md'><ShoppingBag className='mr-2'/></div>Orders</Link>
-        <Link className='flex items-center my-6' to="payments"><div className='text-md'><Banknote className='mr-2'/></div>Payments</Link>
-        {/* <li>Reviews</li>
-        <li>News</li> */}
+        {sideNavLinks.map((link, index) =>
+          <Link key={index} className='flex items-center my-6' to={link.url} onClick={onToggle}><div className='text-md'><link.icon className='mr-2' /></div>{link.name}</Link>
+        )}
       </div>
     </div>
   )

@@ -1,6 +1,5 @@
 import {React,useEffect,useState} from "react";
 import { useParams } from "react-router-dom";
-import { TopNav } from "../../../components/TopNav";
 import "./AddOrder.css";
 import {orderDiscipline,paperTypes,citationOptions,academicLevels} from './AddOrderFormOptions'
 import paypalImage from '../../../../src/assets/images/paypal.png'
@@ -91,7 +90,6 @@ export const AddOrder = () => {
   },[])
   return (
     <div className="main-container">
-      <TopNav />
       <div className="add-order-container">
         <div className="add-order-form">
           <div className="header">
