@@ -24,7 +24,7 @@ export const DashboardLayout = () => {
       </div>
       {/* Sidebar for small screens */}
       {isSideNavOpen && (
-        <div className="block lg:hidden fixed inset-y-0 left-0 z-50 w-2/3 shadow-lg">
+        <div className="block lg:hidden fixed inset-y-0 left-0 z-50 w-1/2 shadow-lg">
           <SideNav onToggle={() => setIsSideNavOpen(false)} />
         </div>
       )}
