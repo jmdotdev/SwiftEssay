@@ -6,7 +6,7 @@ import { NotFound } from './pages/notfound/NotFound'
 import { Routes, Route } from "react-router-dom";
 import { SideNav } from './components/SideNav';
 import { Writers } from './pages/Writers';
-import { AddOrder } from './pages/Orders/AddOrder/AddOrder';
+import { AddOrder } from './pages/AddOrder';
 import { OrderDetails } from './pages/Orders/OrderDetails/OrderDetails'
 import { Payment } from './pages/Payment/Payment'
 import { ToastContainer } from 'react-toastify';

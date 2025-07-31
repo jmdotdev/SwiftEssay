@@ -1,10 +1,8 @@
-import {React,useEffect,useState} from "react";
+import {useEffect,useState} from "react";
 import { useParams } from "react-router-dom";
-import "./AddOrder.css";
-import {orderDiscipline,paperTypes,citationOptions,academicLevels} from './AddOrderFormOptions'
-import paypalImage from '../../../../src/assets/images/paypal.png'
-import {getUserData} from '../../../utils/getUserData'
+import {getUserData} from '../utils/getUserData'
 import axios from 'axios'
+import { academicLevels, citationOptions, orderDiscipline, paperTypes } from "../data/AddOrderFormOptions";
 export const AddOrder = () => {
   const params = useParams()
   const [userId,setUserId] = useState()
@@ -89,94 +87,94 @@ export const AddOrder = () => {
     }) (): '';
   },[])
   return (
-    <div className="main-container">
-      <div className="add-order-container">
-        <div className="add-order-form">
-          <div className="header">
+    <div className="flex flex-col h-[calc(100vh-100px)] w-full p-5">
+      <div className="flex items-center justify-center h-full mt-5">
+        <div className="flex flex-col w-4/5 h-full">
+          <div className=" w-full py-3 px-0">
             <h2>{params.id ? 'Edit an Order' : 'Place an Order'} </h2>
             <p>Fast,Secure and Reliable</p>
           </div>
-          <div className="order-form">
+          <div className="border-2 border-red-400">
             <form onSubmit={params.id ? updateOrder : handleSubmit}>
-              <div className="input-control">
+              <div className="flex flex-col items-start justify-center border-0">
                 <label>Academic Level:</label>
-                <select onChange={handleInputChange} value={orderDetails.academic_level} name="academic_level">
+                <select className="flex w-5/6 border-0 h-[40px] shadow-inputShadow appearance-none focus: outline-none" onChange={handleInputChange} value={orderDetails.academic_level} name="academic_level">
                   {academicLevels.map(al =><option>{al}</option> )}
                 </select>
               </div>
-              <div className="input-control">
+              <div className="flex flex-col items-start justify-center border-0">
                 <label>Type:</label>
-                <select onChange={handleInputChange} value={orderDetails.type} name="type">
+                <select className="flex w-5/6 border-0 h-[40px] shadow-inputShadow appearance-none focus: outline-none" onChange={handleInputChange} value={orderDetails.type} name="type">
                   {paperTypes.map(type =><option>{type}</option> )}
                 </select>
               </div>
-              <div className="input-control">
+              <div className="flex flex-col items-start justify-center border-0">
                 <label>Discipline:</label>
-                <select onChange={handleInputChange} value={orderDetails.discipline} name="discipline">
+                <select className="flex w-5/6 border-0 h-[40px] shadow-inputShadow appearance-none focus: outline-none" onChange={handleInputChange} value={orderDetails.discipline} name="discipline">
                   {orderDiscipline.map(discipline =><option>{discipline}</option> )}
                 </select>
               </div>
-              <div className="input-control">
+              <div className="flex flex-col items-start justify-center border-0">
                 <label>Topic:</label>
-                <input type="text" placeholder="topic" onChange={handleInputChange} value={orderDetails.topic} name="topic"/>
+                <input className="shadow-inputBackground" type="text" placeholder="topic" onChange={handleInputChange} value={orderDetails.topic} name="topic"/>
               </div>
-              <div className="input-control">
+              <div className="flex flex-col items-start justify-center border-0">
                 <label>Instructions:</label>
                 <textarea type="text" placeholder="paper instructions" onChange={handleInputChange} value={orderDetails.instructions} name="instructions"/>
               </div>
-              <div className="input-control">
+              <div className="flex flex-col items-start justify-center border-0">
                 <label>Files:</label>
-                <input type="file" multiple onChange={handleFileChange} name="files"/>
+                <input className="shadow-inputBackground" type="file" multiple onChange={handleFileChange} name="files"/>
               </div>
-              <div className="input-control">
+              <div className="flex flex-col items-start justify-center border-0">
                 <label>Page Format</label>
-                <select onChange={handleInputChange} value={orderDetails.page_format} name="page_format">
+                <select className="flex w-5/6 border-0 h-[40px] shadow-inputShadow appearance-none focus: outline-none" onChange={handleInputChange} value={orderDetails.page_format} name="page_format">
                   {citationOptions.map(option =><option>{option}</option> )}
                 </select>
               </div>
-              <div className="input-control">
+              <div className="flex flex-col items-start justify-center border-0">
                 <label>Pages:</label>
-                <input type="number" placeholder="number of pages" onChange={handleInputChange} value={orderDetails.pages} name="pages"/>
+                <input className="shadow-inputBackground" type="number" placeholder="number of pages" onChange={handleInputChange} value={orderDetails.pages} name="pages"/>
               </div>
-              <div className="input-control">
+              <div className="flex flex-col items-start justify-center border-0">
                 <label>Sources To Cite:</label>
-                <input type="number" placeholder="cited sources" onChange={handleInputChange} value={orderDetails.citations} name="citations"/>
+                <input className="shadow-inputBackground" type="number" placeholder="cited sources" onChange={handleInputChange} value={orderDetails.citations} name="citations"/>
               </div>
-              <div className="input-control">
+              <div className="flex flex-col items-start justify-center border-0">
                 <label>Powerpoint Slides:</label>
-                <input type="number" placeholder="powerpoint slides" onChange={handleInputChange} value={orderDetails.slides} name="slides"/>
+                <input className="shadow-inputBackground" type="number" placeholder="powerpoint slides" onChange={handleInputChange} value={orderDetails.slides} name="slides"/>
               </div>
-              <div className="input-control">
+              <div className="flex flex-col items-start justify-center border-0">
                 <label>Deadline:</label>
-                <input type="datetime-local" id="datetimeInput" name="deadline" onChange={handleInputChange} value={orderDetails.deadline}/>
+                <input className="shadow-inputBackground" type="datetime-local" id="datetimeInput" name="deadline" onChange={handleInputChange} value={orderDetails.deadline}/>
               </div>
-              <button>Checkout</button>
+              <button className="flex items-center justify-center px-4 py-2 rounded-md w-1/4  bg-darkBlue text-white border-0 cursor-pointer">Checkout</button>
             </form>
           </div>
         </div>
-        <div className="checkout-section">
-          <div className="checkout-card">
-            <div className="header">
+        <div className="hidden md:block">
+          <div className="flex flex-col items-start w-full h-1/2 bg-darkBlue text-white rounded-sm shadow-inputShadow p-2">
+            <div className="w-full py-2 px-0">
               {/* find a way to show this in mobile view */}
               <h3>Order Details</h3>
             </div>
-            <div className="paper-details">
+            <div className="w-full border-b-[1px] border-gray-600">
               <p>Type of paper</p>
               <p>Discipline of paper</p>
             </div>
 
-            <div className="paper-cost">
-              <div className="subtotal">
+            <div className="flex flex-col w-full h-full">
+              <div className="flex items-center justify-between w-full my-2 border-b-[1px] border-gray-600">
                 <p>{orderDetails.pages} pages  </p>
                 <p>* ksh 300</p>
               </div>
-              <div className="total">
+              <div className="flex items-center justify-between">
                 <p><b>Total Price</b></p>
                 <p><b>{orderDetails.pages * 300}</b></p>
               </div>
-              <div className="card-footer">
+              <div className="flex items-end h-full">
                 <p>Secure payments via:</p>
-                <img src={paypalImage} alt="paypal-image.png" />
+                <img src='/images/paypal.png' alt="paypal-image.png"  className="h-10"/>
               </div>
             </div>
           </div>
