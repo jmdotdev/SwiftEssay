@@ -87,14 +87,13 @@ export const AddOrder = () => {
     }) (): '';
   },[])
   return (
-    <div className="flex flex-col h-[calc(100vh-100px)] w-full p-5">
-      <div className="flex items-center justify-center h-full mt-5">
-        <div className="flex flex-col w-4/5 h-full">
-          <div className=" w-full py-3 px-0">
-            <h2>{params.id ? 'Edit an Order' : 'Place an Order'} </h2>
-            <p>Fast,Secure and Reliable</p>
+    <div className="flex flex-col h-full w-full p-5 overflow-auto">
+      <div className="flex justify-center h-full mt-5">
+        <div className="flex flex-col w-full md:w-2/3 h-full">
+          <div className=" w-full p-0">
+            <h2 className="text-xl font-semibold">{params.id ? 'Edit an Order' : 'Place an Order'} </h2>
           </div>
-          <div className="border-2 border-red-400">
+          <div>
             <form onSubmit={params.id ? updateOrder : handleSubmit}>
               <div className="flex flex-col items-start justify-center border-0">
                 <label>Academic Level:</label>
@@ -116,13 +115,13 @@ export const AddOrder = () => {
               </div>
               <div className="flex flex-col items-start justify-center border-0">
                 <label>Topic:</label>
-                <input className="shadow-inputBackground" type="text" placeholder="topic" onChange={handleInputChange} value={orderDetails.topic} name="topic"/>
+                <input className="flex w-5/6 border-0 h-[40px] shadow-inputShadow px-1 appearance-none focus: outline-none" type="text" placeholder="topic" onChange={handleInputChange} value={orderDetails.topic} name="topic"/>
               </div>
-              <div className="flex flex-col items-start justify-center border-0">
+              <div className="flex flex-col items-start justify-center border-0 w-5/6">
                 <label>Instructions:</label>
-                <textarea type="text" placeholder="paper instructions" onChange={handleInputChange} value={orderDetails.instructions} name="instructions"/>
+                <textarea className="flex border-0 h-[40px] shadow-inputShadow px-1 appearance-none focus: outline-none" placeholder="paper instructions" onChange={handleInputChange} value={orderDetails.instructions} name="instructions"/>
               </div>
-              <div className="flex flex-col items-start justify-center border-0">
+              <div className="flex flex-col items-start justify-center w-5/6 my-2 border-0 bg-gray-100">
                 <label>Files:</label>
                 <input className="shadow-inputBackground" type="file" multiple onChange={handleFileChange} name="files"/>
               </div>
@@ -134,25 +133,25 @@ export const AddOrder = () => {
               </div>
               <div className="flex flex-col items-start justify-center border-0">
                 <label>Pages:</label>
-                <input className="shadow-inputBackground" type="number" placeholder="number of pages" onChange={handleInputChange} value={orderDetails.pages} name="pages"/>
+                <input className="flex w-5/6 border-0 h-[40px] shadow-inputShadow px-1 appearance-none focus: outline-none" type="number" placeholder="number of pages" onChange={handleInputChange} value={orderDetails.pages} name="pages"/>
               </div>
               <div className="flex flex-col items-start justify-center border-0">
                 <label>Sources To Cite:</label>
-                <input className="shadow-inputBackground" type="number" placeholder="cited sources" onChange={handleInputChange} value={orderDetails.citations} name="citations"/>
+                <input className="flex w-5/6 border-0 h-[40px] shadow-inputShadow px-1 appearance-none focus: outline-none" type="number" placeholder="cited sources" onChange={handleInputChange} value={orderDetails.citations} name="citations"/>
               </div>
               <div className="flex flex-col items-start justify-center border-0">
                 <label>Powerpoint Slides:</label>
-                <input className="shadow-inputBackground" type="number" placeholder="powerpoint slides" onChange={handleInputChange} value={orderDetails.slides} name="slides"/>
+                <input className="flex w-5/6 border-0 h-[40px] shadow-inputShadow px-1 appearance-none focus: outline-none" type="number" placeholder="powerpoint slides" onChange={handleInputChange} value={orderDetails.slides} name="slides"/>
               </div>
               <div className="flex flex-col items-start justify-center border-0">
                 <label>Deadline:</label>
-                <input className="shadow-inputBackground" type="datetime-local" id="datetimeInput" name="deadline" onChange={handleInputChange} value={orderDetails.deadline}/>
+                <input className="flex w-5/6 border-0 h-[40px] shadow-inputShadow px-1 appearance-none focus: outline-none" type="datetime-local" id="datetimeInput" name="deadline" onChange={handleInputChange} value={orderDetails.deadline}/>
               </div>
-              <button className="flex items-center justify-center px-4 py-2 rounded-md w-1/4  bg-darkBlue text-white border-0 cursor-pointer">Checkout</button>
+              <button className="flex items-center justify-center px-4 py-2 rounded-md w-1/4 my-2 bg-darkBlue text-white border-0 cursor-pointer">Checkout</button>
             </form>
           </div>
         </div>
-        <div className="hidden md:block">
+        <div className="hidden md:block md:w-1/3 mt-6">
           <div className="flex flex-col items-start w-full h-1/2 bg-darkBlue text-white rounded-sm shadow-inputShadow p-2">
             <div className="w-full py-2 px-0">
               {/* find a way to show this in mobile view */}
@@ -174,7 +173,7 @@ export const AddOrder = () => {
               </div>
               <div className="flex items-end h-full">
                 <p>Secure payments via:</p>
-                <img src='/images/paypal.png' alt="paypal-image.png"  className="h-10"/>
+                <img src='/images/paypal.png' alt="paypal-image.png"  className="h-8"/>
               </div>
             </div>
           </div>
