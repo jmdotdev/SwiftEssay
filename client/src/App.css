@@ -4,7 +4,8 @@
 @theme {
     --color-darkBlue: #03264D;
     --color-inputBackground: #E5E5E5;
-    --color-siteBackground: #F7F8F9
+    --color-siteBackground: #F7F8F9;
+    --shadow-inputShadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 }
 *{
     font-family: 'Roboto', sans-serif;
