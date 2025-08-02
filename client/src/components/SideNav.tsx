@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Icon, X } from 'lucide-react';
+import { X } from 'lucide-react';
 import { sideNavLinks } from '../data/sideNavLinks';
 
 type SideNavProps = {
@@ -9,7 +9,6 @@ export const SideNav = ({ onToggle }: SideNavProps) => {
 
   return (
     <div className='flex flex-col items-center px-1 py-4 text-white min-h-screen h-auto bg-darkBlue'>
-      {/* Close button for mobile */}
       <button
         className='absolute top-7 right-2 text-white lg:hidden'
         onClick={onToggle}
