@@ -63,10 +63,10 @@ export const Dashboard = () => {
     fetchData();
   }, []);
   return (
-    <div className='flex flex-col w-full h-[calc(100vh-100px)] p-5'>
-        {/* <div className='flex w-full items-start my-5 mx-0'>
-            <h3>Dashboard</h3>
-        </div> */}
+    <div className='flex flex-col w-full h-[calc(100vh-100px)] px-5 py-0'>
+        <div className='flex w-full items-start'>
+          <h4 className="text-darkBlue font-semibold text-xl">Dashboard</h4>
+        </div>
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 justify-between h-auto w-full my-6'>
           <OrderCard orderCount={(latestOrders.filter(ord=>ord.status === 'available')).length} orderType='Available' Icon='/images/pending.svg'/>
           <OrderCard orderCount={(latestOrders.filter(ord=>ord.status === 'revision')).length} orderType='Revision' Icon='/images/repeat.svg'/>

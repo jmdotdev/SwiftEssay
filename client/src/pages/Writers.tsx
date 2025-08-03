@@ -130,7 +130,7 @@ export const Writers = () => {
       assigned: writer.is_assigned ? 1 : 0
     }));
   return (
-    <div className="flex flex-col w-full h-[calc(100vh-100px)] p-5">
+    <div className="flex flex-col w-full h-[calc(100vh-100px)] px-5 py-0">
       {/* Modal to add writer */}
       <Modal
         open={open}
@@ -187,7 +187,7 @@ export const Writers = () => {
       </Modal>
       {/* End of modal to add user */}
       <div className="flex items-center justify-between my-5 mx-0 text-xl font-semibold">
-        <h4>Writers</h4>
+        <h4 className="text-darkBlue font-semibold text-xl">Writers</h4>
         <button className="bg-darkBlue text-white text-sm px-4 py-2 rounded-lg cursor-pointer" onClick={handleOpen}>
           Add Writer
         </button>
