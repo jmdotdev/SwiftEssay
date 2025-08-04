@@ -13,6 +13,8 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.6.7",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
     "lucide-react": "^0.522.0",
     "moment": "^2.30.1",
     "postcss": "^8.5.3",
@@ -22,6 +24,7 @@
     "react-jwt": "^1.2.0",
     "react-router-dom": "^6.21.2",
     "react-toastify": "^10.0.5",
+    "tailwind-merge": "^3.3.1",
     "tailwindcss": "^4.1.7",
     "web-vitals": "^2.1.4"
   },
@@ -52,6 +55,7 @@
     "@types/react": "^18.3.22",
     "@types/react-dom": "^18.3.7",
     "@vitejs/plugin-react": "^4.4.1",
+    "tw-animate-css": "^1.3.6",
     "typescript": "^5.8.3",
     "vite": "^6.3.4"
   }
