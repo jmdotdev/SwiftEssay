@@ -8,25 +8,12 @@ import { IconButton, Menu, MenuItem } from "@mui/material";
 import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 import axios from "axios";
 import { toast } from 'react-toastify';
+import { AddWriterModal } from "@/components/AddWriterModal";
 
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "#FFFF",
-  p: 4,
-  borderRadius: "10px"
-};
 export const Writers = () => {
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-  const [username, setUsername] = useState();
-  const [email, setEmail] = useState();
-  const [phone, setPhone] = useState();
-  const [password, setPassword] = useState();
+  const [isOpen, setIsOpen] = useState(false);
+  const handleOpen = () => setIsOpen(true);
+  const handleClose = () => setIsOpen(false);
   const [writersList, setWritersList] = useState([]);
   const [newWriterAdded,setNewWriterAdded] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -80,20 +67,6 @@ export const Writers = () => {
       toast.error("error fetching writers")
     })
   };
-  const submitHandler = async (e) => {
-    e.preventDefault();
-    await axios
-      .post("http://localhost:5000/writers/registerWriter", {
-        username,
-        email,
-        phone,
-        password,
-      })
-      .then((res) => {
-        setNewWriterAdded(!newWriterAdded)
-        toast.success("writer added successfully")
-      }).catch(error => toast.error("error adding writer"))
-  };
 
   useEffect(() => {
     fetchWriters();
@@ -131,61 +104,6 @@ export const Writers = () => {
     }));
   return (
     <div className="flex flex-col w-full h-[calc(100vh-100px)] px-5 py-0">
-      {/* Modal to add writer */}
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style}>
-          <h3 className="mb-5 text-lg font-semibold">Add New Writer:</h3>
-          <form onSubmit={submitHandler}>
-            <Typography className="flex flex-col items-start" variant="h6" component="h2">
-              <label>Username:</label>
-              <input 
-                className="h-6 px-2 py-4 w-full border-[1px] border-gray-600 rounded-lg focus: outline-0"
-                type="text"
-                placeholder="username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-              />
-            </Typography>
-            <Typography className="flex flex-col items-start" variant="h6" component="h2">
-              <label>Email:</label>
-              <input
-               className="h-6 px-2 py-4 w-full border-[1px] border-gray-600 rounded-lg focus: outline-0"
-                type="email"
-                placeholder="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </Typography>
-            <Typography className="flex flex-col items-start" variant="h6" component="h2">
-              <label>Phone:</label>
-              <input
-              className="h-6 px-2 py-4 w-full border-[1px] border-gray-600 rounded-lg focus: outline-0"
-                type="text"
-                placeholder="phone"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-              />
-            </Typography >
-            <Typography className="flex flex-col items-start" variant="h6" component="h2">
-              <label>Password</label>
-              <input
-              className="h-6 px-2 py-4 w-full border-[1px] border-gray-600 rounded-lg focus: outline-0"
-                type="password"
-                placeholder="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </Typography>
-            <button  className="bg-darkBlue text-white text-sm px-4 py-2 my-2 rounded-lg cursor-pointer">Add Writer</button>
-          </form>
-        </Box>
-      </Modal>
-      {/* End of modal to add user */}
       <div className="flex items-center justify-between my-5 mx-0 text-xl font-semibold">
         <h4 className="text-darkBlue font-semibold text-xl">Writers</h4>
         <button className="bg-darkBlue text-white text-sm px-4 py-2 rounded-lg cursor-pointer" onClick={handleOpen}>
@@ -221,6 +139,9 @@ export const Writers = () => {
           />
         </div>
       </div>
+      {
+        setIsOpen && <AddWriterModal isOpen={isOpen} handleClose={handleClose}/>
+      }
     </div>
   );
 };
