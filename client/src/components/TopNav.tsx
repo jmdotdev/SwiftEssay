@@ -16,6 +16,10 @@ export const TopNav = ({header, toggleNav}: TopNavProps) => {
     navigate("/login");
   };
 
+  const navigateToProfile = () => {
+    navigate('/profile/1')
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       // await verifyToken(setLoggedInUser, setIsLoggedIn, navigate);
@@ -23,6 +27,7 @@ export const TopNav = ({header, toggleNav}: TopNavProps) => {
 
     fetchData();
   }, [isLoggedIn]);
+  
   return (
     <div className="flex items-center justify-between">
       <div className="flex items-center">
@@ -32,7 +37,7 @@ export const TopNav = ({header, toggleNav}: TopNavProps) => {
       </div>
       <div className="flex items-center">
         <BellDot className="h-6 w-6 text-gray-950 mx-2" />
-        <div className="flex items-center">
+        <div className="flex items-center cursor-pointer" onClick={navigateToProfile}>
           <img className="h-6 w-6" src='/images/avatar.webp' alt="avatar.png" />
         </div>
       </div>

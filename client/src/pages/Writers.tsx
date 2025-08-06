@@ -79,7 +79,7 @@ export const Writers = () => {
     { field: "phone", headerName: "Phone", width: 150 },
     {
       field: "tasks_done",
-      headerName: "Tasks_Done",
+      headerName: "Tasks Done",
       type: "number",
       width: 150,
     },
