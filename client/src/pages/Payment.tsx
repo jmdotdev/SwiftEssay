@@ -1,13 +1,13 @@
 import React from "react";
-import "./Payment.css";
-import money from "../../assets/images/money.gif";
-import allmoney from "../../assets/images/money.webp";
 import Box from "@mui/material/Box";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { DataGrid } from "@mui/x-data-grid";
+import { PaymentCard } from "@/components/PaymentCard";
+import { Input } from "@/components/ui/input";
+import { DatePicker } from "@/components/DatePicker";
 export const Payment = () => {
   const [age, setAge] = React.useState("");
 
@@ -47,59 +47,36 @@ export const Payment = () => {
     { id: 9, lastName: "Roxie", firstName: "Harvey", age: 65 },
   ];
   return (
-    <div className="payment">
-      <div className="header">
-        <div className="left-section">
-          <div className="image-section">
-            <img src={money} alt="payment-image" />
-            <p>Here is your money history so far.</p>
-          </div>
+    <div className="p-6 mt-8">
+      <div className="flex flex-col md:flex-row items-center justify-between w-full">
+        <div className="w-full md:w-1/3">
+           <PaymentCard />
         </div>
-        <div className="right-section">
-          <Box>
-            <FormControl className="form">
-              <InputLabel id="demo-simple-select-label">month</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={age}
-                label="month"
-                onChange={handleChange}
-              >
-                <MenuItem value={10}>january</MenuItem>
-                <MenuItem value={20}>february</MenuItem>
-                <MenuItem value={30}>march</MenuItem>
-                <MenuItem value={30}>april</MenuItem>
-              </Select>
-            </FormControl>
-          </Box>
+        <div className="w-full md:w-1/3 mx-6">
+           <PaymentCard />
+        </div>
+        <div className="w-full md:w-1/3">
+           <PaymentCard />
         </div>
       </div>
-      <div className="payment-cards">
-        <div className="card">
-          <div className="money-section">
-            <h3>$1544</h3>
-            <p>total income</p>
+      <div className="bg-white rounded-md p-4 mt-6">
+        <div className="flex flex-col md:flex-row items-center justify-between my-3">
+          <div className="w-full md:w-1/3">
+            <h3 className="mb-2 w-full">Payment History</h3>
           </div>
-          <img src={allmoney} alt="total amount.png" />
-        </div>
-        <div className="card">
-          <div className="money-section">
-            <h3>$1544</h3>
-            <p>total income</p>
+          <div className="flex flex-col md:flex-row w-full md:w-2/3">
+            <Input placeholder="Search" className="mr-0 md:mr-2"/>
+            <div className="flex flex-col w-full md:flex-row items-start md:items-center mt-2 md:mt-0">
+               <div className="mr-0 md:mr-2">
+                <DatePicker header="From"/>
+               </div>
+               <div className="mt-2 md:mt-0">
+                 <DatePicker header="To"/>
+               </div>
+            </div>
           </div>
-          <img src={allmoney} alt="total amount.png" />
+         
         </div>
-        <div className="card">
-          <div className="money-section">
-            <h3>$1544</h3>
-            <p>pending amount</p>
-          </div>
-          <img src={allmoney} alt="total amount.png" />
-        </div>
-      </div>
-      <div className="payment-history">
-        <h3>Payment History</h3>
         <div style={{ height: 300, width: "100%" }}>
           <DataGrid
             rows={rows}
