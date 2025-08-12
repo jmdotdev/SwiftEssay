@@ -6,7 +6,7 @@ import { NotFound } from './pages/notfound/NotFound'
 import { Routes, Route } from "react-router-dom";
 import { Writers } from './pages/Writers';
 import { AddOrder } from './pages/AddOrder';
-import { OrderDetails } from './pages/Orders/OrderDetails/OrderDetails'
+import { OrderDetails } from './pages/OrderDetails'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Dashboard } from './pages/Dashboard';
