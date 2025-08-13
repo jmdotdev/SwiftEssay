@@ -1,11 +1,9 @@
-import {React, useEffect, useState} from 'react'
+import {useEffect, useState} from 'react'
 import { useParams } from 'react-router-dom';
 import axios from 'axios'
 import { isExpired, decodeToken } from "react-jwt";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import Modal from "@mui/material/Modal";
 import moment from "moment"
+import { RateTaskModal } from '@/components/RateTaskModal';
 const style = {
   position: "absolute",
   top: "50%",
@@ -24,8 +22,6 @@ export const OrderDetails = () => {
   const [assignedTo, setAssignedTo] = useState();
   const [writersList, setWritersList] = useState([]);
   const [loggedInWriter,setLoggedInWriter] = useState();
-  const [rate,setRate] = useState();
-  const [comment,setComment] = useState();
   const myDecodedToken = decodeToken(localStorage.getItem('token'));
   const isMyTokenExpired = isExpired(localStorage.getItem('token'));
 
@@ -67,17 +63,6 @@ export const OrderDetails = () => {
   const submitHandler = async (e) =>{
     e.preventDefault();
     assignOrder();
-  }
-  const rateWriterHandler = async (e) =>{
-    e.preventDefault();
-    const writer = writersList.find(writer =>writer._id == loggedInWriter.userId);
-    await axios.post('http://localhost:5000/writers/rateWriter',{
-      writer_id:writer._id,
-      task_id:order._id,
-      rating:rate,
-      comment
-    })
-    .then(res=>console.log(res))
   }
   return (
     <div className='flex flex-col h-full w-full p-8 overflow-y-auto'>
@@ -193,32 +178,9 @@ export const OrderDetails = () => {
     </tr>
   </tbody>:"loading order..."}
 </table>
- {/* Modal to add writer */}
- <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style}>
-          <h3 style={{ marginBottom: "20px" }}>Rate the Work:</h3>
-          <form onSubmit={rateWriterHandler}>
-            <Typography id="modal-modal-title" variant="h6" component="h2">
-              <label>rating:(rating should be from 0-5 with 5 being the highest)</label>
-              <input
-                type="number"
-                placeholder="rating"
-                value={rate}
-                onChange={(e)=>{setRate(e.target.value)}}
-              />
-            </Typography>
-            <label>comment</label>
-            <textarea placeholder='Add Comment' value={comment} onChange={(e)=>{setComment(e.target.value)}}/>
-            <button className="bg-darkBlue text-white p-4 border-0 outline-0 w-auto rounded-md cursor-pointer">Add Rating</button>
-          </form>
-        </Box>
-      </Modal>
-      {/* End of modal to add user */}
+{
+  open && <RateTaskModal isOpen={open} handleClose={handleClose } />
+}
  <button className='bg-darkBlue text-white px-4 py-2 border-0 my-2 outline-0 w-40 rounded-md cursor-pointer' onClick={claimOrder}>Claim Order</button>
  <button className='bg-darkBlue text-white px-4 py-2 border-0 outline-0 w-40 rounded-md cursor-pointer' onClick={handleOpen}>Rate Order</button>
     </div>
