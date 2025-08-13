@@ -19,21 +19,17 @@ type ModalProps = {
   isOpen: boolean
   handleClose: () => void;
 }
-export function RateTaskModal({ isOpen, handleClose }: ModalProps) {
-  const [selectedStarsSet, setSelectedStarsSet] = useState<Set<Number>>(new Set());
+export function RateTaskModal({ isOpen, handleClose }: ModalProps) {  
+  const [rating, setRating] = useState<Number>(0);
 
-
-  const handleStarsRating = (index: number) => {
-    setSelectedStarsSet((prevSet) => {
-      const newSet = new Set(prevSet);
-      if (newSet.has(index)) {
-        newSet.delete(index);
-      } else {
-        newSet.add(index);
+  const handleRating = (index: number) => {
+      if (index + 1 === rating) {
+         setRating(index)
       }
-      return newSet;
-    });
-  }
+      else {
+      setRating(index + 1)
+      }
+  } 
 
   const rateTask = async (e) => {
     // e.preventDefault();
@@ -64,9 +60,9 @@ export function RateTaskModal({ isOpen, handleClose }: ModalProps) {
                   <Star
                     key={si}
                     className="cursor-pointer"
-                    fill={selectedStarsSet.has(si) ? "orange" : "white"}
-                    stroke={selectedStarsSet.has(si) ? "none" : "black"}
-                    onClick={() => handleStarsRating(si)}
+                    fill={si < +rating ? "orange" : "white"}
+                    stroke={si < +rating ? "none" : "black"}
+                    onClick={() => handleRating(si)}
                   />
                 ))}
               </div>
