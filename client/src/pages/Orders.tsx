@@ -7,6 +7,7 @@ import Box from "@mui/material/Box";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from 'react-toastify';
+import { OrderTable } from "@/components/OrderTable";
 export const Orders = () => {
   const [orders, setOrders] = useState([]);
   const [filteredOrders,setFilteredOrders] = useState([])
@@ -153,20 +154,21 @@ export const Orders = () => {
                   <CircularProgress />
                 </Box>
               ) : (
-                <DataGrid
-                  columnVisibilityModel={{
-                    id:false,
-                  }}
-                  rowSelection = {false}
-                  rows={rows}
-                  columns={columns}
-                  initialState={{
-                    pagination: {
-                      paginationModel: { page: 0, pageSize: 5 },
-                    },
-                  }}
-                  pageSizeOptions={[5, 10]}
-                />
+                // <DataGrid
+                //   columnVisibilityModel={{
+                //     id:false,
+                //   }}
+                //   rowSelection = {false}
+                //   rows={rows}
+                //   columns={columns}
+                //   initialState={{
+                //     pagination: {
+                //       paginationModel: { page: 0, pageSize: 5 },
+                //     },
+                //   }}
+                //   pageSizeOptions={[5, 10]}
+                // />
+                <OrderTable/>
               )}
             </div>
           </div>
