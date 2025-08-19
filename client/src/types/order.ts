@@ -1,0 +1,21 @@
+export type Order = {
+  _id: string;
+  order_id: number;
+  academic_level: "highschool" | "undergraduate" | "masters" | "phd";
+  type: "assignment" | "essay" | "report" | "other"; 
+  discipline: string;
+  topic: string;
+  instructions: string;
+  files: string[]; 
+  page_format: "APA" | "MLA" | "Chicago" | "Harvard" | string;
+  pages: number;
+  amount_payable: number;
+  citations: number;
+  slides: number;
+  deadline: string; 
+  submitted_files: string[];
+  status: "available" | "in_progress" | "completed" | "cancelled";
+  isPaid: boolean;
+  created_at: string;
+  updated_at: string; 
+};
