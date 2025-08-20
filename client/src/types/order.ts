@@ -15,6 +15,7 @@ export type Order = {
   deadline: string; 
   submitted_files: string[];
   status: "available" | "in_progress" | "completed" | "cancelled";
+  single_or_double: "single" | "double";
   isPaid: boolean;
   created_at: string;
   updated_at: string; 

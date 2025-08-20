@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { DataGrid } from "@mui/x-data-grid";
 import CircularProgress from "@mui/material/CircularProgress";
 import { IconButton, Menu, MenuItem } from "@mui/material";
 import { MoreVert as MoreVertIcon } from "@mui/icons-material";
@@ -8,35 +7,14 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from 'react-toastify';
 import { OrderTable } from "@/components/OrderTable";
+import { Order } from "@/types/order";
 export const Orders = () => {
-  const [orders, setOrders] = useState([]);
-  const [filteredOrders,setFilteredOrders] = useState([])
+  const [orders, setOrders] = useState<Order[]>();
+  const [filteredOrders,setFilteredOrders] = useState<Order[]>()
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [anchorEl, setAnchorEl] = useState(null);
 
-  const CustomActionCell = ({ row }) => (
-    <div>
-      <IconButton
-        aria-label="more"
-        aria-controls="action-menu"
-        aria-haspopup="true"
-        onClick={handleMenuOpen}
-      >
-        <MoreVertIcon />
-      </IconButton>
-      <Menu
-        id="action-menu"
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={handleMenuClose}
-      >
-        <MenuItem><Link to={`/orders/order-details/${row.id}`}>View</Link></MenuItem>
-        <MenuItem><Link to={`/orders/add-order/${row.id}`}>Edit</Link></MenuItem>
-        <MenuItem onClick={()=>{deleteOrder(row.id)}}>Delete</MenuItem>
-      </Menu>
-    </div>
-  );
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -82,8 +60,8 @@ export const Orders = () => {
   }
 
 
-  const filterOrder = (filter) => {
-    const filterOrders = filteredOrders.filter(
+  const filterOrder = (filter: string) => {
+    const filterOrders: Order[] = filteredOrders.filter(
       (order) => order.status === filter
     );
     setOrders(filterOrders)
@@ -91,33 +69,6 @@ export const Orders = () => {
   useEffect(() => {
     getOrders();
   }, []);
-
-  const columns = [
-    { field: "id", headerName: "ID", width: 150 },
-    { field: "sn", headerName: "SN", width: 150 },
-    { field: "level", headerName: "Level", width: 150 },
-    { field: "discipline", headerName: "Discipline", width: 150 },
-    { field: "topic", headerName: "Topic", width: 150 },
-    { field: "type", headerName: "Type", width: 150 },
-    { field: "deadline", headerName: "Deadline", width: 150 },
-    {
-      field: "action",
-      headerName: "Action",
-      width: 150,
-      renderCell: CustomActionCell,
-    },
-  ];
-  const rows = orders.map((order, index) => ({
-    id: order._id,
-    sn:index + 1,
-    level: order.academic_level,
-    discipline: order.discipline,
-    topic: order.topic,
-    type: order.type,
-    single_double: order.single_or_double,
-    files: order.files,
-    deadline: order.deadline,
-  }));
 
   return (
     <div className="flex flex-col h-[calc(100vh-100px)] w-full px-5 py-0">
@@ -154,21 +105,7 @@ export const Orders = () => {
                   <CircularProgress />
                 </Box>
               ) : (
-                // <DataGrid
-                //   columnVisibilityModel={{
-                //     id:false,
-                //   }}
-                //   rowSelection = {false}
-                //   rows={rows}
-                //   columns={columns}
-                //   initialState={{
-                //     pagination: {
-                //       paginationModel: { page: 0, pageSize: 5 },
-                //     },
-                //   }}
-                //   pageSizeOptions={[5, 10]}
-                // />
-                <OrderTable/>
+                <OrderTable orders={ orders }/>
               )}
             </div>
           </div>
