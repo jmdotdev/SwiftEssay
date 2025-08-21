@@ -35,48 +35,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { Order } from "@/types/order"
+import moment from "moment"
 
-const data: Payment[] = [
-  {
-    id: "m5gr84i9",
-    amount: 316,
-    status: "success",
-    email: "ken99@example.com",
-  },
-  {
-    id: "3u1reuv4",
-    amount: 242,
-    status: "success",
-    email: "Abe45@example.com",
-  },
-  {
-    id: "derv1ws0",
-    amount: 837,
-    status: "processing",
-    email: "Monserrat44@example.com",
-  },
-  {
-    id: "5kma53ae",
-    amount: 874,
-    status: "success",
-    email: "Silas22@example.com",
-  },
-  {
-    id: "bhqecj4p",
-    amount: 721,
-    status: "failed",
-    email: "carmella@example.com",
-  },
-]
-
-export type Payment = {
-  id: string
-  amount: number
-  status: "pending" | "processing" | "success" | "failed"
-  email: string
-}
-
-export const columns: ColumnDef<Payment>[] = [
+export const columns: ColumnDef<Order>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -100,66 +62,74 @@ export const columns: ColumnDef<Payment>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "status",
-    header: "Status",
+    accessorKey: "academic_level",
+    header: () => <div className="text-start">Academic Level</div>,
     cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("status")}</div>
+      <div className="capitalize text-start">{row.original.academic_level}</div>
     ),
   },
   {
-    accessorKey: "email",
+    accessorKey: "discipline",
     header: ({ column }) => {
       return (
-        <Button
+        <div>
+          <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Email
+          Discipline
           <ArrowUpDown />
         </Button>
+        </div>
       )
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
+    cell: ({ row }) => (
+      <div className="capitalize">{row.original.discipline}</div>
+    ),
+  },
+    {
+    accessorKey: "academic_level",
+    header: () => <div className="text-start">Page Format</div>,
+    cell: ({ row }) => (
+      <div className="capitalize text-start">{row.original.page_format}</div>
+    ),
+  },
+  {
+    accessorKey: "pages",
+    header: () => <div className="text-start">Pages</div>,
+    cell: ({ row }) => (
+      <div className="capitalize text-start">{row.original.pages}</div>
+    ),
   },
   {
     accessorKey: "amount",
-    header: () => <div className="text-right">Amount</div>,
-    cell: ({ row }) => {
-      const amount = parseFloat(row.getValue("amount"))
-
-      // Format the amount as a dollar amount
-      const formatted = new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-      }).format(amount)
-
-      return <div className="text-right font-medium">{formatted}</div>
-    },
+    header: () => <div className="text-start">Amount</div>,
+    cell: ({ row }) => (
+      <div className="capitalize text-start">{row.original.amount_payable}</div>
+    ),
+  },
+  {
+    accessorKey: "Deadline",
+    header: () => <div className="text-start">Deadline</div>,
+    cell: ({ row }) => (
+      <div className="capitalize text-start">{moment(row.original.deadline).format('MMMM Do YYYY, h:mm')}</div>
+    ),
   },
   {
     id: "actions",
     enableHiding: false,
+    header: () => <div className="text-start"> Actions </div>,
     cell: ({ row }) => {
-      const payment = row.original
-
-      return (
+      return ( 
         <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
+          <DropdownMenuTrigger>
+            <Button variant="ghost" className="h-8 w-8 p-0 cursor-pointer">
               <MoreHorizontal />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
-            >
-              Copy payment ID
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
+          <DropdownMenuContent align="start">
+            <DropdownMenuItem className="cursor-pointer">View</DropdownMenuItem>
+            <DropdownMenuItem className="text-red-500 cursor-pointer hover:!text-red-400">Delete</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       )
@@ -167,17 +137,17 @@ export const columns: ColumnDef<Payment>[] = [
   },
 ]
 
-export const OrderTable = () => {
+type OrderTableProps = {
+  orders: Order[]
+}
+export const OrderTable = ({ orders }: OrderTableProps) => {
   const [sorting, setSorting] = React.useState<SortingState>([])
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  )
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({})
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
+  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = React.useState({})
 
   const table = useReactTable({
-    data,
+    data: orders,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -197,22 +167,22 @@ export const OrderTable = () => {
 
   return (
     <div className="w-full">
-      <div className="flex items-center py-4">
+      <div className="flex items-center justify-between py-4">
         <Input
-          placeholder="Filter emails..."
-          value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
+          placeholder="Filter discipline..."
+          value={(table.getColumn("discipline")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
-            table.getColumn("email")?.setFilterValue(event.target.value)
+            table.getColumn("discipline")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
         <DropdownMenu>
-          <DropdownMenuTrigger asChild>
+          <DropdownMenuTrigger>
             <Button variant="outline" className="ml-auto">
               Columns <ChevronDown />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
+          <DropdownMenuContent align="start">
             {table
               .getAllColumns()
               .filter((column) => column.getCanHide())
@@ -233,7 +203,7 @@ export const OrderTable = () => {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <div className="overflow-hidden rounded-md border">
+      <div className="overflow-auto rounded-md border">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -244,9 +214,9 @@ export const OrderTable = () => {
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
                     </TableHead>
                   )
                 })}
