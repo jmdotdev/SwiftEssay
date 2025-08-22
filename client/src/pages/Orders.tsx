@@ -11,17 +11,8 @@ import { Order } from "@/types/order";
 export const Orders = () => {
   const [orders, setOrders] = useState<Order[]>();
   const [filteredOrders,setFilteredOrders] = useState<Order[]>()
-  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  const [anchorEl, setAnchorEl] = useState(null);
 
-  const handleMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
   const getOrders = async () => {
     try {
       const token = localStorage.getItem("token");

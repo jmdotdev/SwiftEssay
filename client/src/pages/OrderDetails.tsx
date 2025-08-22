@@ -1,18 +1,8 @@
 import {useEffect, useState} from 'react'
 import { useParams } from 'react-router-dom';
 import axios from 'axios'
-import { isExpired, decodeToken } from "react-jwt";
 import moment from "moment"
 import { RateTaskModal } from '@/components/RateTaskModal';
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "#FFFF",
-  p: 4,
-};
 export const OrderDetails = () => {
   const { id } = useParams();
   const [open, setOpen] = useState(false);
@@ -22,8 +12,6 @@ export const OrderDetails = () => {
   const [assignedTo, setAssignedTo] = useState();
   const [writersList, setWritersList] = useState([]);
   const [loggedInWriter,setLoggedInWriter] = useState();
-  const myDecodedToken = decodeToken(localStorage.getItem('token'));
-  const isMyTokenExpired = isExpired(localStorage.getItem('token'));
 
 
 
