@@ -28,7 +28,7 @@ export const DashboardLayout = () => {
           <SideNav onToggle={() => setIsSideNavOpen(false)} />
         </div>
       )}
-      <div className="flex flex-col w-full lg:w-6/7">
+      <div className="flex flex-col w-full lg:w-6/7 max-h-screen overflow-auto">
         <div className="w-full px-4 pt-2">
           <TopNav header={header} toggleNav={toggleNav} />
         </div>

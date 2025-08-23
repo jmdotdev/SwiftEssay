@@ -1,7 +1,6 @@
 import { BellDot, Menu } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-// import { verifyToken } from "../../utils/verifyToken";
 
 type TopNavProps = {
   header: string;
@@ -9,16 +8,20 @@ type TopNavProps = {
 }
 export const TopNav = ({header, toggleNav}: TopNavProps) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [showDropDown, setShowDropDown] = useState<boolean>(false);
   const navigate = useNavigate();
 
-  const logout = () => {
+  const logOut = () => {
     localStorage.removeItem("token");
     navigate("/login");
+    setShowDropDown(prev => !prev)
   };
 
   const navigateToProfile = () => {
     navigate('/profile/1')
+    setShowDropDown(prev => !prev)
   }
+  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -37,8 +40,17 @@ export const TopNav = ({header, toggleNav}: TopNavProps) => {
       </div>
       <div className="flex items-center">
         <BellDot className="h-6 w-6 text-gray-950 mx-2" />
-        <div className="flex items-center cursor-pointer" onClick={navigateToProfile}>
-          <img className="h-6 w-6" src='/images/avatar.webp' alt="avatar.png" />
+        <div className="flex items-center cursor-pointer relative">
+          <img className="h-6 w-6" src='/images/avatar.webp' alt="avatar.png" onClick={() => setShowDropDown(!showDropDown)}/>
+          {
+            showDropDown && 
+            <div className="absolute bg-white rounded-md top-5 right-1 mt-2">
+             <ul className="list-none p-1">
+                <li className="hover:bg-gray-300 px-3 rounded-md" onClick={navigateToProfile}>Profile</li>
+                <li className="hover:bg-gray-300 px-3 rounded-md" onClick={logOut}>Logout</li>
+             </ul>
+          </div>
+          }
         </div>
       </div>
     </div>
