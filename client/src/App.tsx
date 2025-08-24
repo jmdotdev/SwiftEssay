@@ -14,6 +14,7 @@ import { Orders } from './pages/Orders';
 import { Profile } from './pages/Profile';
 import { DashboardLayout } from './layouts/DashboardLayout';
 import { Payment } from './pages/Payment';
+import { Auth } from './guards/Auth';
 
 function App() {
 
@@ -23,8 +24,8 @@ function App() {
       <Routes>
         <Route path='login' element={<Login />} />
         <Route path='register' element={<Register />} />
-        <Route path='*' element={<NotFound />} />
-        <Route path='' element={<DashboardLayout />}>
+        <Route element={<Auth> <DashboardLayout /></Auth>} >
+          <Route index element={<Dashboard />} />
           <Route path='dashboard' element={<Dashboard />} />
           <Route path='writers' element={<Writers />} />
           <Route path='profile/:id' element={<Profile />} />
@@ -34,6 +35,7 @@ function App() {
           <Route path='orders/order-details/:id' element={<OrderDetails />} />
           <Route path='payments' element={<Payment />} />
         </Route>
+        <Route path='*' element={<NotFound />} />
       </Routes>
     </div>
   );

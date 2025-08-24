@@ -11,11 +11,6 @@ export const DashboardLayout = () => {
   const toggleNav = () => {
     setIsSideNavOpen(prev => !prev)
   }
-  useEffect(() => {
-    setHeader(location.pathname.slice(1))
-    if (location.pathname !== '/') return;
-    navigate('dashboard')
-  }, [location.pathname])
   return (
     <div className="flex w-full min-h-screen">
       {/* Sidebar for large screens */}
@@ -28,7 +23,7 @@ export const DashboardLayout = () => {
           <SideNav onToggle={() => setIsSideNavOpen(false)} />
         </div>
       )}
-      <div className="flex flex-col w-full lg:w-6/7">
+      <div className="flex flex-col w-full lg:w-6/7 max-h-screen overflow-auto">
         <div className="w-full px-4 pt-2">
           <TopNav header={header} toggleNav={toggleNav} />
         </div>
