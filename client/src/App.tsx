@@ -24,10 +24,8 @@ function App() {
       <Routes>
         <Route path='login' element={<Login />} />
         <Route path='register' element={<Register />} />
-        <Route path='*' element={<NotFound />} />
-        <Route path='dashboard' 
-        element={<Auth>
-          <Route index element={<DashboardLayout />} /> 
+        <Route element={<Auth> <DashboardLayout /></Auth>} >
+          <Route index element={<Dashboard />} />
           <Route path='dashboard' element={<Dashboard />} />
           <Route path='writers' element={<Writers />} />
           <Route path='profile/:id' element={<Profile />} />
@@ -36,7 +34,8 @@ function App() {
           <Route path='orders/add-order/:id' element={<AddOrder />} />
           <Route path='orders/order-details/:id' element={<OrderDetails />} />
           <Route path='payments' element={<Payment />} />
-        </Auth>}/>
+        </Route>
+        <Route path='*' element={<NotFound />} />
       </Routes>
     </div>
   );

@@ -11,11 +11,6 @@ export const DashboardLayout = () => {
   const toggleNav = () => {
     setIsSideNavOpen(prev => !prev)
   }
-  useEffect(() => {
-    setHeader(location.pathname.slice(1))
-    if (location.pathname !== '/') return;
-    navigate('dashboard')
-  }, [location.pathname])
   return (
     <div className="flex w-full min-h-screen">
       {/* Sidebar for large screens */}

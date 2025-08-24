@@ -1,10 +1,11 @@
 import { verifyToken } from "@/utils/verifyToken";
 import { useEffect, useState } from "react";
 import { Navigate, useLocation } from "react-router-dom";
+import { Loader } from 'lucide-react';
 
 export const Auth = ({ children }) => {
    const location = useLocation();
-   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 
 
    useEffect(() => {
@@ -24,9 +25,14 @@ export const Auth = ({ children }) => {
       }
       checkAuth();
    }, [])
+    if (isAuthenticated === null) {
+    return <div className="flex items-center justify-center w-screen h-screen">
+      <Loader className="h-20 w-20 m-auto animate-spin opacity-75"/>
+    </div>;
+  }
 
    if (!isAuthenticated) {
       return <Navigate to='/login' state={{ from: location }} replace />
    }
-   return <div>{children}</div>
+   return <>{children}</>
 }
