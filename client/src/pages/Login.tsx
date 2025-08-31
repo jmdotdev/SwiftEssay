@@ -17,7 +17,6 @@ export const Login = () => {
           email: value.email, password: value.password
         });
         localStorage.setItem('token', res.data.token);
-        // setAuth(true);
         toast.success("Login Successful");
         navigate("/dashboard");
       } catch (error) {

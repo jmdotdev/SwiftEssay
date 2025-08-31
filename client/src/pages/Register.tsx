@@ -1,6 +1,6 @@
 import axios from "axios";
 import { toast } from "react-toastify";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 type RegisterFormInputs = {
@@ -11,7 +11,7 @@ type RegisterFormInputs = {
 }
 
 export const Register = () => {
-
+  const navigate = useNavigate()
   const { handleSubmit, register, watch, formState: {errors} } = useForm<RegisterFormInputs>();
 
   const registerUser: SubmitHandler<RegisterFormInputs> = async (value) => {
@@ -21,9 +21,11 @@ export const Register = () => {
           email: value.email,
           password: value.password,
         });
-      console.log('res',res)
+        toast.success('User registered successfully. Redirecting to login...')
+        navigate('/login')
    } catch (error) {
-    toast.error('an error has occured')
+    const err = error.response.data?.error.replace('"', '').replace('"','') ?? 'An error has occured';
+    toast.error(err)
    }
   };
 
