@@ -1,4 +1,4 @@
-import { registrationAuth } from "../helpers/joiauth.js";
+import { loginAuth, registrationAuth } from "../helpers/joiauth.js";
 import User from "../models/Writer.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
@@ -41,7 +41,7 @@ export const getWriters = async (req, res) => {
 
 export const loginUser = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password } = await loginAuth.validateAsync(req.body);
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(401).json({ error: "Authentication failed" });
@@ -64,6 +64,10 @@ export const loginUser = async (req, res) => {
     });
     return res.status(200).json({ token, payload });
   } catch (err) {
+    if (err.isJoi) {
+      const error = err.details[0].message.charAt(1).toUpperCase() + err.details[0].message.slice(2);
+      return res.status(400).json({ error: error });
+    }
     return res.status(500).json({ error: err.message });
   }
 };

@@ -5,11 +5,11 @@ import bcrypt from "bcrypt"
 
 export const registerClientController = async (req, res) => {
   try {
-     const{username,email,phone,password} = req.body
-   //   const [error] = registrationAuth.validateAsync(req.body)
-   //   if(error){
-   //      return res.status(404).json({error:error.details.message})
-   //   }
+     const{ username, email, password} = await registrationAuth.validateAsync(req.body)
+     const isUserFound = await User.findOne({email: email})
+     if(isUserFound) {
+        return res.status(400).json({ error: "User with this email exists" });
+     }
      const hashedPassword = await bcrypt.hash(password,10)
      const user = new User({
         username,
@@ -18,8 +18,12 @@ export const registerClientController = async (req, res) => {
         role:"client"
      })
      await user.save()
-     return res.status(200).json({message:"Writer Created Successfully"})
+     return res.status(200).json({ message: "User Created Successfully" })
   } catch (err) {
-    res.status(500).json({ error: err });
+    if(err.isJoi) {
+       const error = err.details[0].message.charAt(1).toUpperCase() + err.details[0].message.slice(2);
+       return res.status(400).json({ error: error});
+    }
+    res.status(500).json({ error: err.message });
   }
 };
