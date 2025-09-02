@@ -1,4 +1,4 @@
-import { registrationAuth } from "../helpers/joiauth.js";
+import { registrationAuth } from "../validators/validators.js";
 import User from '../models/Writer.js'
 import jwt from "jsonwebtoken"
 import bcrypt from "bcrypt"
