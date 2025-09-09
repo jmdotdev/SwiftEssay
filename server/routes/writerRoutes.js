@@ -1,8 +1,8 @@
 import express from "express"
-import { getWriters, registerWriterController,loginUser,rateWriter,getWriterRatings, verifyUserToken, deleteWriter,getSingleWriter } from "../controllers/writerController.js";
+import { getWriters, registerWriter,loginUser,rateWriter,getWriterRatings, verifyUserToken, deleteWriter,getSingleWriter } from "../controllers/writerController.js";
 export const writerRouter = express.Router();
 
-writerRouter.post('/registerWriter',registerWriterController),
+writerRouter.post('/registerWriter',registerWriter),
 writerRouter.post('/login',loginUser)
 writerRouter.get('/getWriters',getWriters)
 writerRouter.post('/rateWriter',rateWriter)
