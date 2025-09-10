@@ -1,4 +1,4 @@
-import { loginAuth } from "../validators/validators.js";
+import { addWriterAuth, loginAuth } from "../validators/validators.js";
 import User from "../models/Writer.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
@@ -6,13 +6,11 @@ import WriterRating from "../models/writerRatings.js";
 import { verifyToken } from "../helpers/verifyToken.js";
 import Order from "../models/Order.js";
 import { sendEmail } from "../services/sendEmail.js";
-export const registerWriterController = async (req, res) => {
+import { formatJOIError } from "../helpers/formatJoiError.js";
+export const registerWriter = async (req, res) => {
   try {
-    const { username, email, phone, password } = req.body;
-    //   const [error] = registrationAuth.validateAsync(req.body)
-    //   if(error){
-    //      return res.status(404).json({error:error.details.message})
-    //   }
+    console.log(req.body)
+    const { username, email, phone, password } = await addWriterAuth.validateAsync(req.body)
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = new User({
       username,
@@ -65,7 +63,7 @@ export const loginUser = async (req, res) => {
     return res.status(200).json({ token, payload });
   } catch (err) {
     if (err.isJoi) {
-      const error = err.details[0].message.charAt(1).toUpperCase() + err.details[0].message.slice(2);
+      const error = formatJOIError(err);
       return res.status(400).json({ error: error });
     }
     return res.status(500).json({ error: err.message });

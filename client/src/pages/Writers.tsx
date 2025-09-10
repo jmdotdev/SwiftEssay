@@ -94,7 +94,7 @@ export const Writers = () => {
   const rows = writersList
     .filter((writer) => writer.role == "writer")
     .map((writer, index) => ({
-      sn: index,
+      sn: index + 1,
       id: writer._id,
       username: writer.username,
       email: writer.email,
@@ -140,7 +140,7 @@ export const Writers = () => {
         </div>
       </div>
       {
-        setIsOpen && <AddWriterModal isOpen={isOpen} handleClose={handleClose}/>
+        setIsOpen && <AddWriterModal isOpen={isOpen} handleClose={handleClose} tiggerGetWriters={fetchWriters}/>
       }
     </div>
   );
