@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { X } from 'lucide-react';
-import { sideNavLinks } from '../data/sideNavLinks';
+import { sideNavLinks } from '@/data/sideNavLinks';
 
 type SideNavProps = {
   onToggle?: () => void

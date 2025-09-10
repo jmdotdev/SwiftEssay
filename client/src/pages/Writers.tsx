@@ -1,20 +1,18 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { DataGrid } from "@mui/x-data-grid";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import Modal from "@mui/material/Modal";
 import { IconButton, Menu, MenuItem } from "@mui/material";
 import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 import axios from "axios";
 import { toast } from 'react-toastify';
 import { AddWriterModal } from "@/components/AddWriterModal";
+import { WritersTable } from "@/components/WritersTable";
+import { Writer } from "@/types/Writer";
 
 export const Writers = () => {
   const [isOpen, setIsOpen] = useState(false);
   const handleOpen = () => setIsOpen(true);
   const handleClose = () => setIsOpen(false);
-  const [writersList, setWritersList] = useState([]);
+  const [writersList, setWritersList] = useState<Writer[]>([]);
   const [newWriterAdded,setNewWriterAdded] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -43,7 +41,6 @@ export const Writers = () => {
  
   
   const deleteWriter = async (row) =>{
-    console.log(row)
       await axios.delete(`http://localhost:5000/writers/deleteWriter/${row.id}`)
       .then(async res=>{
         await fetchWriters();
@@ -71,37 +68,6 @@ export const Writers = () => {
   useEffect(() => {
     fetchWriters();
   }, [newWriterAdded]);
-  const columns = [
-    { field: "sn", headerName: "SN", width: 150 },
-    { field: "id", headerName: "ID", width: 150},
-    { field: "username", headerName: "Username", width: 150 },
-    { field: "email", headerName: "Email", width: 150 },
-    { field: "phone", headerName: "Phone", width: 150 },
-    {
-      field: "tasks_done",
-      headerName: "Tasks Done",
-      type: "number",
-      width: 150,
-    },
-    { field: "assigned", headerName: "Assigned", type: "boolean", width: 150 },
-    {
-      field: "action",
-      headerName: "Action",
-      width: 150,
-      renderCell: CustomActionCell,
-    },
-  ];
-  const rows = writersList
-    .filter((writer) => writer.role == "writer")
-    .map((writer, index) => ({
-      sn: index + 1,
-      id: writer._id,
-      username: writer.username,
-      email: writer.email,
-      phone: writer.phone,
-      tasks_done: writer.assigned_tasks.length,
-      assigned: writer.is_assigned ? 1 : 0
-    }));
   return (
     <div className="flex flex-col w-full h-[calc(100vh-100px)] px-5 py-0">
       <div className="flex items-center justify-between my-5 mx-0 text-xl font-semibold">
@@ -122,22 +88,9 @@ export const Writers = () => {
         </form>
       </div>
       <div className="my-4 h-full w-full p-6 bg-white rounded-lg">
-        <div style={{ height: 350, width: "100%" }}>
-          <DataGrid
-            columnVisibilityModel={{
-              id:false
-            }}
-            rowSelection= {false}
-            rows={rows}
-            columns={columns}
-            initialState={{
-              pagination: {
-                paginationModel: { page: 0, pageSize: 5 },
-              },
-            }}
-            pageSizeOptions={[5, 10]}
-          />
-        </div>
+        {
+          writersList.length && <WritersTable writers={writersList} />
+        }
       </div>
       {
         setIsOpen && <AddWriterModal isOpen={isOpen} handleClose={handleClose} tiggerGetWriters={fetchWriters}/>

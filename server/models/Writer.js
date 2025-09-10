@@ -44,7 +44,7 @@ const userSchema = new Schema({
     type:Date,
     default:Date.now()
   },
-  update_at:{
+  updated_at:{
     type:Date,
     default:()=>Date.now()
   }

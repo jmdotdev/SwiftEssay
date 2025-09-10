@@ -13,7 +13,7 @@ import { Dashboard } from './pages/Dashboard';
 import { Orders } from './pages/Orders';
 import { Profile } from './pages/Profile';
 import { DashboardLayout } from './layouts/DashboardLayout';
-import { Payment } from './pages/Payment';
+import { Payments } from './pages/Payments';
 import { Auth } from './guards/Auth';
 
 function App() {
@@ -33,7 +33,7 @@ function App() {
           <Route path='orders/add-order' element={<AddOrder />} />
           <Route path='orders/add-order/:id' element={<AddOrder />} />
           <Route path='orders/order-details/:id' element={<OrderDetails />} />
-          <Route path='payments' element={<Payment />} />
+          <Route path='payments' element={<Payments />} />
         </Route>
         <Route path='*' element={<NotFound />} />
       </Routes>
