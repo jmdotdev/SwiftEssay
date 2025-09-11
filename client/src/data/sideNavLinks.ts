@@ -1,5 +1,5 @@
-import { Banknote, GraduationCap, LayoutDashboard, LayoutDashboardIcon, LayoutGrid, ShoppingBag } from "lucide-react"
-import { SideNav } from "../types/sideNav"
+import { SideNav } from "@/types/sideNav"
+import { Banknote, GraduationCap, LayoutDashboard, ShoppingBag } from "lucide-react"
 
 
 export const sideNavLinks: SideNav[] = [

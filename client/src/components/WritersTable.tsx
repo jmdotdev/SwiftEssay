@@ -22,8 +22,6 @@ import {
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
@@ -36,9 +34,9 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import moment from "moment"
-import { Order } from "@/types/Order"
+import { Writer } from "@/types/Writer"
 
-export const columns: ColumnDef<Order>[] = [
+export const columns: ColumnDef<Writer>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -62,14 +60,14 @@ export const columns: ColumnDef<Order>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "academic_level",
-    header: () => <div className="text-start">Academic Level</div>,
+    accessorKey: "Username",
+    header: () => <div className="text-start">Username</div>,
     cell: ({ row }) => (
-      <div className="capitalize text-start">{row.original.academic_level}</div>
+      <div className="capitalize text-start">{row.original.username}</div>
     ),
   },
   {
-    accessorKey: "discipline",
+    accessorKey: "Email",
     header: ({ column }) => {
       return (
         <div>
@@ -77,42 +75,42 @@ export const columns: ColumnDef<Order>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Discipline
+          Email
           <ArrowUpDown />
         </Button>
         </div>
       )
     },
     cell: ({ row }) => (
-      <div className="capitalize">{row.original.discipline}</div>
+      <div className="capitalize">{row.original.email}</div>
     ),
   },
     {
-    accessorKey: "academic_level",
-    header: () => <div className="text-start">Page Format</div>,
+    accessorKey: "Phone",
+    header: () => <div className="text-start">Phone</div>,
     cell: ({ row }) => (
-      <div className="capitalize text-start">{row.original.page_format}</div>
+      <div className="capitalize text-start">{row.original.phone}</div>
     ),
   },
   {
-    accessorKey: "pages",
-    header: () => <div className="text-start">Pages</div>,
+    accessorKey: "Tasks Done",
+    header: () => <div className="text-start">Tasks Done</div>,
     cell: ({ row }) => (
-      <div className="capitalize text-start">{row.original.pages}</div>
+      <div className="capitalize text-start">{row.original.assigned_tasks.length}</div>
     ),
   },
   {
-    accessorKey: "amount",
-    header: () => <div className="text-start">Amount</div>,
+    accessorKey: "Assigned",
+    header: () => <div className="text-start">Assigned</div>,
     cell: ({ row }) => (
-      <div className="capitalize text-start">{row.original.amount_payable}</div>
+      <div className="capitalize text-start">{row.original.is_assigned ? 'Assigned' : 'Not Assigned'}</div>
     ),
   },
-  {
-    accessorKey: "Deadline",
-    header: () => <div className="text-start">Deadline</div>,
+    {
+    accessorKey: "Joined",
+    header: () => <div className="text-start">Joined</div>,
     cell: ({ row }) => (
-      <div className="capitalize text-start">{moment(row.original.deadline).format('MMMM Do YYYY, h:mm')}</div>
+      <div className="capitalize text-start">{moment(row.original.created_at).format('MMMM Do YYYY')}</div>
     ),
   },
   {
@@ -137,17 +135,17 @@ export const columns: ColumnDef<Order>[] = [
   },
 ]
 
-type OrderTableProps = {
-  orders: Order[]
+type WriterTableProps = {
+  writers: Writer[]
 }
-export const OrderTable = ({ orders }: OrderTableProps) => {
+export const WritersTable = ({ writers }: WriterTableProps) => {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = React.useState({})
 
   const table = useReactTable({
-    data: orders,
+    data: writers,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -169,10 +167,10 @@ export const OrderTable = ({ orders }: OrderTableProps) => {
     <div className="w-full">
       <div className="flex items-center justify-between py-4">
         <Input
-          placeholder="Filter discipline..."
-          value={(table.getColumn("discipline")?.getFilterValue() as string) ?? ""}
+          placeholder="Search email..."
+          value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
-            table.getColumn("discipline")?.setFilterValue(event.target.value)
+            table.getColumn("email")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />

@@ -3,12 +3,13 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios'
 import moment from "moment"
 import { RateTaskModal } from '@/components/RateTaskModal';
+import { Order } from '@/types/Order';
 export const OrderDetails = () => {
   const { id } = useParams();
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const [order, setOrder] = useState();
+  const [order, setOrder] = useState<Order>();
   const [assignedTo, setAssignedTo] = useState();
   const [writersList, setWritersList] = useState([]);
   const [loggedInWriter,setLoggedInWriter] = useState();

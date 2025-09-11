@@ -7,7 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from 'react-toastify';
 import { OrderTable } from "@/components/OrderTable";
-import { Order } from "@/types/order";
+import { Order } from "@/types/Order";
 export const Orders = () => {
   const [orders, setOrders] = useState<Order[]>();
   const [filteredOrders,setFilteredOrders] = useState<Order[]>()

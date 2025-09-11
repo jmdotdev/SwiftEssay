@@ -30,7 +30,7 @@ export const registerWriter = async (req, res) => {
 
 export const getWriters = async (req, res) => {
   try {
-    const users = await User.find();
+    const users = await User.find({role: 'writer'}).select('-password -updated_at')
     return res.status(200).json(users);
   } catch (err) {
     res.status(500).json({ error: err });
@@ -128,7 +128,7 @@ export const deleteWriter = async (req, res) => {
   if (!user) {
     return res.status(404).json({ message: "writer not found" });
   }
-  await User.findOneAndDelete(user);
+  await User.findOneAndDelete({_id: user._id});
   return res.status(200).json({ message: "writer deleted successfully" });
 };
 
