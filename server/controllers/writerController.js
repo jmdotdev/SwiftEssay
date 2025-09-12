@@ -57,7 +57,7 @@ export const loginUser = async (req, res) => {
       posted_jobs: user.posted_jobs,
       role: user.role,
     };
-    const token = jwt.sign({ payload }, "mysecretkey", {
+    const token = jwt.sign({ payload }, process.env.JWT_SECRET, {
       expiresIn: "1h",
     });
     return res.status(200).json({ token, payload });

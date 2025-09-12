@@ -1,16 +1,14 @@
 import { useEffect, useState } from "react";
-import CircularProgress from "@mui/material/CircularProgress";
-import { IconButton, Menu, MenuItem } from "@mui/material";
-import { MoreVert as MoreVertIcon } from "@mui/icons-material";
-import Box from "@mui/material/Box";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import { toast } from 'react-toastify';
 import { OrderTable } from "@/components/OrderTable";
 import { Order } from "@/types/Order";
+import { Skeleton } from "@/components/ui/skeleton"
+
 export const Orders = () => {
   const [orders, setOrders] = useState<Order[]>();
-  const [filteredOrders,setFilteredOrders] = useState<Order[]>()
+  const [filteredOrders, setFilteredOrders] = useState<Order[]>()
   const [loading, setLoading] = useState(true);
 
   const getOrders = async () => {
@@ -33,19 +31,19 @@ export const Orders = () => {
       setLoading(false);
     }
   };
-   
-  const deleteOrder = async (id) =>{
-    try{
-        console.log("id",id)
-       await axios.delete(`http://localhost:5000/orders/deleteOrder/${id}`)
-       .then( async res=>{
-         await getOrders();
-        toast.success("order deleted successfully")
-       }).catch(error =>{
-        toast.error("error deleting order")
-       })
+
+  const deleteOrder = async (id) => {
+    try {
+      console.log("id", id)
+      await axios.delete(`http://localhost:5000/orders/deleteOrder/${id}`)
+        .then(async res => {
+          await getOrders();
+          toast.success("order deleted successfully")
+        }).catch(error => {
+          toast.error("error deleting order")
+        })
     }
-    catch(error){
+    catch (error) {
       toast.error("error deleting order")
     }
   }
@@ -85,23 +83,19 @@ export const Orders = () => {
           <div className="mt-5 h-4/5 w-full bg-white p-6 rounded-lg">
             <div style={{ height: 350, width: "100%" }}>
               {loading ? (
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    height: "100%",
-                  }}
-                >
-                  <CircularProgress />
-                </Box>
+                <div className="w-full h-full">
+                  <div className="space-y-2">
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-4 w-full" />
+                  </div>
+                </div>
               ) : (
-                <OrderTable orders={ orders }/>
+                <OrderTable orders={orders} />
               )}
             </div>
           </div>
         </div>
       }
     </div>
-  ) 
+  )
 };

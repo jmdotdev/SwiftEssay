@@ -16,7 +16,7 @@ dotenv.config();
 app.use(cors());
 app.use(express.json());
 const PORT = process.env.PORT || 5000;
-const url = process.env.mongoDbUrl;
+const url = process.env.MONGODB_URL;
 const __filename = fileURLToPath(import.meta.url); 
 const __dirname = path.dirname(__filename);
 const connectDb = () => {

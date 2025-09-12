@@ -1,7 +1,4 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { IconButton, Menu, MenuItem } from "@mui/material";
-import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 import axios from "axios";
 import { toast } from 'react-toastify';
 import { AddWriterModal } from "@/components/AddWriterModal";
@@ -15,29 +12,6 @@ export const Writers = () => {
   const [writersList, setWritersList] = useState<Writer[]>([]);
   const [newWriterAdded,setNewWriterAdded] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
-
- 
-  const CustomActionCell = ({ row }) => (
-    <div>
-      <IconButton
-        aria-label="more"
-        aria-controls="action-menu"
-        aria-haspopup="true"
-        onClick={handleMenuOpen}
-      >
-        <MoreVertIcon />
-      </IconButton>
-      <Menu
-        id="action-menu"
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={handleMenuClose}
-      >
-        <MenuItem><Link to={`/profile/${row.id}`}>View</Link></MenuItem>
-        <MenuItem onClick={()=>deleteWriter(row)}>Delete</MenuItem>
-      </Menu>
-    </div>
-  );
  
   
   const deleteWriter = async (row) =>{
