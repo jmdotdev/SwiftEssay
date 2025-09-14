@@ -14,21 +14,17 @@ Swift Essay is an academic writing platform built with MERN Stack, where clients
 
 - **User Roles:**
   - **Admin:** Manages users, tasks, and overall system.
-  - **Clients:** Post tasks, review bids, and assign tasks to writers.
-  - **Writers:** Bid on tasks, communicate with clients, and submit completed work.
+  - **Writers:** Bid on tasks, and submit completed work.
 
 - **Task Management:**
-  - Clients can post detailed tasks with requirements.
+  - Admins can post detailed tasks with requirements.
   - Writers can bid on available tasks and provide estimated completion times.
 
-- **Messaging System:**
-  - Integrated messaging allows clients and writers to communicate throughout the writing process.
-
 - **User Authentication:**
-  - Secure user authentication system for admins, clients, and writers.
+  - Secure user authentication system for admins and writers.
 
 - **Dashboard:**
-  - Personalized dashboards for clients and writers to track ongoing tasks, bids, and completed work.
+  - Personalized dashboards for admins and writers to track ongoing tasks, bids, and completed work.
 
 ## Installation
 
