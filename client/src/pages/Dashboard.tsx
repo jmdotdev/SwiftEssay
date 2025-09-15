@@ -33,7 +33,7 @@ export const Dashboard = () => {
           <OrderCard orderCount={(latestOrders.filter(ord=>ord.status === 'completed')).length} orderType='Completed' Icon='/images/complete.jpg'/>
         </div>
         <div className='flex flex-col h-auto w-full bg-white rounded-xl'>
-          <h2 className='text-md text-center mt-4 font-semibold text-darkBlue'>Latest Orders</h2>
+          <h2 className='text-md text-start mt-4 mx-4 font-semibold text-darkBlue'>Latest Orders</h2>
     <div className='px-4'>
        <OrderTable orders={latestOrders} />
     </div>

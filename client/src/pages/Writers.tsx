@@ -4,6 +4,8 @@ import { toast } from 'react-toastify';
 import { AddWriterModal } from "@/components/AddWriterModal";
 import { WritersTable } from "@/components/WritersTable";
 import { Writer } from "@/types/Writer";
+import { WriterFilter } from "@/types/WritersFilters";
+import { writersFilters } from "@/data/WritersFilters";
 
 export const Writers = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -11,7 +13,7 @@ export const Writers = () => {
   const handleClose = () => setIsOpen(false);
   const [writersList, setWritersList] = useState<Writer[]>([]);
   const [newWriterAdded,setNewWriterAdded] = useState(false);
-  const [anchorEl, setAnchorEl] = useState(null);
+  const [filters, setFilters] = useState<WriterFilter[]>(writersFilters)
  
   
   const deleteWriter = async (row) =>{
@@ -23,13 +25,6 @@ export const Writers = () => {
         toast.error(error.message)
       })
   }
-  const handleMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
 
   const fetchWriters = async () => {
     await axios.get("http://localhost:5000/writers/getWriters").then((res) => {
@@ -38,6 +33,15 @@ export const Writers = () => {
       toast.error("error fetching writers")
     })
   };
+
+  const selectFilter = (id: number) => {
+    const filteredFilters =  filters.map(f=>({
+      id: f.id,
+      name: f.name,
+      isActive: f.id === id ? true : false
+    }))
+    setFilters(filteredFilters)
+  }
 
   useEffect(() => {
     fetchWriters();
@@ -51,12 +55,13 @@ export const Writers = () => {
         </button>
       </div>
       <div className="flex flex-col md:flex-row items-center justify-between bg-white w-full h-auto md:h-12 cursor-pointer px-2 py-7 rounded-lg">
-        <a className="my-5 mx-0 relative">
-          Assigned<span className="absolute bottom-2 ms-[0.5px] text-sm text-red-600">0</span>
-        </a>
-        <a className="my-5 mx-0">Unassigned</a>
-        <a className="my-5 mx-0">Active</a>
-        <a className="my-5 mx-0">Inactive</a>
+        {filters.length &&
+          filters.map((filter, i)=>  
+          <a key={i} className="my-5 mx-0 relative" onClick={() => selectFilter(filter.id)}>
+            {filter.name}
+           {filter.isActive  && <span className="absolute bottom-2 ms-[0.5px] text-sm text-red-600">{writersList.length}</span>}
+        </a>)
+        }
         <form className="mb-6 md:mb-0">
           <input className="h-6 p-4 border-[1px] border-gray-600 rounded-lg focus: outline-0" type="text" placeholder="search" />
         </form>
