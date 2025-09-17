@@ -6,6 +6,7 @@ import { WritersTable } from "@/components/WritersTable";
 import { Writer } from "@/types/Writer";
 import { WriterFilter } from "@/types/WritersFilters";
 import { writersFilters } from "@/data/WritersFilters";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export const Writers = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -14,6 +15,7 @@ export const Writers = () => {
   const [writersList, setWritersList] = useState<Writer[]>([]);
   const [newWriterAdded,setNewWriterAdded] = useState(false);
   const [filters, setFilters] = useState<WriterFilter[]>(writersFilters)
+  const [loading, setLoading] = useState<Boolean>(false);
  
   
   const deleteWriter = async (row) =>{
@@ -27,10 +29,14 @@ export const Writers = () => {
   }
 
   const fetchWriters = async () => {
+    setLoading(true)
     await axios.get("http://localhost:5000/writers/getWriters").then((res) => {
       setWritersList(res.data);
     }).catch(error=>{
       toast.error("error fetching writers")
+    })
+    .finally(()=>{
+      setLoading(false)
     })
   };
 
@@ -68,7 +74,12 @@ export const Writers = () => {
       </div>
       <div className="my-4 h-full w-full p-6 bg-white rounded-lg">
         {
-          writersList.length && <WritersTable writers={writersList} />
+           loading ? <div className="w-full h-full">
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-full" />
+            </div>
+          </div> : <WritersTable writers={writersList} />
         }
       </div>
       {
