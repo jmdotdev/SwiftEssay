@@ -5,10 +5,13 @@ import { toast } from 'react-toastify';
 import { OrderTable } from "@/components/OrderTable";
 import { Order } from "@/types/Order";
 import { Skeleton } from "@/components/ui/skeleton"
+import { orderFilter } from "@/types/OrderFilter";
+import { orderFiltersList } from "@/data/OrderFilters";
 
 export const Orders = () => {
   const [orders, setOrders] = useState<Order[]>();
-  const [filteredOrders, setFilteredOrders] = useState<Order[]>()
+  const [filteredOrders, setFilteredOrders] = useState<Order[]>();
+  const [orderFilters, setOrderFilters] = useState<orderFilter[]>(orderFiltersList);
   const [loading, setLoading] = useState(true);
 
   const getOrders = async () => {
@@ -27,7 +30,6 @@ export const Orders = () => {
     } catch (error) {
       toast.error("error fetching orders")
     } finally {
-      // Set loading to false whether the request is successful or not
       setLoading(false);
     }
   };
@@ -70,15 +72,16 @@ export const Orders = () => {
             </Link>
           </div>
           <div className="flex flex-col md:flex-row items-center justify-between cursor-pointer bg-white w-full min-h-16 p-6 rounded-lg">
-            <a className="relative" onClick={() => filterOrder("available")}>
-              Available<span className="absolute text-sm bottom-2 text-red-500">0</span>
-            </a>
-            <a onClick={() => filterOrder("assigned")}>Assigned</a>
-            <a onClick={() => filterOrder("Pending")}>Pending</a>
-            <a onClick={() => filterOrder("Completed")}>Completed</a>
-            <a onClick={() => filterOrder("Revision")}>Revision</a>
-            <a onClick={() => filterOrder("Progress")}>Progress</a>
-            <a onClick={() => filterOrder("Cancelled")}>Cancelled</a>
+            {
+              orderFilters.length && 
+              orderFilters.map((order,index) =>  
+              <a key={index}  className="relative" onClick={() => filterOrder(order.name)}>
+              {order.name}
+              {
+                order.isActive && <span className="absolute text-sm bottom-2 text-red-500">{0}</span>
+              }
+            </a>)
+            }
           </div>
           <div className="mt-5 h-4/5 w-full bg-white p-6 rounded-lg">
             <div style={{ height: 350, width: "100%" }}>
