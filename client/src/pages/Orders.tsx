@@ -9,9 +9,10 @@ import { orderFilter } from "@/types/OrderFilter";
 import { orderFiltersList } from "@/data/OrderFilters";
 
 export const Orders = () => {
-  const [orders, setOrders] = useState<Order[]>();
-  const [filteredOrders, setFilteredOrders] = useState<Order[]>();
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [filteredOrders, setFilteredOrders] = useState<Order[]>([]);
   const [orderFilters, setOrderFilters] = useState<orderFilter[]>(orderFiltersList);
+  const [selectedFilter, setSelectedFilter] = useState<string>('Available');
   const [loading, setLoading] = useState(true);
 
   const getOrders = async () => {
@@ -26,6 +27,7 @@ export const Orders = () => {
         })
         .then((res) => {
           setOrders(res.data)
+          filterOrders(selectedFilter)
         });
     } catch (error) {
       toast.error("error fetching orders")
@@ -36,7 +38,6 @@ export const Orders = () => {
 
   const deleteOrder = async (id) => {
     try {
-      console.log("id", id)
       await axios.delete(`http://localhost:5000/orders/deleteOrder/${id}`)
         .then(async res => {
           await getOrders();
@@ -51,15 +52,24 @@ export const Orders = () => {
   }
 
 
-  const filterOrder = (filter: string) => {
-    const filterOrders: Order[] = filteredOrders.filter(
-      (order) => order.status === filter
+  const filterOrders = (filterName: string) => {
+    setSelectedFilter(filterName)
+    const filterOrders: Order[] = orders.filter(
+      (order) => order.status.toLowerCase() === filterName.toLowerCase()
     );
-    setOrders(filterOrders)
+    setFilteredOrders(filterName === 'All' ? orders : filterOrders);
+    setOrderFilters(orderFilters.map(o => ({
+      ...o,
+      isActive: o.name.toLowerCase() === filterName.toLowerCase() ? true : false
+    })));
   };
   useEffect(() => {
     getOrders();
   }, []);
+
+  useEffect(() => {
+    filterOrders(selectedFilter)
+  }, [orders, selectedFilter])
 
   return (
     <div className="flex flex-col h-[calc(100vh-100px)] w-full px-5 py-0">
@@ -73,14 +83,14 @@ export const Orders = () => {
           </div>
           <div className="flex flex-col md:flex-row items-center justify-between cursor-pointer bg-white w-full min-h-16 p-6 rounded-lg">
             {
-              orderFilters.length && 
-              orderFilters.map((order,index) =>  
-              <a key={index}  className="relative" onClick={() => filterOrder(order.name)}>
-              {order.name}
-              {
-                order.isActive && <span className="absolute text-sm bottom-2 text-red-500">{0}</span>
-              }
-            </a>)
+              orderFilters.length &&
+              orderFilters.map((filter, index) =>
+                <a key={index} className="relative" onClick={() => filterOrders(filter.name)}>
+                  {filter.isActive ? <p className="text-red-500">{filter.name}</p> : <p>{filter.name}</p>}
+                  {
+                    filter.isActive && <span className="absolute text-sm bottom-4 right-0 text-red-500">{selectedFilter === 'All' ? orders.length : filteredOrders.length}</span>
+                  }
+                </a>)
             }
           </div>
           <div className="mt-5 h-4/5 w-full bg-white p-6 rounded-lg">
@@ -93,7 +103,7 @@ export const Orders = () => {
                   </div>
                 </div>
               ) : (
-                <OrderTable orders={orders} />
+                <OrderTable orders={filteredOrders} />
               )}
             </div>
           </div>
