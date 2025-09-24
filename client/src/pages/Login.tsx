@@ -20,7 +20,7 @@ export const Login = () => {
         toast.success("Login Successful");
         navigate("/dashboard");
       } catch (error) {
-        toast.error("Login Failed");
+        toast.error("Invalid username or password");
       }
   };
 

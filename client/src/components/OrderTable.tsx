@@ -35,6 +35,7 @@ import {
 } from "@/components/ui/table"
 import moment from "moment"
 import { Order } from "@/types/Order"
+import { Link } from "react-router-dom"
 
 export const columns: ColumnDef<Order>[] = [
   {
@@ -125,7 +126,7 @@ export const columns: ColumnDef<Order>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start">
-            <DropdownMenuItem className="cursor-pointer">View</DropdownMenuItem>
+            <DropdownMenuItem className="cursor-pointer"><Link to={`/orders/order-details/${row.original._id}`}>View</Link></DropdownMenuItem>
             <DropdownMenuItem className="text-red-500 cursor-pointer hover:!text-red-400">Delete</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -135,7 +136,7 @@ export const columns: ColumnDef<Order>[] = [
 ]
 
 type OrderTableProps = {
-  orders: Order[]
+  orders: Order[];
 }
 export const OrderTable = ({ orders }: OrderTableProps) => {
   const [sorting, setSorting] = React.useState<SortingState>([])
