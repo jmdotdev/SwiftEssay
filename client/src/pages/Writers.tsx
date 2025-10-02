@@ -50,19 +50,15 @@ export const Writers = () => {
     }))
     setFilters(filteredFilters)
     if (filter.name.toLowerCase() === 'assigned') {
-        console.log('executed is assigned')
         setFilteredWrites(writersList.filter(w => w.is_assigned))
     }
     if (filter.name.toLowerCase() === 'unassigned') {
-        console.log('executed is not assigned')
         setFilteredWrites(writersList.filter(w => !w.is_assigned))
     }
     if (filter.name.toLowerCase() === 'active') {
-        console.log('executed is active')
         setFilteredWrites(writersList.filter(w => w.is_active))
     }
     if (filter.name.toLowerCase() === 'inactive') {
-        console.log('executed is not active')
         setFilteredWrites(writersList.filter(w => !w.is_active))
     }
   }
