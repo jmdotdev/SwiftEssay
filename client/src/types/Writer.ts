@@ -7,5 +7,6 @@ export type Writer = {
   assigned_tasks: []; 
   posted_jobs: []; 
   is_assigned: boolean;
+  is_active: boolean;
   created_at: string;
 }

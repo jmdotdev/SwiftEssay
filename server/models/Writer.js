@@ -40,6 +40,10 @@ const userSchema = new Schema({
     type: Boolean,
     default: false,
   },
+  is_active: {
+    type: Boolean,
+    default: true
+  },
   created_at:{
     type:Date,
     default:Date.now()

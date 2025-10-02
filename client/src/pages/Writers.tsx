@@ -13,6 +13,7 @@ export const Writers = () => {
   const handleOpen = () => setIsOpen(true);
   const handleClose = () => setIsOpen(false);
   const [writersList, setWritersList] = useState<Writer[]>([]);
+  const [filteredWriters, setFilteredWrites] = useState<Writer[]>([]);
   const [newWriterAdded,setNewWriterAdded] = useState(false);
   const [filters, setFilters] = useState<WriterFilter[]>(writersFilters)
   const [loading, setLoading] = useState<Boolean>(false);
@@ -32,6 +33,7 @@ export const Writers = () => {
     setLoading(true)
     await axios.get("http://localhost:5000/writers/getWriters").then((res) => {
       setWritersList(res.data);
+      setFilteredWrites(writersList.filter(w => !w.is_assigned))
     }).catch(error=>{
       toast.error("error fetching writers")
     })
@@ -40,13 +42,25 @@ export const Writers = () => {
     })
   };
 
-  const selectFilter = (id: number) => {
+  const selectFilter = (filter: WriterFilter) => {
     const filteredFilters =  filters.map(f=>({
       id: f.id,
       name: f.name,
-      isActive: f.id === id ? true : false
+      isActive: f.id === filter.id ? true : false
     }))
     setFilters(filteredFilters)
+    if (filter.name.toLowerCase() === 'assigned') {
+        setFilteredWrites(writersList.filter(w => w.is_assigned))
+    }
+    if (filter.name.toLowerCase() === 'unassigned') {
+        setFilteredWrites(writersList.filter(w => !w.is_assigned))
+    }
+    if (filter.name.toLowerCase() === 'active') {
+        setFilteredWrites(writersList.filter(w => w.is_active))
+    }
+    if (filter.name.toLowerCase() === 'inactive') {
+        setFilteredWrites(writersList.filter(w => !w.is_active))
+    }
   }
 
   useEffect(() => {
@@ -63,9 +77,9 @@ export const Writers = () => {
       <div className="flex flex-col md:flex-row items-center justify-between bg-white w-full h-auto md:h-12 cursor-pointer px-2 py-7 rounded-lg">
         {filters.length &&
           filters.map((filter, i)=>  
-          <a key={i} className="my-5 mx-0 relative" onClick={() => selectFilter(filter.id)}>
-            {filter.name}
-           {filter.isActive  && <span className="absolute bottom-2 ms-[0.5px] text-sm text-red-600">{writersList.length}</span>}
+          <a key={i} className="my-5 mx-0 relative" onClick={() => selectFilter(filter)}>
+            { filter.isActive ? <span className="text-red-500">{filter.name}</span> : <span>{filter.name}</span>}
+           {filter.isActive  && <span className="absolute bottom-2 ms-[0.5px] text-sm text-red-600">{filteredWriters.length}</span>}
         </a>)
         }
         <form className="mb-6 md:mb-0">
@@ -79,7 +93,7 @@ export const Writers = () => {
               <Skeleton className="h-4 w-full" />
               <Skeleton className="h-4 w-full" />
             </div>
-          </div> : <WritersTable writers={writersList} />
+          </div> : <WritersTable writers={filteredWriters} />
         }
       </div>
       {

@@ -67,7 +67,7 @@ export const columns: ColumnDef<Writer>[] = [
     ),
   },
   {
-    accessorKey: "Email",
+    accessorKey: "email",
     header: ({ column }) => {
       return (
         <div>
@@ -127,7 +127,7 @@ export const columns: ColumnDef<Writer>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start">
             <DropdownMenuItem className="cursor-pointer">View</DropdownMenuItem>
-            <DropdownMenuItem className="text-red-500 cursor-pointer hover:!text-red-400">Delete</DropdownMenuItem>
+            <DropdownMenuItem className="text-red-500 cursor-pointer hover:!text-red-400">Deactivate</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       )
