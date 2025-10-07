@@ -6,21 +6,25 @@ export const sideNavLinks: SideNav[] = [
     {
         name: 'Dashboard',
         icon:  LayoutDashboard,
-        url:  'dashboard'
+        url:  'dashboard',
+        isActive: true
     },
     {
         name: 'Writers',
         icon: GraduationCap,
-        url: 'writers'
+        url: 'writers',
+        isActive: false
     },
     {
         name: 'Orders',
         icon: ShoppingBag,
-        url: 'orders'
+        url: 'orders',
+        isActive: false
     },
     {
         name: 'Payments',
         icon: Banknote,
-        url: 'payments'
+        url: 'payments',
+        isActive: false
     }
 ]

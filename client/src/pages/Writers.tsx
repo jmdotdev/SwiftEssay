@@ -49,6 +49,9 @@ export const Writers = () => {
       isActive: f.id === filter.id ? true : false
     }))
     setFilters(filteredFilters)
+    if (filter.name.toLowerCase() === 'all') {
+        setFilteredWrites(writersList)
+    }
     if (filter.name.toLowerCase() === 'assigned') {
         setFilteredWrites(writersList.filter(w => w.is_assigned))
     }
@@ -69,8 +72,7 @@ export const Writers = () => {
   return (
     <div className="flex flex-col w-full h-[calc(100vh-100px)] px-5 py-0">
       <div className="flex items-center justify-between my-5 mx-0 text-xl font-semibold">
-        <h4 className="text-darkBlue font-semibold text-xl">Writers</h4>
-        <button className="bg-darkBlue text-white text-sm px-4 py-2 rounded-lg cursor-pointer" onClick={handleOpen}>
+        <button className="bg-darkBlue text-white text-sm px-4 py-2 rounded-lg cursor-pointer ml-auto" onClick={handleOpen}>
           Add Writer
         </button>
       </div>
@@ -82,9 +84,6 @@ export const Writers = () => {
            {filter.isActive  && <span className="absolute bottom-2 ms-[0.5px] text-sm text-red-600">{filteredWriters.length}</span>}
         </a>)
         }
-        <form className="mb-6 md:mb-0">
-          <input className="h-6 p-4 border-[1px] border-gray-600 rounded-lg focus: outline-0" type="text" placeholder="search" />
-        </form>
       </div>
       <div className="my-4 h-full w-full p-6 bg-white rounded-lg">
         {

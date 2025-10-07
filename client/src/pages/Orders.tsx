@@ -76,8 +76,7 @@ export const Orders = () => {
       {
         <div>
           <div className="flex items-center justify-between text-md my-5 mx-0">
-            <h4 className="text-darkBlue font-semibold text-xl">Orders</h4>
-            <Link className="decoration-0" to="add-order">
+            <Link className="decoration-0 ml-auto" to="add-order">
               <button className="flex items-center px-4 py-2 cursor-pointer text-md text-white rounded-md bg-darkBlue">Add Order</button>
             </Link>
           </div>

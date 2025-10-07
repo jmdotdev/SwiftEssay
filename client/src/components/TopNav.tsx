@@ -35,8 +35,7 @@ export const TopNav = ({header, toggleNav}: TopNavProps) => {
     <div className="flex items-center justify-between">
       <div className="flex items-center">
         <Menu className="block lg:hidden cursor-pointer mr-2" onClick={toggleNav}/>
-        {/* <h2 className="text-xl font-semibold">{header.charAt(0).toUpperCase() + header.slice(1)}</h2> */}
-        <h2 className="opacity-90 font-light text-sm cursor-pointer">Home \ Dashboard</h2>
+        <h2 className="text-xl font-semibold text-darkBlue ml-1">{header.charAt(0).toUpperCase() + header.slice(1)}</h2>
       </div>
       <div className="flex items-center">
         <BellDot className="h-6 w-6 text-gray-950 mx-2" />

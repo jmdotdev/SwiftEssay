@@ -4,4 +4,5 @@ export type SideNav = {
     name: string;
     icon: LucideIcon;
     url: string;
+    isActive: boolean
 }
