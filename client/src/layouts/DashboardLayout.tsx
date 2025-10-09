@@ -12,6 +12,14 @@ export const DashboardLayout = () => {
   }
   useEffect (() => {
     const pathNameArray = location.pathname.split('/');
+    if (pathNameArray[2] === 'order-details') {
+       setHeader('order details')
+       return;
+    }
+    if (pathNameArray[1] === 'profile') {
+       setHeader('profile')
+       return;
+    }
     setHeader(pathNameArray[pathNameArray.length-1])
   },[location])
   return (

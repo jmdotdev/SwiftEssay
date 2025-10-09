@@ -55,7 +55,6 @@ export const OrderDetails = () => {
   }
   return (
     <div className='flex flex-col h-full w-full p-8 overflow-y-auto'>
-      <h3>Order Details</h3>
       <form onSubmit={submitHandler} className='flex items-center w-full mb-5 mt-3'>
         <div className='w-full'>
         <label>Assigned To:</label>
