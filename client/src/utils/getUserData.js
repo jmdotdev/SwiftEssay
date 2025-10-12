@@ -1,6 +1,6 @@
 export const getUserData = () => {
   const token = localStorage.getItem("token");
-  if (!token) return null; // Return null if the token is missing
+  if (!token) return null;
 
   try {
     const decodedToken = atob(token.split(".")[1]);
