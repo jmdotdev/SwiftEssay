@@ -10,15 +10,16 @@ import {
 } from "@/components/ui/popover"
 
 type Props = {
-    header: string
+    header: string,
+    isOpen: boolean,
+    setIsOpen: (open: boolean) => void;
 }
-export function DatePicker({header}: Props) {
-  const [open, setOpen] = React.useState(false)
+export function DatePicker({header, isOpen, setIsOpen}: Props) {
   const [date, setDate] = React.useState<Date | undefined>(undefined)
 
   return (
     <div className="flex gap-3">
-      <Popover open={open} onOpenChange={setOpen}>
+      <Popover open={isOpen} onOpenChange={setIsOpen}>
         <PopoverTrigger asChild>
           <Button
             variant="outline"
@@ -36,7 +37,7 @@ export function DatePicker({header}: Props) {
             captionLayout="dropdown"
             onSelect={(date) => {
               setDate(date)
-              setOpen(false)
+              setIsOpen(false)
             }}
           />
         </PopoverContent>

@@ -13,13 +13,12 @@ import {
     useReactTable,
     VisibilityState,
 } from "@tanstack/react-table"
-import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react"
+import { ArrowUpDown, MoreHorizontal } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import {
     DropdownMenu,
-    DropdownMenuCheckboxItem,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
@@ -68,7 +67,7 @@ export const columns: ColumnDef<Payment>[] = [
         ),
     },
     {
-        accessorKey: "Email",
+        accessorKey: "email",
         header: ({ column }) => {
             return (
                 <div>
@@ -143,7 +142,9 @@ export const PaymentsTable = ({ payments }: PaymentTableProps) => {
     const [sorting, setSorting] = React.useState<SortingState>([])
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
-    const [rowSelection, setRowSelection] = React.useState({})
+    const [rowSelection, setRowSelection] = React.useState({});
+    const [isFromOpen, setIsFromOpen] = React.useState<boolean>(false)
+    const [isToOpen, setIsToOpen] = React.useState<boolean>(false)
 
     const table = useReactTable({
         data: payments,
@@ -177,14 +178,14 @@ export const PaymentsTable = ({ payments }: PaymentTableProps) => {
                 />
                 <div className="flex flex-col w-full md:flex-row items-start md:items-center mt-2 md:mt-0 mx-2">
                     <div className="mr-0 md:mr-2">
-                        <DatePicker header="From" />
+                        <DatePicker header="From" isOpen={isFromOpen} setIsOpen={setIsFromOpen} />
                     </div>
                     <div className="mt-2 md:mt-0">
-                        <DatePicker header="To" />
+                        <DatePicker header="To" isOpen={isToOpen} setIsOpen={setIsToOpen}/>
                     </div>
                 </div>
             </div>
-            <div className="overflow-auto rounded-md border">
+            <div className="rounded-md border overflow-visible">
                 <Table>
                     <TableHeader>
                         {table.getHeaderGroups().map((headerGroup) => (
