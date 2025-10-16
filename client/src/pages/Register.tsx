@@ -126,7 +126,7 @@ export const Register = () => {
               <Link to="/login">
                 <h4 className="my-2 cursor-pointer">
                   Already have an account?{" "}
-                  <a className="underline underline-offset-1">login</a>
+                  <a className="underline underline-offset-1">Login</a>
                 </h4>
               </Link>
             </div>

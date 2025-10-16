@@ -80,7 +80,7 @@ export const Login = () => {
              <Link to="/register">
                 <h4 className="my-2 cursor-pointer">
                   Don't have an account?{" "}
-                  <a className="underline underline-offset-1">register</a>
+                  <a className="underline underline-offset-1">Register</a>
                 </h4>
               </Link>
         </div>
