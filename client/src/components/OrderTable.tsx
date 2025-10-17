@@ -13,13 +13,12 @@ import {
   useReactTable,
   VisibilityState,
 } from "@tanstack/react-table"
-import { ChevronDown, MoreHorizontal } from "lucide-react"
+import { MoreHorizontal } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import {
   DropdownMenu,
-  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
@@ -37,7 +36,17 @@ import moment from "moment"
 import { Order } from "@/types/Order"
 import { Link } from "react-router-dom"
 
-export const columns: ColumnDef<Order>[] = [
+
+type OrderTableProps = {
+  orders: Order[];
+  onDelete?: (id: string) => void;
+}
+export const OrderTable = ({ orders, onDelete }: OrderTableProps) => {
+  const [sorting, setSorting] = React.useState<SortingState>([])
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
+  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
+  const [rowSelection, setRowSelection] = React.useState({})
+  const columns: ColumnDef<Order>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -127,23 +136,14 @@ export const columns: ColumnDef<Order>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start">
             <DropdownMenuItem className="cursor-pointer"><Link to={`/orders/order-details/${row.original._id}`}>View</Link></DropdownMenuItem>
-            <DropdownMenuItem className="text-red-500 cursor-pointer hover:!text-red-400">Delete</DropdownMenuItem>
+            <DropdownMenuItem className="cursor-pointer"><Link to={`/orders/add-order/${row.original._id}`}>Edit</Link></DropdownMenuItem>
+            <DropdownMenuItem className="text-red-500 cursor-pointer hover:!text-red-400" onClick={() => onDelete(row.original._id)}>Delete</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       )
     },
   },
-]
-
-type OrderTableProps = {
-  orders: Order[];
-}
-export const OrderTable = ({ orders }: OrderTableProps) => {
-  const [sorting, setSorting] = React.useState<SortingState>([])
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
-  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
-  const [rowSelection, setRowSelection] = React.useState({})
-
+ ]
   const table = useReactTable({
     data: orders,
     columns,

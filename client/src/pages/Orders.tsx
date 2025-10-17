@@ -102,7 +102,7 @@ export const Orders = () => {
                   </div>
                 </div>
               ) : (
-                <OrderTable orders={filteredOrders} />
+                <OrderTable orders={filteredOrders} onDelete={(id) => deleteOrder(id)}/>
               )}
             </div>
           </div>
