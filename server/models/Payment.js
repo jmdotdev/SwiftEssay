@@ -1,4 +1,4 @@
-import mongoose, { Schema } from 'mongoose';
+import mongoose, {Schema} from 'mongoose';
 const paymentSchema = new Schema(
   {
     order: {
@@ -46,4 +46,5 @@ const paymentSchema = new Schema(
 );
 
 const Payment = mongoose.model('Payment', paymentSchema);
-module.exports(Payment)
+
+export default Payment
