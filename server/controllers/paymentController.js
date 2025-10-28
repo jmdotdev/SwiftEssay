@@ -12,7 +12,6 @@ export const createPayment = async (req, res) => {
       paidAt,
     } = req.body;
 
-    // Basic validation
     if (!order || !user || !paymentCode || !amount) {
       return res.status(400).json({ message: 'Missing required fields.' });
     }

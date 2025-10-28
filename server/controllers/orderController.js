@@ -24,41 +24,42 @@ paypal.configure({
       req.session.order = order;
   
       console.log("Order saved:", order);
+      res.status(201).json({ data: order });
   
-      const create_payment_json = {
-        intent: "sale",
-        payer: {
-          payment_method: "paypal",
-        },
-        redirect_urls: {
-          return_url: "http://localhost:5000/payment/success",
-          cancel_url: "http://localhost:5000/payment/cancel",
-        },
-        transactions: [
-          {
-            amount: {
-              currency: "USD",
-              total: orderDetails.amount_payable.toFixed(2),
-            },
-            description: `Order ${order.id} payment`,
-          },
-        ],
-      };
+      // const create_payment_json = {
+      //   intent: "sale",
+      //   payer: {
+      //     payment_method: "paypal",
+      //   },
+      //   redirect_urls: {
+      //     return_url: "http://localhost:5000/payment/success",
+      //     cancel_url: "http://localhost:5000/payment/cancel",
+      //   },
+      //   transactions: [
+      //     {
+      //       amount: {
+      //         currency: "USD",
+      //         total: orderDetails.amount_payable.toFixed(2),
+      //       },
+      //       description: `Order ${order.id} payment`,
+      //     },
+      //   ],
+      // };
   
-      paypal.payment.create(create_payment_json, function (error, payment) {
-        if (error) {
-          console.log("Error creating payment:", error);
-          res.status(500).json({ error: "Payment creation failed" });
-        } else {
-          console.log("Payment created successfully:", payment);
-          for (let i = 0; i < payment.links.length; i++) {
-            if (payment.links[i].rel === "approval_url") {
-              return res.json({redirectionLink: payment.links[i].href});
-            }
-          }
-          res.status(500).json({ error: "No approval URL found" });
-        }
-      });
+      // paypal.payment.create(create_payment_json, function (error, payment) {
+      //   if (error) {
+      //     console.log("Error creating payment:", error);
+      //     res.status(500).json({ error: "Payment creation failed" });
+      //   } else {
+      //     console.log("Payment created successfully:", payment);
+      //     for (let i = 0; i < payment.links.length; i++) {
+      //       if (payment.links[i].rel === "approval_url") {
+      //         return res.json({redirectionLink: payment.links[i].href});
+      //       }
+      //     }
+      //     res.status(500).json({ error: "No approval URL found" });
+      //   }
+      // });
     } catch (error) {
       console.error("Error creating order:", error);
       res.status(500).json({ error: "Order creation failed" });
@@ -95,9 +96,8 @@ export const assignOrder = async (req, res) => {
     const writer = req.body;
     await Order.findByIdAndUpdate(
       id,
-      { assigned_to: writer, status: "progress" }
-      // To get the updated document
-      // { new: true }
+      { assigned_to: writer, status: "progress" },
+      { new: true }
     );
     return res.status(200).json({ message: "order updated successfully" });
   } catch (error) {
