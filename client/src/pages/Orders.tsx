@@ -113,7 +113,7 @@ export const Orders = () => {
               )}
             </div>
             { 
-              showPaymentModal && <AddPaymentModal isOpen={false} handleClose={() => setShowPaymentModal(prev => !prev)} />
+              showPaymentModal && <AddPaymentModal isOpen={showPaymentModal} handleClose={() => setShowPaymentModal(prev => !prev)} />
             }
           </div>
         </div>
