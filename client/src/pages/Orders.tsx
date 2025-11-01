@@ -7,13 +7,15 @@ import { Order } from "@/types/Order";
 import { Skeleton } from "@/components/ui/skeleton"
 import { orderFilter } from "@/types/OrderFilter";
 import { orderFiltersList } from "@/data/OrderFilters";
+import { AddPaymentModal } from "@/components/AddPaymentModal";
 
 export const Orders = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [filteredOrders, setFilteredOrders] = useState<Order[]>([]);
   const [orderFilters, setOrderFilters] = useState<orderFilter[]>(orderFiltersList);
   const [selectedFilter, setSelectedFilter] = useState<string>('Available');
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [showPaymentModal, setShowPaymentModal] = useState<boolean>(false);
 
   const getOrders = async () => {
     try {
@@ -63,6 +65,11 @@ export const Orders = () => {
       isActive: o.name.toLowerCase() === filterName.toLowerCase() ? true : false
     })));
   };
+
+  const openAddPaymentModal = (id: string) => {
+     console.log('id', id)
+     setShowPaymentModal(prev => !prev)
+  }
   useEffect(() => {
     getOrders();
   }, []);
@@ -102,9 +109,12 @@ export const Orders = () => {
                   </div>
                 </div>
               ) : (
-                <OrderTable orders={filteredOrders} onDelete={(id) => deleteOrder(id)}/>
+                <OrderTable orders={filteredOrders} onDelete={(id) => deleteOrder(id)} openAddPaymentModal={(id) => openAddPaymentModal(id)}/>
               )}
             </div>
+            { 
+              showPaymentModal && <AddPaymentModal isOpen={showPaymentModal} handleClose={() => setShowPaymentModal(prev => !prev)} />
+            }
           </div>
         </div>
       }

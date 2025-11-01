@@ -40,8 +40,9 @@ import { Link } from "react-router-dom"
 type OrderTableProps = {
   orders: Order[];
   onDelete?: (id: string) => void;
+  openAddPaymentModal: (id: string) => void;
 }
-export const OrderTable = ({ orders, onDelete }: OrderTableProps) => {
+export const OrderTable = ({ orders, onDelete, openAddPaymentModal }: OrderTableProps) => {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
@@ -137,6 +138,7 @@ export const OrderTable = ({ orders, onDelete }: OrderTableProps) => {
           <DropdownMenuContent align="start">
             <DropdownMenuItem className="cursor-pointer"><Link to={`/orders/order-details/${row.original._id}`}>View</Link></DropdownMenuItem>
             <DropdownMenuItem className="cursor-pointer"><Link to={`/orders/add-order/${row.original._id}`}>Edit</Link></DropdownMenuItem>
+            <DropdownMenuItem className="cursor-pointer" onClick={() => openAddPaymentModal(row.original._id)}>Add Payment</DropdownMenuItem>
             <DropdownMenuItem className="text-red-500 cursor-pointer hover:!text-red-400" onClick={() => onDelete(row.original._id)}>Delete</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
