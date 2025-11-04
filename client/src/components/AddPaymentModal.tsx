@@ -9,25 +9,33 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { toast } from 'react-toastify';
-import axios from "axios"
+import { Order } from "@/types/Order";
 import { X } from "lucide-react";
 import { SubmitHandler, useForm } from "react-hook-form";
 
 type ModalProps = {
   isOpen: boolean
   handleClose: () => void;
+  selectedOrder: Order;
 }
 type FormInputs = {
-  username: string;
-  email: string;
-  phone: string;
-  password: string
+  code: string;
+  amount: number;
+  method: string;
 }
-export function AddPaymentModal({ isOpen, handleClose }: ModalProps) {
-  const { handleSubmit, register, reset, formState: { errors } } = useForm<FormInputs>();
+export function AddPaymentModal({ isOpen, handleClose, selectedOrder }: ModalProps) {
+  const { handleSubmit, register, formState: { errors } } = useForm<FormInputs>();
+
   const addPayment: SubmitHandler<FormInputs> = async (value) => {
-    console.log('values')
+    const payload = {
+      order: selectedOrder._id,
+      paymentCode: value.code,
+      amount: value.amount,
+      currency: 'KSH',
+      method: value.method
+    }
+    console.log('payload', payload);
+    console.log('selectedOrder', selectedOrder)
   }
   return (
     <Dialog open={isOpen}>
@@ -41,24 +49,19 @@ export function AddPaymentModal({ isOpen, handleClose }: ModalProps) {
         <form onSubmit={handleSubmit(addPayment)}>
           <div className="grid gap-4">
             <div className="grid gap-3">
-              <Label htmlFor="username-1">Username</Label>
-              <Input id="username-1" type="text" defaultValue='' {...register('username', { required: 'Username is required' })} />
-              {errors.username && <span className='w-full text-start text-red-500 text-sm'>{errors.username.message}</span>}
+              <Label htmlFor="code-1">Payment Code</Label>
+              <Input id="code-1" type="text" defaultValue='' {...register('code', { required: 'Payment Code is required' })} />
+              {errors.code && <span className='w-full text-start text-red-500 text-sm'>{errors.code.message}</span>}
             </div>
             <div className="grid gap-3">
-              <Label htmlFor="email-1">Email</Label>
-              <Input id="email-1" type="email" defaultValue='' {...register('email', { required: 'Email is required' })} />
-              {errors.email && <span className='w-full text-start text-red-500 text-sm'>{errors.email.message}</span>}
+              <Label htmlFor="amount-1">Amount</Label>
+              <Input id="amount-1" type="number" defaultValue='' {...register('amount', { required: 'Amount is required' })} />
+              {errors.amount && <span className='w-full text-start text-red-500 text-sm'>{errors.amount.message}</span>}
             </div>
             <div className="grid gap-3">
-              <Label htmlFor="phone-1">Phone</Label>
-              <Input id="phone-1" type="text" defaultValue='' {...register('phone', { required: 'Phone is required' })} />
-              {errors.phone && <span className='w-full text-start text-red-500 text-sm'>{errors.phone.message}</span>}
-            </div>
-            <div className="grid gap-3">
-              <Label htmlFor="password-1">Password</Label>
-              <Input id="password-1" type="password" defaultValue='' {...register('password', { required: 'Password is required' })} />
-              {errors.password && <span className='w-full text-start text-red-500 text-sm'>{errors.password.message}</span>}
+              <Label htmlFor="method-1">Method</Label>
+              <Input id="method-1" type="text" defaultValue='' {...register('method', { required: 'Payment Method is required' })} placeholder="m-pesa" />
+              {errors.method && <span className='w-full text-start text-red-500 text-sm'>{errors.method.message}</span>}
             </div>
           </div>
           <DialogFooter className="mt-4">

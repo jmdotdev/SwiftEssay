@@ -16,6 +16,7 @@ export const Orders = () => {
   const [selectedFilter, setSelectedFilter] = useState<string>('Available');
   const [loading, setLoading] = useState<boolean>(true);
   const [showPaymentModal, setShowPaymentModal] = useState<boolean>(false);
+  const [selectedOrder, setSelectedOrder] = useState<Order>()
 
   const getOrders = async () => {
     try {
@@ -67,7 +68,7 @@ export const Orders = () => {
   };
 
   const openAddPaymentModal = (id: string) => {
-     console.log('id', id)
+     setSelectedOrder(filteredOrders.find(o => o._id === id))
      setShowPaymentModal(prev => !prev)
   }
   useEffect(() => {
@@ -113,7 +114,7 @@ export const Orders = () => {
               )}
             </div>
             { 
-              showPaymentModal && <AddPaymentModal isOpen={showPaymentModal} handleClose={() => setShowPaymentModal(prev => !prev)} />
+              showPaymentModal && <AddPaymentModal isOpen={showPaymentModal} handleClose={() => setShowPaymentModal(prev => !prev)} selectedOrder = {selectedOrder}/>
             }
           </div>
         </div>
