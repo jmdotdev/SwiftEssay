@@ -16,7 +16,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 type ModalProps = {
   isOpen: boolean
   handleClose: () => void;
-  selectedOrder: Order;
+  selectedOrder?: Order;
 }
 type FormInputs = {
   code: string;
@@ -34,8 +34,6 @@ export function AddPaymentModal({ isOpen, handleClose, selectedOrder }: ModalPro
       currency: 'KSH',
       method: value.method
     }
-    console.log('payload', payload);
-    console.log('selectedOrder', selectedOrder)
   }
   return (
     <Dialog open={isOpen}>

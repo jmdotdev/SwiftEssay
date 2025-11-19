@@ -2,14 +2,22 @@ import {useEffect,useState} from 'react'
 import axios from 'axios'
 import { OrderCard } from '../components/OrderCard';
 import { OrderTable } from '@/components/OrderTable';
+import { AddPaymentModal } from '@/components/AddPaymentModal';
 
 export const Dashboard = () => {
-    const [latestOrders,setLatestOrders] = useState([])
+    const [latestOrders,setLatestOrders] = useState([]);
+    const [showPaymentModal, setShowPaymentModal] = useState<boolean>(false);
+    const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
 
     const getOrders = async () =>{
       await axios.get("http://localhost:5000/orders/getOrders").then((res) => {
         setLatestOrders(res.data)
       });
+    }
+
+    const handleShowAddPaymentModal = (id: string) => {
+        console.log('id',id)
+        setShowPaymentModal(prev => !prev);
     }
 
   useEffect(() => {
@@ -32,8 +40,12 @@ export const Dashboard = () => {
         <div className='flex flex-col h-auto w-full bg-white rounded-xl'>
           <h2 className='text-md text-start mt-4 mx-4 font-semibold text-darkBlue'>Latest Orders</h2>
     <div className='px-4'>
-       <OrderTable orders={latestOrders} />
+       <OrderTable orders={latestOrders} openAddPaymentModal={ (id: string) => handleShowAddPaymentModal(id) } />
     </div>
+    {
+      showPaymentModal && 
+      <AddPaymentModal isOpen={true} handleClose={() => setShowPaymentModal(prev => !prev)}/>
+    }
         </div>
     </div>
   )
