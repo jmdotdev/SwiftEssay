@@ -74,7 +74,7 @@ export const OrderTable = ({ orders, onDelete, openAddPaymentModal }: OrderTable
     accessorKey: "academic_level",
     header: () => <div className="text-start">Academic Level</div>,
     cell: ({ row }) => (
-      <div className="capitalize text-start">{row.original.academic_level}</div>
+      <div className="capitalize text-start" key={row.original._id}>{row.original.academic_level}</div>
     ),
   },
   {
