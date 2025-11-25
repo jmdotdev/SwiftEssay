@@ -2,13 +2,13 @@ import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useForm, SubmitHandler } from "react-hook-form";
 import axios from "axios";
-import { getUserData } from "../utils/getUserData";
 import {
   academicLevels,
   citationOptions,
   orderDiscipline,
   paperTypes,
 } from "../data/AddOrderFormOptions";
+import { getUserData } from "@/utils/getUserData";
 
 type OrderFormData = {
   academic_level: string;
