@@ -122,12 +122,6 @@ export default function LoginPage() {
                       <FormItem>
                         <div className="flex items-center justify-between">
                           <FormLabel>Password</FormLabel>
-                          <Link
-                            href="/forgot-password"
-                            className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                          >
-                            Forgot password?
-                          </Link>
                         </div>
                         <FormControl>
                           <div className="relative">
@@ -162,7 +156,13 @@ export default function LoginPage() {
                 </form>
               </Form>
             </CardContent>
-            <CardFooter className="px-0 lg:px-6">
+            <CardFooter className="flex flex-col px-0 lg:px-6">
+               <Link
+                  href="/forgot-password"
+                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  Forgot password?
+                </Link>
               <p className="text-sm text-muted-foreground text-center w-full">
                 Don&apos;t have an account?{' '}
                 <Link href="/register" className="text-foreground font-medium hover:underline">

@@ -76,7 +76,7 @@ export default function RegisterPage() {
             </li>
             <li className="flex items-center gap-3">
               <div className="h-2 w-2 rounded-full bg-background" />
-              <span>Secure payment system</span>
+              <span>Guaranteed payments</span>
             </li>
           </ul>
         </div>
@@ -137,7 +137,7 @@ export default function RegisterPage() {
                       </FormItem>
                     )}
                   />
-                  <FormField
+                  {/* <FormField
                     control={form.control}
                     name="role"
                     render={({ field }) => (
@@ -157,7 +157,7 @@ export default function RegisterPage() {
                         <FormMessage />
                       </FormItem>
                     )}
-                  />
+                  /> */}
                   <FormField
                     control={form.control}
                     name="password"
