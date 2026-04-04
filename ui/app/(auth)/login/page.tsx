@@ -18,6 +18,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { loginSchema, type LoginFormData } from '@/lib/validations'
+import { toast } from 'sonner'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -32,15 +33,34 @@ export default function LoginPage() {
   })
 
   const onSubmit = async (data: LoginFormData) => {
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-
-    // Mock login - redirect based on email domain
-    if (data.email.includes('admin')) {
-      router.push('/admin')
-    } else {
-      router.push('/writer')
+    const payload = {
+      email: data.email,
+      password: data.password
     }
+    await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+     }).then(async (res) => {
+      if (res.ok){
+           toast.success('Login successful!');
+           await fetch('/api/auth/me').then(async (res) => {
+            const result = await res.json()
+            if (result.user.role === 'admin') {
+              router.push('/admin')
+            } else {
+              router.push('/writer')
+            } 
+          }).catch((error) => {            
+            console.error('Error fetching user info:', error)
+            toast.error('An error occurred while fetching user information.')
+          })
+      }
+      else
+        toast.error('Login failed. Please check your credentials and try again.')
+    })
   }
 
   return (

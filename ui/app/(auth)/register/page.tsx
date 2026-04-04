@@ -9,7 +9,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import {
   Form,
   FormControl,
@@ -19,6 +18,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { registerSchema, type RegisterFormData } from '@/lib/validations'
+import { toast } from 'sonner'
 
 export default function RegisterPage() {
   const router = useRouter()
@@ -30,18 +30,31 @@ export default function RegisterPage() {
     defaultValues: {
       name: '',
       email: '',
-      role: undefined,
       password: '',
       confirmPassword: '',
     },
   })
 
   const onSubmit = async (data: RegisterFormData) => {
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-
-    // Redirect to login
-    router.push('/login')
+    const payload = {
+      username: data.name,
+      email: data.email,
+      password: data.password
+    }
+    await fetch('/api/auth/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    }).then((res) => {
+      if (res.ok) {
+        toast.success('Account created successfully! Please log in.')
+        router.push('/login')
+      } else {
+        toast.error('Registration failed. Please try again.')
+      }
+    })
   }
 
   return (
@@ -137,27 +150,6 @@ export default function RegisterPage() {
                       </FormItem>
                     )}
                   />
-                  {/* <FormField
-                    control={form.control}
-                    name="role"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Role</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select your role" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            <SelectItem value="writer">Writer</SelectItem>
-                            <SelectItem value="admin">Admin</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  /> */}
                   <FormField
                     control={form.control}
                     name="password"

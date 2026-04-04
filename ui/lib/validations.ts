@@ -9,10 +9,9 @@ export const loginSchema = z.object({
 export type LoginFormData = z.infer<typeof loginSchema>
 
 export const registerSchema = z.object({
-  name: z.string().min(1, 'Name is required'),
+  name: z.string().min(1, 'Username is required'),
   email: z.string().email('Please enter a valid email'),
-  role: z.enum(['writer', 'admin'], { required_error: 'Please select a role' }),
-  password: z.string().min(8, 'Password must be at least 8 characters'),
+  password: z.string().min(4, 'Password must be at least 4 characters'),
   confirmPassword: z.string().min(1, 'Please confirm your password'),
 }).refine((data) => data.password === data.confirmPassword, {
   message: 'Passwords do not match',
