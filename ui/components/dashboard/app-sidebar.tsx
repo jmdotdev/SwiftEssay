@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import {
   LayoutDashboard,
   Users,
@@ -24,6 +24,7 @@ import {
 } from '@/components/ui/sidebar'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import type { UserRole } from '@/lib/types'
+
 
 interface AppSidebarProps {
   role: UserRole
@@ -72,10 +73,19 @@ const writerNavItems = [
 
 export function AppSidebar({ role }: AppSidebarProps) {
   const pathname = usePathname()
+  const router = useRouter()
   const navItems = role === 'admin' ? adminNavItems : writerNavItems
   const user = role === 'admin' 
     ? { name: 'John Admin', email: 'admin@swiftessay.com' }
     : { name: 'Sarah Writer', email: 'sarah@swiftessay.com' }
+  
+  const logout = () => {
+    fetch('/api/auth/logout', {
+      method: 'POST',
+    }).then(() => {
+      router.push('/login')
+    });
+  }
 
   return (
     <Sidebar>
@@ -131,10 +141,10 @@ export function AppSidebar({ role }: AppSidebarProps) {
           </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarMenuButton asChild tooltip="Logout">
-              <Link href="/login">
+              <div onClick={logout} className="flex items-center gap-2">
                 <LogOut className="h-4 w-4" />
                 <span>Logout</span>
-              </Link>
+              </div>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
