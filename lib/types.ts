@@ -6,7 +6,7 @@ export type PaymentStatus = 'pending' | 'paid' | 'cancelled'
 
 export interface User {
   id: string
-  name: string
+  username: string
   email: string
   role: UserRole
   status: 'active' | 'inactive'
