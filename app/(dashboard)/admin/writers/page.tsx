@@ -19,9 +19,11 @@ import type { WriterFormData } from '@/lib/validations'
 import { useWriters } from '@/lib/hooks'
 import { toast } from 'sonner'
 import type { Writer } from '@/lib/types'
+import { QueryClient } from '@tanstack/react-query'
 
 export default function WritersPage() {
   const router = useRouter()
+  const query = new QueryClient()
   const { data: writers, isLoading } = useWriters()
   const [modalOpen, setModalOpen] = useState(false)
   const [modalMode, setModalMode] = useState<'add' | 'edit'>('add')
@@ -42,14 +44,31 @@ export default function WritersPage() {
 
   const handleDeleteWriter = (writer: Writer, e: React.MouseEvent) => {
     e.stopPropagation()
-    toast.success(`Writer "${writer.name}" has been deleted`)
+    toast.success(`Writer "${writer.username}" has been deleted`)
   }
 
-  const handleSubmit = (data: WriterFormData) => {
+  const handleSubmit = async (data: WriterFormData) => {
     if (modalMode === 'add') {
-      toast.success(`Writer "${data.name}" has been added`)
+       await fetch('/api/writers/add', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: data.name,
+          email: data.email,
+          status: data.status,
+        }),
+      }).then(async (res) => {
+        if (!res.ok) {
+          throw new Error('Failed to add writer')
+        }
+        toast.success(`Writer "${data.name}" has been added`)
+        query.invalidateQueries({ queryKey: ['writers'] })
+      }) 
     } else {
       toast.success(`Writer "${data.name}" has been updated`)
+      query.invalidateQueries({ queryKey: ['writers'] })
     }
   }
 
@@ -67,11 +86,11 @@ export default function WritersPage() {
           <div className="flex items-center gap-3">
             <Avatar className="h-8 w-8">
               <AvatarFallback className="text-xs">
-                {writer.name.split(' ').map((n) => n[0]).join('')}
+                {writer.username.split(' ').map((n) => n[0]).join('')}
               </AvatarFallback>
             </Avatar>
             <div>
-              <div className="font-medium">{writer.name}</div>
+              <div className="font-medium">{writer.username}</div>
             </div>
           </div>
         )

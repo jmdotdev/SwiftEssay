@@ -40,8 +40,11 @@ export function useWriters() {
   return useQuery<Writer[]>({
     queryKey: ['writers'],
     queryFn: async () => {
-      await delay(400)
-      return mockWriters
+      const res = await fetch('/api/writers/get')
+      if (!res.ok) {
+        throw new Error('Failed to fetch writers')
+      }
+      return res.json()
     },
   })
 }

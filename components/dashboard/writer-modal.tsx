@@ -62,7 +62,7 @@ export function WriterModal({
     if (open) {
       if (mode === 'edit' && writer) {
         form.reset({
-          name: writer.name,
+          name: writer.username,
           email: writer.email,
           status: writer.status,
         })
