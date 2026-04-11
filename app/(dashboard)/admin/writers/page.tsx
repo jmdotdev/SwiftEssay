@@ -19,11 +19,11 @@ import type { WriterFormData } from '@/lib/validations'
 import { useWriters } from '@/lib/hooks'
 import { toast } from 'sonner'
 import type { Writer } from '@/lib/types'
-import { QueryClient } from '@tanstack/react-query'
+import { useQueryClient } from '@tanstack/react-query'
 
 export default function WritersPage() {
   const router = useRouter()
-  const query = new QueryClient()
+  const query = useQueryClient()
   const { data: writers, isLoading } = useWriters()
   const [modalOpen, setModalOpen] = useState(false)
   const [modalMode, setModalMode] = useState<'add' | 'edit'>('add')
@@ -64,11 +64,11 @@ export default function WritersPage() {
           throw new Error('Failed to add writer')
         }
         toast.success(`Writer "${data.name}" has been added`)
-        query.invalidateQueries({ queryKey: ['writers'] })
+        await query.invalidateQueries({ queryKey: ['writers'] })
       }) 
     } else {
       toast.success(`Writer "${data.name}" has been updated`)
-      query.invalidateQueries({ queryKey: ['writers'] })
+      await query.invalidateQueries({ queryKey: ['writers'] })
     }
   }
 

@@ -130,15 +130,15 @@ export function WriterModal({
                   </FormItem>
                 )}
               />
-              <FormField
+               <FormField
                 control={form.control}
                 name="status"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className='w-full'>
                     <FormLabel>Status</FormLabel>
                     <Select onValueChange={field.onChange} value={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
+                      <FormControl className='w-full'>
+                        <SelectTrigger className="w-full">
                           <SelectValue placeholder="Select status" />
                         </SelectTrigger>
                       </FormControl>
