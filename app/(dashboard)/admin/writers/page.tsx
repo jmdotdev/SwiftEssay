@@ -53,6 +53,7 @@ export default function WritersPage() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          Credentials: 'include'
         },
         body: JSON.stringify({
           username: data.name,
