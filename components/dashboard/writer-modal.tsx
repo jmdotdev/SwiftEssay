@@ -77,9 +77,6 @@ export function WriterModal({
   }, [mode, writer, open, form])
 
   const handleSubmit = async (data: WriterFormData) => {
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 500))
-    
     onSubmit(data)
     onOpenChange(false)
   }
