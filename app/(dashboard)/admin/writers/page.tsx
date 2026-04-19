@@ -19,7 +19,7 @@ import type { WriterFormData } from '@/lib/validations'
 import { useWriters } from '@/lib/hooks'
 import { toast } from 'sonner'
 import type { Writer } from '@/lib/types'
-import { useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 export default function WritersPage() {
   const router = useRouter()
@@ -47,34 +47,75 @@ export default function WritersPage() {
     toast.success(`Writer "${writer.username}" has been deleted`)
   }
 
-  const handleSubmit = async (data: WriterFormData) => {
-    if (modalMode === 'add') {
-       await fetch('/api/writers/add', {
+  const createWriterMutation = useMutation({
+    mutationFn: async (data: WriterFormData) => {
+      const res = await fetch('/api/writers/add', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Credentials: 'include'
+           Credentials: 'include'
         },
         body: JSON.stringify({
           username: data.name,
           email: data.email,
           status: data.status,
         }),
-      }).then(async (res) => {
-        if (!res.ok) {
-          throw new Error('Failed to add writer')
+      })
+      if (!res.ok) {
+        throw new Error('Failed to add writer')
+      }
+      return res.json()
+    }
+  })
+
+  const updateWriterMutation = useMutation({
+    mutationFn: async (data: { id: string; name: string; email: string; status: string }) => {
+      const res = await fetch(`/api/writers/${data.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+           Credentials: 'include'
+        },
+        body: JSON.stringify({
+          username: data.name,
+          email: data.email,
+          status: data.status
+        }),
+      })
+      if (!res.ok) {
+        throw new Error('Failed to update writer')
+      }
+      return res.json()
+    }
+  })
+
+
+  const handleSubmit = async (data: WriterFormData) => {
+    if (modalMode === 'add') {
+      createWriterMutation.mutate(data, {
+        onSuccess: async (res) => {
+          toast.success(`Writer has been added`)
+          await query.invalidateQueries({ queryKey: ['writers'] })
+        },
+        onError: (err) => {
+          toast.error(err instanceof Error ? err.message : 'Failed to add writer')
         }
-        toast.success(`Writer "${data.name}" has been added`)
-        await query.invalidateQueries({ queryKey: ['writers'] })
-      }) 
+      })
     } else {
-      toast.success(`Writer "${data.name}" has been updated`)
-      await query.invalidateQueries({ queryKey: ['writers'] })
+      updateWriterMutation.mutate({ id: selectedWriter!._id, name: data.name, email: data.email, status: data.status }, {
+        onSuccess: async (res) => {
+          toast.success(`Writer has been updated`)
+          await query.invalidateQueries({ queryKey: ['writers'] })
+        },
+        onError: (err) => {
+          toast.error(err instanceof Error ? err.message : 'Failed to update writer')
+        }
+      })
     }
   }
 
   const handleRowClick = (writer: Writer) => {
-    router.push(`/admin/writers/${writer.id}`)
+    router.push(`/admin/writers/${writer._id}`)
   }
 
   const columns: ColumnDef<Writer>[] = [
