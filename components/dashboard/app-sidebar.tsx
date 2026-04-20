@@ -133,7 +133,7 @@ export function AppSidebar({ role }: AppSidebarProps) {
                   {user.name.split(' ').map(n => n[0]).join('')}
                 </AvatarFallback>
               </Avatar>
-              <div className="flex flex-1 flex-col text-left text-sm">
+              <div className="flex flex-1 flex-col text-left text-sm cursor-pointer">
                 <span className="font-medium">{user.name}</span>
                 <span className="text-xs text-muted-foreground">{user.email}</span>
               </div>
@@ -141,7 +141,7 @@ export function AppSidebar({ role }: AppSidebarProps) {
           </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarMenuButton asChild tooltip="Logout">
-              <div onClick={logout} className="flex items-center gap-2">
+              <div onClick={logout} className="flex items-center gap-2 cursor-pointer">
                 <LogOut className="h-4 w-4" />
                 <span>Logout</span>
               </div>

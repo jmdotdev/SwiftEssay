@@ -19,7 +19,8 @@ import type { WriterFormData } from '@/lib/validations'
 import { useWriters } from '@/lib/hooks'
 import { toast } from 'sonner'
 import type { Writer } from '@/lib/types'
-import { useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { DeleteUserDialog } from '@/components/dashboard/delete-user-dialog'
 
 export default function WritersPage() {
   const router = useRouter()
@@ -28,6 +29,7 @@ export default function WritersPage() {
   const [modalOpen, setModalOpen] = useState(false)
   const [modalMode, setModalMode] = useState<'add' | 'edit'>('add')
   const [selectedWriter, setSelectedWriter] = useState<Writer | null>(null)
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false)
 
   const handleAddWriter = () => {
     setModalMode('add')
@@ -42,39 +44,108 @@ export default function WritersPage() {
     setModalOpen(true)
   }
 
-  const handleDeleteWriter = (writer: Writer, e: React.MouseEvent) => {
-    e.stopPropagation()
-    toast.success(`Writer "${writer.username}" has been deleted`)
+  const handleDeleteWriter = () => {
+    if (!selectedWriter) return
+    deleteWriterMutation.mutate(selectedWriter._id, {
+    onSuccess: async (res) => {
+      toast.success(`Writer has been deleted successfully`)
+      await query.invalidateQueries({ queryKey: ['writers'] })
+      setDeleteModalOpen(false)
+      setSelectedWriter(null)
+    },
+    onError: (err) => {
+      toast.error(err instanceof Error ? err.message : 'Failed to delete writer')
+      setDeleteModalOpen(false)
+      setSelectedWriter(null)
+    }
+  })
   }
 
-  const handleSubmit = async (data: WriterFormData) => {
-    if (modalMode === 'add') {
-       await fetch('/api/writers/add', {
+  const createWriterMutation = useMutation({
+    mutationFn: async (data: WriterFormData) => {
+      const res = await fetch('/api/writers/add', {
         method: 'POST',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
-          Credentials: 'include'
         },
         body: JSON.stringify({
           username: data.name,
           email: data.email,
           status: data.status,
         }),
-      }).then(async (res) => {
-        if (!res.ok) {
-          throw new Error('Failed to add writer')
+      })
+      if (!res.ok) {
+        throw new Error('Failed to add writer')
+      }
+      return res.json()
+    }
+  })
+
+  const updateWriterMutation = useMutation({
+    mutationFn: async (data: { id: string; name: string; email: string; status: string }) => {
+      const res = await fetch(`/api/writers/${data.id}`, {
+        method: 'PUT',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: data.name,
+          email: data.email,
+          status: data.status
+        }),
+      })
+      if (!res.ok) {
+        throw new Error('Failed to update writer')
+      }
+      return res.json()
+    }
+  })
+
+  const deleteWriterMutation = useMutation({
+    mutationFn: async (id: string) => {
+      const res = await fetch(`/api/writers/${id}`, {
+        method: 'DELETE',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      if (!res.ok) {
+        throw new Error('Failed to delete writer')
+      }
+      return res.json()
+    }
+  })
+
+
+  const handleSubmit = async (data: WriterFormData) => {
+    if (modalMode === 'add') {
+      createWriterMutation.mutate(data, {
+        onSuccess: async (res) => {
+          toast.success(`Writer has been added`)
+          await query.invalidateQueries({ queryKey: ['writers'] })
+        },
+        onError: (err) => {
+          toast.error(err instanceof Error ? err.message : 'Failed to add writer')
         }
-        toast.success(`Writer "${data.name}" has been added`)
-        await query.invalidateQueries({ queryKey: ['writers'] })
-      }) 
+      })
     } else {
-      toast.success(`Writer "${data.name}" has been updated`)
-      await query.invalidateQueries({ queryKey: ['writers'] })
+      updateWriterMutation.mutate({ id: selectedWriter!._id, name: data.name, email: data.email, status: data.status }, {
+        onSuccess: async (res) => {
+          toast.success(`Writer has been updated`)
+          await query.invalidateQueries({ queryKey: ['writers'] })
+        },
+        onError: (err) => {
+          toast.error(err instanceof Error ? err.message : 'Failed to update writer')
+        }
+      })
     }
   }
 
   const handleRowClick = (writer: Writer) => {
-    router.push(`/admin/writers/${writer.id}`)
+    router.push(`/admin/writers/${writer._id}`)
   }
 
   const columns: ColumnDef<Writer>[] = [
@@ -127,13 +198,17 @@ export default function WritersPage() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={(e) => handleEditWriter(writer, e)}>
+              <DropdownMenuItem className='cursor-pointer' onClick={(e) => handleEditWriter(writer, e)}>
                 <Edit className="h-4 w-4 mr-2" />
                 Edit
               </DropdownMenuItem>
               <DropdownMenuItem
-                className="text-destructive"
-                onClick={(e) => handleDeleteWriter(writer, e)}
+                className="text-destructive cursor-pointer"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  setSelectedWriter(writer)
+                  setDeleteModalOpen(true)
+                }}
               >
                 <Trash2 className="h-4 w-4 mr-2" />
                 Delete
@@ -154,7 +229,7 @@ export default function WritersPage() {
             Manage your writers and view their performance.
           </p>
         </div>
-        <Button onClick={handleAddWriter}>
+        <Button onClick={handleAddWriter} className="flex items-center cursor-pointer">
           <Plus className="h-4 w-4 mr-2" />
           Add Writer
         </Button>
@@ -176,6 +251,11 @@ export default function WritersPage() {
         writer={selectedWriter}
         mode={modalMode}
       />
+      <DeleteUserDialog
+        open={deleteModalOpen}
+        onOpenChange={setDeleteModalOpen}
+        handleDelete={handleDeleteWriter}
+       />
     </div>
   )
 }

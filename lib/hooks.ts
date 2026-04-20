@@ -40,7 +40,9 @@ export function useWriters() {
   return useQuery<Writer[]>({
     queryKey: ['writers'],
     queryFn: async () => {
-      const res = await fetch('/api/writers/get')
+      const res = await fetch('/api/writers/get', {
+        credentials: 'include'
+      })
       if (!res.ok) {
         throw new Error('Failed to fetch writers')
       }
@@ -54,7 +56,7 @@ export function useWriter(id: string) {
     queryKey: ['writer', id],
     queryFn: async () => {
       await delay(300)
-      return mockWriters.find((w) => w.id === id)
+      return mockWriters.find((w) => w._id === id)
     },
   })
 }

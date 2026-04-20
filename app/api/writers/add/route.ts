@@ -1,7 +1,7 @@
 import { connectDB } from "@/lib/mongoose";
 import { addWriter } from "@/services/writerService";
 import { cookies } from 'next/headers';
-import jwt from "jsonwebtoken";
+import isAdmin from "../../(guards)/isAdmin";
 
 export async function POST(request: Request) {
     const { username, email, status } = await request.json();
@@ -9,11 +9,8 @@ export async function POST(request: Request) {
     if (!token) {
         return new Response(JSON.stringify({ message: "Unauthorized" }), { status: 401 });
     }
-    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as {
-      userId: string;
-      role: string;
-    };
-    if (decoded.role !== 'admin') {
+    const isUserAdmin = isAdmin(token);
+    if (!isUserAdmin) {
         return new Response(JSON.stringify({ message: "Forbidden" }), { status: 403 });
     }
     await connectDB();

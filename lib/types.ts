@@ -5,7 +5,7 @@ export type OrderStatus = 'pending' | 'assigned' | 'in_progress' | 'revision' | 
 export type PaymentStatus = 'pending' | 'paid' | 'cancelled'
 
 export interface User {
-  id: string
+  _id: string
   username: string
   email: string
   role: UserRole
