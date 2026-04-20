@@ -39,7 +39,7 @@ export async function deleteWriter (id: string) {
     if (!user) {
         throw new Error("User not found");
     }
-    await user.remove();
-     const { password, ...userWithoutPassword } = user.toObject();
-     return userWithoutPassword;
+    await user.deleteOne();
+    const { password, ...userWithoutPassword } = user.toObject();
+    return userWithoutPassword;
 }

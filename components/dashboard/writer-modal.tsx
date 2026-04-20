@@ -151,13 +151,14 @@ export function WriterModal({
             </div>
             <DialogFooter>
               <Button
+                className="cursor-pointer"
                 type="button"
                 variant="outline"
                 onClick={() => onOpenChange(false)}
               >
                 Cancel
               </Button>
-              <Button type="submit" disabled={form.formState.isSubmitting}>
+              <Button type="submit" className="cursor-pointer" disabled={form.formState.isSubmitting}>
                 {form.formState.isSubmitting && <Spinner className="mr-2" />}
                 {mode === 'add' ? 'Add Writer' : 'Save Changes'}
               </Button>

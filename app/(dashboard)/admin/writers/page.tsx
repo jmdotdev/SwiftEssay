@@ -20,6 +20,7 @@ import { useWriters } from '@/lib/hooks'
 import { toast } from 'sonner'
 import type { Writer } from '@/lib/types'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { DeleteUserDialog } from '@/components/dashboard/delete-user-dialog'
 
 export default function WritersPage() {
   const router = useRouter()
@@ -28,6 +29,7 @@ export default function WritersPage() {
   const [modalOpen, setModalOpen] = useState(false)
   const [modalMode, setModalMode] = useState<'add' | 'edit'>('add')
   const [selectedWriter, setSelectedWriter] = useState<Writer | null>(null)
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false)
 
   const handleAddWriter = () => {
     setModalMode('add')
@@ -42,18 +44,30 @@ export default function WritersPage() {
     setModalOpen(true)
   }
 
-  const handleDeleteWriter = (writer: Writer, e: React.MouseEvent) => {
-    e.stopPropagation()
-    toast.success(`Writer "${writer.username}" has been deleted`)
+  const handleDeleteWriter = () => {
+    if (!selectedWriter) return
+    deleteWriterMutation.mutate(selectedWriter._id, {
+    onSuccess: async (res) => {
+      toast.success(`Writer has been deleted successfully`)
+      await query.invalidateQueries({ queryKey: ['writers'] })
+      setDeleteModalOpen(false)
+      setSelectedWriter(null)
+    },
+    onError: (err) => {
+      toast.error(err instanceof Error ? err.message : 'Failed to delete writer')
+      setDeleteModalOpen(false)
+      setSelectedWriter(null)
+    }
+  })
   }
 
   const createWriterMutation = useMutation({
     mutationFn: async (data: WriterFormData) => {
       const res = await fetch('/api/writers/add', {
         method: 'POST',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
-           Credentials: 'include'
         },
         body: JSON.stringify({
           username: data.name,
@@ -72,9 +86,9 @@ export default function WritersPage() {
     mutationFn: async (data: { id: string; name: string; email: string; status: string }) => {
       const res = await fetch(`/api/writers/${data.id}`, {
         method: 'PUT',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
-           Credentials: 'include'
         },
         body: JSON.stringify({
           username: data.name,
@@ -84,6 +98,22 @@ export default function WritersPage() {
       })
       if (!res.ok) {
         throw new Error('Failed to update writer')
+      }
+      return res.json()
+    }
+  })
+
+  const deleteWriterMutation = useMutation({
+    mutationFn: async (id: string) => {
+      const res = await fetch(`/api/writers/${id}`, {
+        method: 'DELETE',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      if (!res.ok) {
+        throw new Error('Failed to delete writer')
       }
       return res.json()
     }
@@ -168,13 +198,17 @@ export default function WritersPage() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={(e) => handleEditWriter(writer, e)}>
+              <DropdownMenuItem className='cursor-pointer' onClick={(e) => handleEditWriter(writer, e)}>
                 <Edit className="h-4 w-4 mr-2" />
                 Edit
               </DropdownMenuItem>
               <DropdownMenuItem
-                className="text-destructive"
-                onClick={(e) => handleDeleteWriter(writer, e)}
+                className="text-destructive cursor-pointer"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  setSelectedWriter(writer)
+                  setDeleteModalOpen(true)
+                }}
               >
                 <Trash2 className="h-4 w-4 mr-2" />
                 Delete
@@ -195,7 +229,7 @@ export default function WritersPage() {
             Manage your writers and view their performance.
           </p>
         </div>
-        <Button onClick={handleAddWriter}>
+        <Button onClick={handleAddWriter} className="flex items-center cursor-pointer">
           <Plus className="h-4 w-4 mr-2" />
           Add Writer
         </Button>
@@ -217,6 +251,11 @@ export default function WritersPage() {
         writer={selectedWriter}
         mode={modalMode}
       />
+      <DeleteUserDialog
+        open={deleteModalOpen}
+        onOpenChange={setDeleteModalOpen}
+        handleDelete={handleDeleteWriter}
+       />
     </div>
   )
 }
