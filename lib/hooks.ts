@@ -81,6 +81,21 @@ export function useOrders() {
   })
 }
 
+export function createOrder(posted_by: string, discipline: string, files: string[], totalPrice: number, price_per_page: number, total_pages: number, deadline: Date) {
+  return fetch('/api/orders/add', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include',
+    body: JSON.stringify({ posted_by, discipline, files, totalPrice, price_per_page, total_pages, deadline }),
+  }).then((res) => {
+    if (!res.ok) {
+      throw new Error('Failed to create order')
+    }
+    return res.json()
+  }
+
 export function useOrder(id: string) {
   return useQuery<Order | undefined>({
     queryKey: ['order', id],

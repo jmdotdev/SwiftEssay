@@ -5,10 +5,13 @@ const StatusEnum = ['unassigned', 'assigned', 'in_progress', 'revision', 'cancel
 const orderSchema = new mongoose.Schema({
     posted_by: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     discipline: { type: String, required: true },
+    deadline: { type: Date, required: true },
     files: [{ type: String, required: true }],
     status: { type: String, enum: StatusEnum, default: 'unassigned' },
     totalPrice: { type: Number, required: true },
     assigned_to: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    price_per_page: { type: Number },   
+    total_pages: { type: Number },
 }, { timestamps: true });
 
 export const Order = mongoose.models.Order || mongoose.model("Order", orderSchema)
