@@ -95,7 +95,8 @@ export function createOrder(posted_by: string, discipline: string, files: string
     }
     return res.json()
   }
-
+  )
+}
 export function useOrder(id: string) {
   return useQuery<Order | undefined>({
     queryKey: ['order', id],
