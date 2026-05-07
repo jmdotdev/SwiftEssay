@@ -58,7 +58,11 @@ export default function CreateOrderPage() {
     defaultValues: {
       title: '',
       description: '',
-      price: 0,
+      discipline: '',
+      totalPrice: 0,
+      price_per_page: 0,
+      total_pages: 0,
+      files: [],
       deadline: '',
     },
   })
@@ -75,7 +79,11 @@ export default function CreateOrderPage() {
       file,
     }))
 
-    setUploadedFiles((prev) => [...prev, ...newFiles])
+    setUploadedFiles((prev) => {
+      const combined = [...prev, ...newFiles]
+      form.setValue('files', combined)
+      return combined
+    })
     
     // Reset input
     if (fileInputRef.current) {
@@ -84,7 +92,11 @@ export default function CreateOrderPage() {
   }
 
   const removeFile = (id: string) => {
-    setUploadedFiles((prev) => prev.filter((f) => f.id !== id))
+    setUploadedFiles((prev) => {
+      const nextFiles = prev.filter((f) => f.id !== id)
+      form.setValue('files', nextFiles)
+      return nextFiles
+    })
   }
 
   const onSubmit = async (data: CreateOrderFormData) => {
@@ -115,7 +127,11 @@ export default function CreateOrderPage() {
       file,
     }))
 
-    setUploadedFiles((prev) => [...prev, ...newFiles])
+    setUploadedFiles((prev) => {
+      const combined = [...prev, ...newFiles]
+      form.setValue('files', combined)
+      return combined
+    })
   }
 
   return (
@@ -161,6 +177,19 @@ export default function CreateOrderPage() {
                   />
                   <FormField
                     control={form.control}
+                    name="discipline"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Discipline</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Enter discipline or subject" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
                     name="description"
                     render={({ field }) => (
                       <FormItem>
@@ -187,32 +216,41 @@ export default function CreateOrderPage() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div
-                    className="border-2 border-dashed rounded-lg p-6 text-center hover:border-primary/50 transition-colors cursor-pointer"
-                    onDragOver={handleDragOver}
-                    onDrop={handleDrop}
-                    onClick={() => fileInputRef.current?.click()}
-                  >
-                    <input
-                      ref={fileInputRef}
-                      type="file"
-                      multiple
-                      className="hidden"
-                      onChange={handleFileChange}
-                      accept=".pdf,.doc,.docx,.txt,.rtf,.odt,.jpg,.jpeg,.png,.gif,.webp"
-                    />
-                    <div className="flex flex-col items-center gap-2">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-muted">
-                        <Upload className="h-6 w-6 text-muted-foreground" />
-                      </div>
-                      <div>
-                        <p className="font-medium">Click to upload or drag and drop</p>
-                        <p className="text-sm text-muted-foreground">
-                          PDF, DOC, DOCX, TXT, or images (max 10MB each)
-                        </p>
-                      </div>
-                    </div>
-                  </div>
+                  <FormField
+                    control={form.control}
+                    name="files"
+                    render={() => (
+                      <FormItem>
+                        <div
+                          className="border-2 border-dashed rounded-lg p-6 text-center hover:border-primary/50 transition-colors cursor-pointer"
+                          onDragOver={handleDragOver}
+                          onDrop={handleDrop}
+                          onClick={() => fileInputRef.current?.click()}
+                        >
+                          <input
+                            ref={fileInputRef}
+                            type="file"
+                            multiple
+                            className="hidden"
+                            onChange={handleFileChange}
+                            accept=".pdf,.doc,.docx,.txt,.rtf,.odt,.jpg,.jpeg,.png,.gif,.webp"
+                          />
+                          <div className="flex flex-col items-center gap-2">
+                            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-muted">
+                              <Upload className="h-6 w-6 text-muted-foreground" />
+                            </div>
+                            <div>
+                              <p className="font-medium">Click to upload or drag and drop</p>
+                              <p className="text-sm text-muted-foreground">
+                                PDF, DOC, DOCX, TXT, or images (max 10MB each)
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
                   {uploadedFiles.length > 0 && (
                     <div className="space-y-2">
@@ -254,16 +292,54 @@ export default function CreateOrderPage() {
                 <CardContent className="space-y-4">
                   <FormField
                     control={form.control}
-                    name="price"
+                    name="totalPrice"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Price ($)</FormLabel>
+                        <FormLabel>Total Price ($)</FormLabel>
                         <FormControl>
                           <Input
                             type="number"
                             min="0"
                             step="0.01"
                             placeholder="0.00"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="price_per_page"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Price per Page ($)</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="number"
+                            min="0"
+                            step="0.01"
+                            placeholder="0.00"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="total_pages"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Total Pages</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="number"
+                            min="0"
+                            step="1"
+                            placeholder="0"
                             {...field}
                           />
                         </FormControl>
