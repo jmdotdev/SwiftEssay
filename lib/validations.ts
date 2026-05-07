@@ -49,7 +49,11 @@ export type WriterFormData = z.infer<typeof writerSchema>
 export const createOrderSchema = z.object({
   title: z.string().min(1, 'Title is required'),
   description: z.string().min(10, 'Description must be at least 10 characters'),
-  price: z.coerce.number().positive('Price must be greater than 0'),
+  discipline: z.string().min(1, 'Discipline is required'),
+  totalPrice: z.coerce.number().positive('Total price must be greater than 0'),
+  price_per_page: z.coerce.number().positive('Price per page must be greater than 0'),
+  total_pages: z.coerce.number().int('Total pages must be a number').positive('Total pages must be greater than 0'),
+  files: z.array(z.any()).min(1, 'At least one file is required'),
   deadline: z.string().min(1, 'Deadline is required'),
 })
 
