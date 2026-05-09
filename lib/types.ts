@@ -1,6 +1,6 @@
 export type UserRole = 'admin' | 'writer'
 
-export type OrderStatus = 'pending' | 'assigned' | 'in_progress' | 'revision' | 'completed' | 'cancelled'
+export type OrderStatus = 'unassigned' | 'assigned' | 'in_progress' | 'revision' | 'completed' | 'cancelled'
 
 export type PaymentStatus = 'pending' | 'paid' | 'cancelled'
 
@@ -23,18 +23,24 @@ export interface Writer extends User {
 }
 
 export interface Order {
-  id: string
+  _id: string
+  id?: string
   title: string
   description: string
   status: OrderStatus
-  price: number
-  deadline: string
+  totalPrice: number
+  price_per_page?: number
+  total_pages?: number
+  deadline: string | Date
+  discipline: string
+  posted_by: User | string
+  assigned_to?: User | string
   assignedWriterId?: string
   assignedWriter?: Writer
+  files: FileAttachment[]
   createdAt: string
   updatedAt: string
   comments?: Comment[]
-  attachments?: FileAttachment[]
 }
 
 export interface Comment {

@@ -38,7 +38,7 @@ export function AssignWriterModal({
   const filteredWriters = writers?.filter(
     (writer) =>
       writer.status === 'active' &&
-      (writer.name.toLowerCase().includes(search.toLowerCase()) ||
+      (writer.username.toLowerCase().includes(search.toLowerCase()) ||
         writer.email.toLowerCase().includes(search.toLowerCase()))
   )
 
@@ -88,23 +88,23 @@ export function AssignWriterModal({
             ) : (
               filteredWriters?.map((writer) => (
                 <button
-                  key={writer.id}
+                  key={writer._id}
                   onClick={() => setSelectedWriter(writer)}
                   className={`w-full flex items-center gap-3 p-3 rounded-lg border transition-colors text-left ${
-                    selectedWriter?.id === writer.id
+                    selectedWriter?._id === writer._id
                       ? 'border-primary bg-primary/5'
                       : 'border-transparent hover:bg-muted'
                   }`}
                 >
                   <Avatar className="h-10 w-10">
                     <AvatarFallback>
-                      {writer.name.split(' ').map((n) => n[0]).join('')}
+                      {writer.username.split(' ').map((n) => n[0]).join('')}
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
-                      <span className="font-medium truncate">{writer.name}</span>
-                      {selectedWriter?.id === writer.id && (
+                      <span className="font-medium truncate">{writer.username}</span>
+                      {selectedWriter?._id === writer._id && (
                         <Check className="h-4 w-4 text-primary" />
                       )}
                     </div>

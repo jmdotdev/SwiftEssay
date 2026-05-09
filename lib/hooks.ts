@@ -75,8 +75,13 @@ export function useOrders() {
   return useQuery<Order[]>({
     queryKey: ['orders'],
     queryFn: async () => {
-      await delay(500)
-      return mockOrders
+      const res = await fetch('/api/orders/get', {
+        credentials: 'include'
+      })
+      if (!res.ok) {
+        throw new Error('Failed to fetch orders')
+      }
+      return res.json()
     },
   })
 }
@@ -101,8 +106,13 @@ export function useOrder(id: string) {
   return useQuery<Order | undefined>({
     queryKey: ['order', id],
     queryFn: async () => {
-      await delay(300)
-      return mockOrders.find((o) => o.id === id)
+      const res = await fetch(`/api/orders/${id}`, {
+        credentials: 'include'
+      })
+      if (!res.ok) {
+        throw new Error('Failed to fetch order')
+      }
+      return res.json()
     },
   })
 }

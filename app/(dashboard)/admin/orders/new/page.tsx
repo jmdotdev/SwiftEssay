@@ -100,11 +100,35 @@ export default function CreateOrderPage() {
   }
 
   const onSubmit = async (data: CreateOrderFormData) => {
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+    const formData = new FormData();
+    formData.append('title', data.title);
+    formData.append('discipline', data.discipline);
+    formData.append('description', data.description);
+    formData.append('totalPrice', data.totalPrice.toString());
+    formData.append('price_per_page', data.price_per_page.toString());
+    formData.append('total_pages', data.total_pages.toString());
+    formData.append('deadline', data.deadline);
 
-    toast.success('Order created successfully')
-    router.push('/admin/orders')
+    data.files.forEach((file: any) => {
+      formData.append('files', file.file);
+    });
+
+    try {
+      const response = await fetch('/api/orders/create', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (response.ok) {
+        toast.success('Order created successfully');
+        router.push('/admin/orders');
+      } else {
+        const error = await response.json();
+        toast.error(error.message || 'Failed to create order');
+      }
+    } catch (error) {
+      toast.error('An error occurred while creating the order');
+    }
   }
 
   const handleDragOver = (e: React.DragEvent) => {

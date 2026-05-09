@@ -8,6 +8,10 @@ interface StatusBadgeProps {
 }
 
 const statusConfig: Record<string, { label: string; className: string }> = {
+  unassigned: {
+    label: 'Unassigned',
+    className: 'bg-gray-100 text-gray-800 border-gray-200',
+  },
   pending: {
     label: 'Pending',
     className: 'bg-amber-100 text-amber-800 border-amber-200',
