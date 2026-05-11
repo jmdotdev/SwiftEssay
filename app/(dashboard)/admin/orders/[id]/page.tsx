@@ -44,7 +44,7 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
   const [commentModalOpen, setCommentModalOpen] = useState(false)
 
   const handleAssign = (writer: Writer) => {
-    toast.success(`Assigned ${writer.name} to this order`)
+    toast.success(`Assigned ${writer.username} to this order`)
   }
 
   const handleAddComment = (comment: string) => {
@@ -92,18 +92,18 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
         </Link>
       </Button>
 
-      <div className="flex items-start justify-between">
+        <div className="flex items-start justify-between">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">{order.title}</h1>
           <div className="flex items-center gap-3 mt-2">
             <StatusBadge status={order.status} />
             <span className="text-sm text-muted-foreground">
-              Order #{order.id}
+              Order #{order._id}
             </span>
           </div>
         </div>
         <div className="flex gap-2">
-          {!order.assignedWriterId && (
+          {!order.assigned_to && (
             <Button onClick={() => setAssignModalOpen(true)}>
               <UserPlus className="h-4 w-4 mr-2" />
               Assign Writer
@@ -136,7 +136,7 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
                   </div>
                   <div>
                     <div className="text-sm text-muted-foreground">Price</div>
-                    <div className="font-semibold">${order.price}</div>
+                    <div className="font-semibold">${order.totalPrice}</div>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
@@ -202,24 +202,26 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
               <CardTitle>Assigned Writer</CardTitle>
             </CardHeader>
             <CardContent>
-              {order.assignedWriter ? (
+              {order.assigned_to ? (
                 <div className="flex items-center gap-3">
                   <Avatar className="h-12 w-12">
                     <AvatarFallback>
-                      {order.assignedWriter.name.split(' ').map((n) => n[0]).join('')}
+                      {typeof order.assigned_to === 'string' 
+                        ? 'AW' 
+                        : (order.assigned_to.username || 'AW').split(' ').map((n) => n[0]).join('').toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
                   <div>
-                    <div className="font-medium">{order.assignedWriter.name}</div>
-                    <div className="text-sm text-muted-foreground">
-                      {order.assignedWriter.email}
+                    <div className="font-medium">
+                      {typeof order.assigned_to === 'string' 
+                        ? order.assigned_to 
+                        : order.assigned_to.username}
                     </div>
-                    <Link
-                      href={`/admin/writers/${order.assignedWriter.id}`}
-                      className="text-sm text-primary hover:underline"
-                    >
-                      View Profile
-                    </Link>
+                    <div className="text-sm text-muted-foreground">
+                      {typeof order.assigned_to === 'string' 
+                        ? 'Writer' 
+                        : order.assigned_to.email}
+                    </div>
                   </div>
                 </div>
               ) : (
@@ -247,21 +249,28 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              {order.attachments && order.attachments.length > 0 ? (
+              {order.files && order.files.length > 0 ? (
                 <div className="space-y-2">
-                  {order.attachments.map((file) => (
+                  {order.files.map((file, idx) => (
                     <div
-                      key={file.id}
+                      key={idx}
                       className="flex items-center gap-3 p-3 rounded-lg border bg-muted/50"
                     >
-                      {getFileIcon(file.type)}
+                      <FileText className="h-5 w-5 text-blue-500" />
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium truncate">{file.name}</p>
-                        <p className="text-xs text-muted-foreground">
-                          {formatFileSize(file.size)}
+                        <p className="text-sm font-medium truncate">
+                          {typeof file === 'string' ? file.split('/').pop() : file.url.split('/').pop()}
                         </p>
                       </div>
-                      <Button variant="ghost" size="icon" className="h-8 w-8 shrink-0">
+                      <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        className="h-8 w-8 shrink-0"
+                        onClick={() => {
+                          const fileUrl = typeof file === 'string' ? file : file.url
+                          window.open(fileUrl, '_blank')
+                        }}
+                      >
                         <Download className="h-4 w-4" />
                         <span className="sr-only">Download</span>
                       </Button>

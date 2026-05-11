@@ -34,28 +34,29 @@ const columns: ColumnDef<Order>[] = [
     cell: ({ row }) => <StatusBadge status={row.original.status} />,
   },
   {
-    accessorKey: 'price',
+    accessorKey: 'totalPrice',
     header: 'Price',
     cell: ({ row }) => (
-      <span className="font-medium">${row.original.price}</span>
+      <span className="font-medium">${row.original.totalPrice}</span>
     ),
   },
   {
-    accessorKey: 'assignedWriter',
+    accessorKey: 'assigned_to',
     header: 'Assigned Writer',
     cell: ({ row }) => {
-      const writer = row.original.assignedWriter
+      const writer = row.original.assigned_to
       if (!writer) {
         return <span className="text-muted-foreground">Unassigned</span>
       }
+      const username = typeof writer === 'string' ? writer : (writer.username || 'Unknown')
       return (
         <div className="flex items-center gap-2">
           <Avatar className="h-6 w-6">
             <AvatarFallback className="text-xs">
-              {writer.name.split(' ').map((n) => n[0]).join('')}
+              {username.split(' ').map((n) => n[0]).join('').toUpperCase()}
             </AvatarFallback>
           </Avatar>
-          <span>{writer.name}</span>
+          <span>{username}</span>
         </div>
       )
     },
@@ -83,7 +84,7 @@ const columns: ColumnDef<Order>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            {!order.assignedWriterId && (
+            {!order.assigned_to && (
               <>
                 <DropdownMenuItem>
                   <UserPlus className="h-4 w-4 mr-2" />
@@ -112,7 +113,7 @@ export default function OrdersPage() {
   const { data: orders, isLoading } = useOrders()
 
   const handleRowClick = (order: Order) => {
-    router.push(`/admin/orders/${order.id}`)
+    router.push(`/admin/orders/${order._id}`)
   }
 
   return (
