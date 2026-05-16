@@ -31,19 +31,24 @@ export async function POST(request: Request) {
     console.log("Creating order with user.userId:", user.userId);
 
     // Upload files to Cloudinary
-    const uploadedFiles: { url: string; public_id: string }[] = [];
+    const uploadedFiles: { url: string; public_id: string; name: string }[] = [];
     for (const file of files) {
       const buffer = await file.arrayBuffer();
+      const resourceType = file.type.startsWith('image/') ? 'image' : 'raw';
       const result = await new Promise<any>((resolve, reject) => {
         cloudinary.uploader.upload_stream(
-          { resource_type: 'auto', folder: 'orders' },
+          { resource_type: resourceType, folder: 'orders' },
           (error: any, result: any) => {
             if (error) reject(error);
             else resolve(result);
           }
         ).end(Buffer.from(buffer));
       });
-      uploadedFiles.push({ url: (result as any).secure_url, public_id: (result as any).public_id });
+      uploadedFiles.push({
+        url: (result as any).secure_url,
+        public_id: (result as any).public_id,
+        name: file.name,
+      });
     }
 
     const order = await createOrder(user.userId, discipline, uploadedFiles, totalPrice, price_per_page, total_pages, new Date(deadline), title, description);

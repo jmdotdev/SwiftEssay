@@ -33,6 +33,53 @@ function getFileIcon(type: string) {
   return <File className="h-5 w-5 text-muted-foreground" />
 }
 
+function getDownloadUrl(url: string) {
+  if (/\.(pdf|docx?|txt|rtf|odt)$/i.test(url) && url.includes('/image/upload/')) {
+    return url.replace('/image/upload/', '/raw/upload/')
+  }
+  return url
+}
+
+function getDownloadFilename(url: string) {
+  const filename = url.split('/').pop() || 'download'
+  if (/\.[a-z0-9]+$/i.test(filename)) {
+    return filename
+  }
+
+  if (/pdf/i.test(url)) {
+    return `${filename}.pdf`
+  }
+  if (/docx?/i.test(url)) {
+    return `${filename}.doc`
+  }
+  if (/txt/i.test(url)) {
+    return `${filename}.txt`
+  }
+  return `${filename}.pdf`
+}
+
+async function downloadFile(url: string, filename: string) {
+  try {
+    const response = await fetch(getDownloadUrl(url))
+    if (!response.ok) {
+      throw new Error(`Download failed: ${response.status}`)
+    }
+
+    const blob = await response.blob()
+    const objectUrl = URL.createObjectURL(blob)
+    const anchor = document.createElement('a')
+    anchor.href = objectUrl
+    anchor.download = filename
+    document.body.appendChild(anchor)
+    anchor.click()
+    anchor.remove()
+    URL.revokeObjectURL(objectUrl)
+  } catch (error) {
+    console.error('Download error:', error)
+    toast.error('Could not download file. Please try again.')
+  }
+}
+
 interface OrderDetailsPageProps {
   params: Promise<{ id: string }>
 }
@@ -259,17 +306,14 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
                       <FileText className="h-5 w-5 text-blue-500" />
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium truncate">
-                          {typeof file === 'string' ? file.split('/').pop() : file.url.split('/').pop()}
+                          {file.name || file.url.split('/').pop()}
                         </p>
                       </div>
-                      <Button 
-                        variant="ghost" 
-                        size="icon" 
+                      <Button
+                        variant="ghost"
+                        size="icon"
                         className="h-8 w-8 shrink-0"
-                        onClick={() => {
-                          const fileUrl = typeof file === 'string' ? file : file.url
-                          window.open(fileUrl, '_blank')
-                        }}
+                        onClick={() => downloadFile(file.url, file.name || getDownloadFilename(file.url))}
                       >
                         <Download className="h-4 w-4" />
                         <span className="sr-only">Download</span>
