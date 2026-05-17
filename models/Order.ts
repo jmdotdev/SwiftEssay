@@ -11,7 +11,8 @@ const orderSchema = new mongoose.Schema({
     deadline: { type: Date, required: true },
     files: [{
         url: { type: String, required: true },
-        public_id: { type: String, required: true }
+        public_id: { type: String, required: true },
+        name: { type: String, required: true }
     }],
     status: { type: String, enum: StatusEnum, default: 'unassigned' },
     totalPrice: { type: Number, required: true },
