@@ -16,6 +16,7 @@ import { Badge } from '@/components/ui/badge'
 import { Search, Check } from 'lucide-react'
 import { useWriters } from '@/lib/hooks'
 import { Skeleton } from '@/components/ui/skeleton'
+import { toast } from 'sonner'
 import type { Writer } from '@/lib/types'
 
 interface AssignWriterModalProps {
@@ -41,6 +42,16 @@ export function AssignWriterModal({
       (writer.username.toLowerCase().includes(search.toLowerCase()) ||
         writer.email.toLowerCase().includes(search.toLowerCase()))
   )
+
+  const handleWriterSelection = (writer: Writer) => {
+    const hasActiveOrder = writer.activeOrderCount && writer.activeOrderCount > 0
+    if (hasActiveOrder) {
+      toast.warning(`${writer.username} already has an active order and cannot be assigned another one.`)
+      return
+    }
+
+    setSelectedWriter(writer)
+  }
 
   const handleAssign = () => {
     if (selectedWriter) {
@@ -86,37 +97,44 @@ export function AssignWriterModal({
                 No writers found
               </p>
             ) : (
-              filteredWriters?.map((writer) => (
-                <button
-                  key={writer._id}
-                  onClick={() => setSelectedWriter(writer)}
-                  className={`w-full flex items-center gap-3 p-3 rounded-lg border transition-colors text-left ${
-                    selectedWriter?._id === writer._id
-                      ? 'border-primary bg-primary/5'
-                      : 'border-transparent hover:bg-muted'
-                  }`}
-                >
-                  <Avatar className="h-10 w-10">
-                    <AvatarFallback>
-                      {writer.username.split(' ').map((n) => n[0]).join('')}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
-                      <span className="font-medium truncate">{writer.username}</span>
-                      {selectedWriter?._id === writer._id && (
-                        <Check className="h-4 w-4 text-primary" />
-                      )}
+              filteredWriters?.map((writer) => {
+                const hasActiveOrder = writer.activeOrderCount && writer.activeOrderCount > 0
+                return (
+                  <button
+                    key={writer._id}
+                    onClick={() => handleWriterSelection(writer)}
+                    className={`w-full flex items-center gap-3 p-3 rounded-lg border transition-colors text-left ${
+                      selectedWriter?._id === writer._id
+                        ? 'border-primary bg-primary/5'
+                        : 'border-transparent hover:bg-muted'
+                    } ${hasActiveOrder ? 'cursor-not-allowed opacity-80' : ''}`}
+                  >
+                    <Avatar className="h-10 w-10">
+                      <AvatarFallback>
+                        {writer.username.split(' ').map((n) => n[0]).join('')}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2">
+                        <span className="font-medium truncate">{writer.username}</span>
+                        {selectedWriter?._id === writer._id && (
+                          <Check className="h-4 w-4 text-primary" />
+                        )}
+                      </div>
+                      <p className="text-sm text-muted-foreground truncate">
+                        {writer.email}
+                      </p>
                     </div>
-                    <p className="text-sm text-muted-foreground truncate">
-                      {writer.email}
-                    </p>
-                  </div>
-                  <Badge variant="secondary" className="shrink-0">
-                    {writer.tasksCompleted} completed
-                  </Badge>
-                </button>
-              ))
+                    <Badge variant={hasActiveOrder ? 'destructive' : 'secondary'} className="shrink-0">
+                      {hasActiveOrder
+                        ? `${writer.activeOrderCount} active order`
+                        : writer.tasksCompleted !== undefined
+                        ? `${writer.tasksCompleted} completed`
+                        : 'Available'}
+                    </Badge>
+                  </button>
+                )
+              })
             )}
           </div>
         </div>

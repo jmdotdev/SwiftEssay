@@ -12,6 +12,7 @@ import { AssignWriterModal } from '@/components/dashboard/assign-writer-modal'
 import { AddCommentModal } from '@/components/dashboard/add-comment-modal'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useOrder } from '@/lib/hooks'
+import { useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import type { Writer } from '@/lib/types'
 
@@ -89,9 +90,29 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
   const { data: order, isLoading } = useOrder(id)
   const [assignModalOpen, setAssignModalOpen] = useState(false)
   const [commentModalOpen, setCommentModalOpen] = useState(false)
+  const queryClient = useQueryClient()
 
-  const handleAssign = (writer: Writer) => {
-    toast.success(`Assigned ${writer.username} to this order`)
+  const handleAssign = async (writer: Writer) => {
+    try {
+      const response = await fetch(`/api/orders/${id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ writerId: writer._id }),
+      })
+
+      const result = await response.json()
+      if (!response.ok) {
+        throw new Error(result?.message || 'Failed to assign writer')
+      }
+
+      toast.success(`Assigned ${writer.username} to this order`)
+      queryClient.invalidateQueries({ queryKey: ['order', id] })
+      queryClient.invalidateQueries({ queryKey: ['orders'] })
+    } catch (error: any) {
+      toast.error(error.message || 'Error assigning writer')
+    }
   }
 
   const handleAddComment = (comment: string) => {
@@ -150,12 +171,10 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
           </div>
         </div>
         <div className="flex gap-2">
-          {!order.assigned_to && (
-            <Button onClick={() => setAssignModalOpen(true)}>
-              <UserPlus className="h-4 w-4 mr-2" />
-              Assign Writer
-            </Button>
-          )}
+          <Button onClick={() => setAssignModalOpen(true)}>
+            <UserPlus className="h-4 w-4 mr-2" />
+            {order.assigned_to ? 'Reassign Writer' : 'Assign Writer'}
+          </Button>
           <Button variant="outline" onClick={() => setCommentModalOpen(true)}>
             <MessageSquare className="h-4 w-4 mr-2" />
             Add Comment
@@ -250,27 +269,32 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
             </CardHeader>
             <CardContent>
               {order.assigned_to ? (
-                <div className="flex items-center gap-3">
-                  <Avatar className="h-12 w-12">
-                    <AvatarFallback>
-                      {typeof order.assigned_to === 'string' 
-                        ? 'AW' 
-                        : (order.assigned_to.username || 'AW').split(' ').map((n) => n[0]).join('').toUpperCase()}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <div className="font-medium">
-                      {typeof order.assigned_to === 'string' 
-                        ? order.assigned_to 
-                        : order.assigned_to.username}
-                    </div>
-                    <div className="text-sm text-muted-foreground">
-                      {typeof order.assigned_to === 'string' 
-                        ? 'Writer' 
-                        : order.assigned_to.email}
+                <>
+                  <div className="flex items-center gap-3">
+                    <Avatar className="h-12 w-12">
+                      <AvatarFallback>
+                        {typeof order.assigned_to === 'string' 
+                          ? 'AW' 
+                          : (order.assigned_to.username || 'AW').split(' ').map((n) => n[0]).join('').toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <div className="font-medium">
+                        {typeof order.assigned_to === 'string' 
+                          ? order.assigned_to 
+                          : order.assigned_to.username}
+                      </div>
+                      <div className="text-sm text-muted-foreground">
+                        {typeof order.assigned_to === 'string' 
+                          ? 'Writer' 
+                          : order.assigned_to.email}
+                      </div>
                     </div>
                   </div>
-                </div>
+                  <Button size="sm" className="mt-4" onClick={() => setAssignModalOpen(true)}>
+                    Reassign Writer
+                  </Button>
+                </>
               ) : (
                 <div className="text-center py-4">
                   <div className="flex h-12 w-12 items-center justify-center rounded-full bg-muted mx-auto mb-3">
