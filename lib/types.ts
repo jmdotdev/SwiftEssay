@@ -20,6 +20,8 @@ export interface Writer extends User {
   pendingTasks: number
   inRevision: number
   currentActiveTask?: string
+  activeOrderCount?: number
+  hasActiveOrder?: boolean
 }
 
 export interface Order {

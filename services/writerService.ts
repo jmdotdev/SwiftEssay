@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
 import { User } from "../models/User";
+import { Order } from "@/models/Order";
+import { connectDB } from "@/lib/mongoose";
 import bycrypt from "bcryptjs";
 
 export async function addWriter( username: string, email: string, status: string) {
@@ -16,8 +18,32 @@ export async function addWriter( username: string, email: string, status: string
 }
 
 export async function getWriters() {
-    const writers = await User.find({ role: "writer" }).select("-password");
-    return writers;
+    await connectDB();
+
+    const writers = await User.find({ role: "writer" }).select("-password").lean();
+    const activeAssignments = await Order.aggregate([
+        {
+            $match: {
+                status: { $in: ["assigned", "in_progress"] },
+                assigned_to: { $exists: true, $ne: null },
+            },
+        },
+        {
+            $group: {
+                _id: "$assigned_to",
+                count: { $sum: 1 },
+            },
+        },
+    ]);
+    const activeMap = new Map<string, number>(
+        activeAssignments.map((group) => [group._id.toString(), group.count])
+    );
+
+    return writers.map((writer) => ({
+        ...writer,
+        activeOrderCount: activeMap.get(writer._id.toString()) ?? 0,
+        hasActiveOrder: (activeMap.get(writer._id.toString()) ?? 0) > 0,
+    }));
 }
 
 export async function updateWriter(id: string, username: string, email: string, status: string) {
