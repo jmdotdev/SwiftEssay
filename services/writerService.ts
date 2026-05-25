@@ -65,7 +65,41 @@ export async function deleteWriter (id: string) {
     if (!user) {
         throw new Error("User not found");
     }
+
+    // check if writer has any assigned orders in active states
+    const assignedOrder = await Order.findOne({ assigned_to: user._id, status: { $in: ['assigned', 'in_progress'] } });
+    if (assignedOrder) {
+        throw new Error('Writer cannot be deleted because they are assigned to an active order');
+    }
+
     await user.deleteOne();
     const { password, ...userWithoutPassword } = user.toObject();
     return userWithoutPassword;
+}
+
+export async function getWriterById(id: string) {
+    await connectDB();
+    const user = await User.findById(id).select('-password').lean();
+    if (!user) {
+        throw new Error('Writer not found');
+    }
+
+    // compute simple metrics for the writer
+    const completedCount = await Order.countDocuments({ assigned_to: user._id, status: 'completed' });
+    const pendingCount = await Order.countDocuments({ assigned_to: user._id, status: 'pending' });
+    const inRevisionCount = await Order.countDocuments({ assigned_to: user._id, status: 'revision' });
+    const activeOrder = await Order.findOne({ assigned_to: user._id, status: { $in: ['assigned', 'in_progress'] } }).lean();
+
+    return {
+        _id: user._id,
+        username: user.username,
+        name: (user.username as string) || '',
+        email: user.email,
+        status: user.status,
+        createdAt: user.createdAt,
+        tasksCompleted: completedCount,
+        pendingTasks: pendingCount,
+        inRevision: inRevisionCount,
+        currentActiveTask: activeOrder ? (activeOrder.title || null) : null,
+    };
 }

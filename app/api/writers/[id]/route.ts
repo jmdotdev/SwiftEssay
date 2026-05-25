@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers';
 import isAdmin from '../../(guards)/isAdmin';
 import { connectDB } from "@/lib/mongoose";
-import { deleteWriter, updateWriter } from "@/services/writerService";
+import { deleteWriter, updateWriter, getWriterById } from "@/services/writerService";
 
 export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
@@ -44,6 +44,32 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
         const user = await deleteWriter(id);
         return Response.json({ message: "Writer deleted successfully", user });
     } catch (error: any) {
-        return new Response(JSON.stringify(error), { status: 400 });
+        const msg = error?.message || 'Error deleting writer';
+        const status = msg.toLowerCase().includes('assigned') ? 409 : 400;
+        return new Response(JSON.stringify({ message: msg }), { status });
+    }
+}
+
+export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
+    const { id } = await params;
+    if (!id) {
+        return new Response(JSON.stringify({ message: "Writer ID is required" }), { status: 400 });
+    }
+    const token = (await cookies()).get('token')?.value;
+    if (!token) {
+        return new Response(JSON.stringify({ message: "Unauthorized" }), { status: 401 });
+    }
+    const isUserAdmin = isAdmin(token);
+    if (!isUserAdmin) {
+        return new Response(JSON.stringify({ message: "Forbidden" }), { status: 403 });
+    }
+    await connectDB();
+    try {
+        const writer = await getWriterById(id);
+        return Response.json(writer);
+    } catch (error: any) {
+        const msg = error?.message || 'Error fetching writer';
+        const status = msg.toLowerCase().includes('not found') ? 404 : 400;
+        return new Response(JSON.stringify({ message: msg }), { status });
     }
 }

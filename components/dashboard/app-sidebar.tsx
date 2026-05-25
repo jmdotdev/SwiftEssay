@@ -109,7 +109,11 @@ export function AppSidebar({ role }: AppSidebarProps) {
                 <SidebarMenuItem key={item.href}>
                   <SidebarMenuButton
                     asChild
-                    isActive={pathname === item.href || pathname.startsWith(item.href + '/')}
+                    isActive={
+                      item.href === '/admin'
+                        ? pathname === item.href
+                        : pathname === item.href || pathname.startsWith(item.href + '/')
+                    }
                     tooltip={item.title}
                   >
                     <Link href={item.href}>

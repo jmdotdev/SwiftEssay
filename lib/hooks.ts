@@ -52,11 +52,15 @@ export function useWriters() {
 }
 
 export function useWriter(id: string) {
-  return useQuery<Writer | undefined>({
+  return useQuery<Writer | null>({
     queryKey: ['writer', id],
     queryFn: async () => {
-      await delay(300)
-      return mockWriters.find((w) => w._id === id)
+      const res = await fetch(`/api/writers/${id}`, { credentials: 'include' })
+      if (!res.ok) {
+        if (res.status === 404) return null
+        throw new Error('Failed to fetch writer')
+      }
+      return res.json()
     },
   })
 }
@@ -65,8 +69,11 @@ export function useWriterOrders(writerId: string) {
   return useQuery<Order[]>({
     queryKey: ['writer-orders', writerId],
     queryFn: async () => {
-      await delay(400)
-      return mockOrders.filter((o) => o.assignedWriterId === writerId)
+      const res = await fetch(`/api/writers/${writerId}/orders`, { credentials: 'include' })
+      if (!res.ok) {
+        throw new Error('Failed to fetch writer orders')
+      }
+      return res.json()
     },
   })
 }
@@ -122,7 +129,10 @@ export function useAvailableOrders() {
     queryKey: ['available-orders'],
     queryFn: async () => {
       await delay(400)
-      return mockOrders.filter((o) => o.status === 'pending' && !o.assignedWriterId)
+      return mockOrders.filter((o) => {
+        const s = o.status as unknown as string
+        return (['pending', 'unassigned'] as string[]).includes(s) && !o.assignedWriterId
+      })
     },
   })
 }

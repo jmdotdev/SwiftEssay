@@ -222,3 +222,58 @@ export async function PUT(
     return new Response(JSON.stringify({ message: "Error updating order", error: error.message }), { status: 400 });
   }
 }
+
+export async function DELETE(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params;
+  const cookieStore = await cookies();
+  const token = cookieStore.get("token")?.value;
+  const user = isAdmin(token as string);
+
+  if (!token || !user) {
+    return new Response(JSON.stringify({ message: "Unauthorized" }), { status: 401 });
+  }
+
+  try {
+    await connectDB();
+
+    const order = await Order.findById(id);
+    if (!order) {
+      return new Response(JSON.stringify({ message: "Order not found" }), { status: 404 });
+    }
+
+    // Prevent deleting orders that are assigned to a writer
+    if (order.assigned_to) {
+      return new Response(JSON.stringify({ message: "Cannot delete order while it is assigned to a writer. Unassign the writer first." }), { status: 409 });
+    }
+
+    const files = order.files || [];
+    for (const file of files) {
+      if (!file?.public_id) continue;
+      const resourceType = typeof file.url === 'string' && file.url.includes('/raw/upload/') ? 'raw' : 'image';
+      try {
+        await new Promise<void>((resolve, reject) => {
+          cloudinary.uploader.destroy(
+            file.public_id,
+            { resource_type: resourceType },
+            (error: any) => {
+              if (error) reject(error);
+              else resolve();
+            }
+          );
+        });
+      } catch (err) {
+        console.error(`Failed to delete Cloudinary file ${file.public_id}:`, err);
+      }
+    }
+
+    await Order.findByIdAndDelete(id);
+
+    return Response.json({ message: "Order deleted successfully" });
+  } catch (error: any) {
+    console.error("Error deleting order:", error);
+    return new Response(JSON.stringify({ message: "Error deleting order", error: error.message }), { status: 400 });
+  }
+}
