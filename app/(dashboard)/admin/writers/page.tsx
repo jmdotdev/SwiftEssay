@@ -20,7 +20,7 @@ import { useWriters } from '@/lib/hooks'
 import { toast } from 'sonner'
 import type { Writer } from '@/lib/types'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { DeleteUserDialog } from '@/components/dashboard/delete-user-dialog'
+import { DeleteDialog } from '@/components/dashboard/delete-dialog'
 
 export default function WritersPage() {
   const router = useRouter()
@@ -112,10 +112,11 @@ export default function WritersPage() {
           'Content-Type': 'application/json',
         },
       })
+      const json = await res.json().catch(() => null)
       if (!res.ok) {
-        throw new Error('Failed to delete writer')
+        throw new Error(json?.message || 'Failed to delete writer')
       }
-      return res.json()
+      return json
     }
   })
 
@@ -251,11 +252,18 @@ export default function WritersPage() {
         writer={selectedWriter}
         mode={modalMode}
       />
-      <DeleteUserDialog
+      <DeleteDialog
         open={deleteModalOpen}
         onOpenChange={setDeleteModalOpen}
-        handleDelete={handleDeleteWriter}
-       />
+        onConfirm={handleDeleteWriter}
+        title="Delete Writer"
+        message={
+          selectedWriter
+            ? `Are you sure you want to delete ${selectedWriter.username}? This action cannot be undone.`
+            : 'Are you sure you want to delete this writer? This action cannot be undone.'
+        }
+        confirmText="Delete Writer"
+      />
     </div>
   )
 }

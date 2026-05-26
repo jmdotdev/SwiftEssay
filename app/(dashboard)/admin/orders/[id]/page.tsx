@@ -1,8 +1,9 @@
 'use client'
 
 import { use, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft, Calendar, DollarSign, User, MessageSquare, UserPlus, Paperclip, FileText, Image, File, Download } from 'lucide-react'
+import { ArrowLeft, Calendar, DollarSign, User, MessageSquare, UserPlus, Paperclip, FileText, Image, File, Download, Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -12,8 +13,9 @@ import { AssignWriterModal } from '@/components/dashboard/assign-writer-modal'
 import { AddCommentModal } from '@/components/dashboard/add-comment-modal'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useOrder } from '@/lib/hooks'
-import { useQueryClient } from '@tanstack/react-query'
+import { useQueryClient, useMutation } from '@tanstack/react-query'
 import { toast } from 'sonner'
+import { DeleteDialog } from '@/components/dashboard/delete-dialog'
 import type { Writer } from '@/lib/types'
 
 function formatFileSize(bytes: number): string {
@@ -88,9 +90,25 @@ interface OrderDetailsPageProps {
 export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
   const { id } = use(params)
   const { data: order, isLoading } = useOrder(id)
+  const router = useRouter()
   const [assignModalOpen, setAssignModalOpen] = useState(false)
   const [commentModalOpen, setCommentModalOpen] = useState(false)
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false)
   const queryClient = useQueryClient()
+
+  const deleteOrderMutation = useMutation({
+    mutationFn: async () => {
+      const res = await fetch(`/api/orders/${id}`, {
+        method: 'DELETE',
+        credentials: 'include',
+      })
+      if (!res.ok) {
+        const json = await res.json().catch(() => null)
+        throw new Error(json?.message || 'Failed to delete order')
+      }
+      return res.json()
+    },
+  })
 
   const handleAssign = async (writer: Writer) => {
     try {
@@ -174,6 +192,10 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
           <Button onClick={() => setAssignModalOpen(true)}>
             <UserPlus className="h-4 w-4 mr-2" />
             {order.assigned_to ? 'Reassign Writer' : 'Assign Writer'}
+          </Button>
+          <Button variant="destructive" onClick={() => setDeleteModalOpen(true)}>
+            <Trash2 className="h-4 w-4 mr-2" />
+            Delete Order
           </Button>
           <Button variant="outline" onClick={() => setCommentModalOpen(true)}>
             <MessageSquare className="h-4 w-4 mr-2" />
@@ -391,6 +413,28 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
         onOpenChange={setCommentModalOpen}
         onSubmit={handleAddComment}
         orderTitle={order.title}
+      />
+      <DeleteDialog
+        open={deleteModalOpen}
+        onOpenChange={setDeleteModalOpen}
+        onConfirm={async () => {
+          deleteOrderMutation.mutate(undefined, {
+            onSuccess: async () => {
+              toast.success('Order deleted successfully')
+              await queryClient.invalidateQueries({ queryKey: ['orders'] })
+              await queryClient.invalidateQueries({ queryKey: ['order', id] })
+              setDeleteModalOpen(false)
+              router.push('/admin/orders')
+            },
+            onError: (err) => {
+              toast.error(err instanceof Error ? err.message : 'Failed to delete order')
+              setDeleteModalOpen(false)
+            },
+          })
+        }}
+        title="Delete Order"
+        message={`Are you sure you want to delete order “${order.title}”? This will remove the order and its uploaded files from Cloudinary and cannot be undone.`}
+        confirmText="Delete Order"
       />
     </div>
   )

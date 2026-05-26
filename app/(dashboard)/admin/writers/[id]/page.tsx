@@ -31,10 +31,10 @@ const columns: ColumnDef<Order>[] = [
     cell: ({ row }) => <StatusBadge status={row.original.status} />,
   },
   {
-    accessorKey: 'price',
+    accessorKey: 'totalPrice',
     header: 'Price',
     cell: ({ row }) => (
-      <span className="font-medium">${row.original.price}</span>
+      <span className="font-medium">${(row.original as any).totalPrice ?? (row.original as any).price}</span>
     ),
   },
   {
@@ -97,7 +97,8 @@ export default function WriterProfilePage({ params }: WriterProfilePageProps) {
   }
 
   const handleRowClick = (order: Order) => {
-    router.push(`/admin/orders/${order.id}`)
+    const orderId = (order as any)._id ?? (order as any).id
+    if (orderId) router.push(`/admin/orders/${orderId}`)
   }
 
   return (
