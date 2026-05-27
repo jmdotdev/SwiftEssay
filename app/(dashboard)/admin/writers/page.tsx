@@ -186,6 +186,34 @@ export default function WritersPage() {
       ),
     },
     {
+      accessorKey: 'pendingTasks',
+      header: 'Pending Tasks',
+      cell: ({ row }) => (
+        <span className="font-medium">{row.original.pendingTasks}</span>
+      ),
+    },
+    {
+      accessorKey: 'activeOrderCount',
+      header: 'Active Tasks',
+      cell: ({ row }) => (
+        <span className="font-medium">{row.original.activeOrderCount}</span>
+      ),
+    },
+    {
+      accessorKey: 'inRevision',
+      header: 'In Revision',
+      cell: ({ row }) => (
+        <span className="font-medium">{row.original.inRevision}</span>
+      ),
+    },
+    {
+      accessorKey: 'canceledTasks',
+      header: 'Canceled Tasks',
+      cell: ({ row }) => (
+        <span className="font-medium">{row.original.canceledTasks ?? 0}</span>
+      ),
+    },
+    {
       id: 'actions',
       header: '',
       cell: ({ row }) => {

@@ -19,6 +19,7 @@ export interface Writer extends User {
   tasksCompleted: number
   pendingTasks: number
   inRevision: number
+  canceledTasks?: number
   currentActiveTask?: string
   activeOrderCount?: number
   hasActiveOrder?: boolean

@@ -21,29 +21,60 @@ export async function getWriters() {
     await connectDB();
 
     const writers = await User.find({ role: "writer" }).select("-password").lean();
-    const activeAssignments = await Order.aggregate([
+
+    // Aggregate order counts per writer for different statuses
+    const stats = await Order.aggregate([
         {
             $match: {
-                status: { $in: ["assigned", "in_progress"] },
                 assigned_to: { $exists: true, $ne: null },
             },
         },
         {
             $group: {
                 _id: "$assigned_to",
-                count: { $sum: 1 },
+                completed: {
+                    $sum: {
+                        $cond: [{ $eq: ["$status", "completed"] }, 1, 0],
+                    },
+                },
+                pending: {
+                    $sum: {
+                        $cond: [{ $eq: ["$status", "pending"] }, 1, 0],
+                    },
+                },
+                inRevision: {
+                    $sum: {
+                        $cond: [{ $eq: ["$status", "revision"] }, 1, 0],
+                    },
+                },
+                cancelled: {
+                    $sum: {
+                        $cond: [{ $eq: ["$status", "cancelled"] }, 1, 0],
+                    },
+                },
+                activeCount: {
+                    $sum: {
+                        $cond: [{ $in: ["$status", ["assigned", "in_progress"]] }, 1, 0],
+                    },
+                },
             },
         },
     ]);
-    const activeMap = new Map<string, number>(
-        activeAssignments.map((group) => [group._id.toString(), group.count])
-    );
 
-    return writers.map((writer) => ({
-        ...writer,
-        activeOrderCount: activeMap.get(writer._id.toString()) ?? 0,
-        hasActiveOrder: (activeMap.get(writer._id.toString()) ?? 0) > 0,
-    }));
+    const statsMap = new Map<string, any>(stats.map((s) => [s._id.toString(), s]));
+
+    return writers.map((writer) => {
+        const s = statsMap.get(writer._id.toString()) || {};
+        return {
+            ...writer,
+            tasksCompleted: s.completed ?? 0,
+            pendingTasks: s.pending ?? 0,
+            inRevision: s.inRevision ?? 0,
+            canceledTasks: s.cancelled ?? 0,
+            activeOrderCount: s.activeCount ?? 0,
+            hasActiveOrder: (s.activeCount ?? 0) > 0,
+        }
+    });
 }
 
 export async function updateWriter(id: string, username: string, email: string, status: string) {
