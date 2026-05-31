@@ -5,8 +5,6 @@ import {
   mockWriters,
   mockOrders,
   mockPayments,
-  mockChartData,
-  adminMetrics,
   writerMetrics,
   paymentMetrics,
 } from './mock-data'
@@ -20,8 +18,26 @@ export function useAdminMetrics() {
   return useQuery<DashboardMetrics>({
     queryKey: ['admin-metrics'],
     queryFn: async () => {
-      await delay(500)
-      return adminMetrics
+      try {
+        const res = await fetch('/api/orders/get', { credentials: 'include' })
+        if (!res.ok) throw new Error('Failed to fetch orders')
+        const orders = await res.json()
+
+        const totalTasks = Array.isArray(orders) ? orders.length : 0
+        const assignedTasks = Array.isArray(orders) ? orders.filter((o: any) => o.assigned_to || o.assignedWriterId).length : 0
+        const pendingTasks = Array.isArray(orders) ? orders.filter((o: any) => ['pending', 'unassigned'].includes(String(o.status))).length : 0
+        const completedTasks = Array.isArray(orders) ? orders.filter((o: any) => String(o.status) === 'completed').length : 0
+
+        return { totalTasks, assignedTasks, pendingTasks, completedTasks }
+      } catch (err) {
+        await delay(500)
+        return {
+          totalTasks: mockOrders.length,
+          assignedTasks: mockOrders.filter((o) => (o as any).assignedWriterId).length,
+          pendingTasks: mockOrders.filter((o) => (o as any).status === 'pending' || (o as any).status === 'unassigned').length,
+          completedTasks: mockOrders.filter((o) => (o as any).status === 'completed').length,
+        }
+      }
     },
   })
 }
@@ -30,8 +46,46 @@ export function useChartData() {
   return useQuery<ChartData[]>({
     queryKey: ['chart-data'],
     queryFn: async () => {
-      await delay(600)
-      return mockChartData
+      try {
+        const res = await fetch('/api/orders/get', { credentials: 'include' })
+        if (!res.ok) throw new Error('Failed to fetch orders')
+        const orders = await res.json()
+
+        const now = new Date()
+        const months: { key: string; label: string }[] = []
+        for (let i = 5; i >= 0; i--) {
+          const d = new Date(now.getFullYear(), now.getMonth() - i, 1)
+          months.push({ key: `${d.getFullYear()}-${d.getMonth()}`, label: d.toLocaleString(undefined, { month: 'short' }) })
+        }
+
+        const map = new Map<string, { date: string; tasks: number; completed: number }>()
+        months.forEach((m) => map.set(m.key, { date: m.label, tasks: 0, completed: 0 }))
+
+        if (Array.isArray(orders)) {
+          orders.forEach((o: any) => {
+            const d = o.createdAt ? new Date(o.createdAt) : o.created_at ? new Date(o.created_at) : null
+            if (!d || isNaN(d.getTime())) return
+            const key = `${d.getFullYear()}-${d.getMonth()}`
+            const entry = map.get(key)
+            if (entry) {
+              entry.tasks += 1
+              if (String(o.status) === 'completed') entry.completed += 1
+            }
+          })
+        }
+
+        return Array.from(map.values())
+      } catch (err) {
+        await delay(600)
+        return [
+          { date: 'Jan', tasks: 0, completed: 0 },
+          { date: 'Feb', tasks: 0, completed: 0 },
+          { date: 'Mar', tasks: 0, completed: 0 },
+          { date: 'Apr', tasks: 0, completed: 0 },
+          { date: 'May', tasks: 0, completed: 0 },
+          { date: 'Jun', tasks: 0, completed: 0 },
+        ]
+      }
     },
   })
 }
