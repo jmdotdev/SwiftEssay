@@ -19,6 +19,7 @@ const orderSchema = new mongoose.Schema({
     assigned_to: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     price_per_page: { type: Number },   
     total_pages: { type: Number },
+    isPaid: { type: Boolean, default: false },
 }, { timestamps: true });
 
 export const Order = mongoose.models.Order || mongoose.model("Order", orderSchema)

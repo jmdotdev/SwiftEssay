@@ -57,15 +57,39 @@ export async function PATCH(
 
   try {
     const { writerId } = await request.json();
-    if (!writerId) {
-      return new Response(JSON.stringify({ message: "Writer ID is required" }), { status: 400 });
-    }
 
     await connectDB();
 
     const order = await Order.findById(id);
     if (!order) {
       return new Response(JSON.stringify({ message: "Order not found" }), { status: 404 });
+    }
+
+    if (writerId === null) {
+      const updatedOrder = await Order.findByIdAndUpdate(
+        id,
+        {
+          assigned_to: null,
+          status: 'unassigned',
+        },
+        {
+          new: true,
+          runValidators: true,
+        }
+      )
+        .populate('posted_by', 'username email')
+        .populate('assigned_to', 'username email');
+
+      if (!updatedOrder) {
+        return new Response(JSON.stringify({ message: "Order not found" }), { status: 404 });
+      }
+
+      return Response.json({ message: "Order unassigned successfully", order: updatedOrder });
+    }
+
+    // Handle assignment (writerId is provided)
+    if (!writerId) {
+      return new Response(JSON.stringify({ message: "Writer ID is required" }), { status: 400 });
     }
 
     const writer = await User.findById(writerId);

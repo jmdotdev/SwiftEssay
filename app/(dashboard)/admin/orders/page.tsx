@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import Link from 'next/link'
 import { ColumnDef } from '@tanstack/react-table'
-import { MoreHorizontal, Edit, Trash2, UserPlus, Plus } from 'lucide-react'
+import { MoreHorizontal, Edit, Trash2, UserPlus, Plus, DollarSign, CheckCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import {
@@ -45,6 +45,24 @@ export default function OrdersPage() {
     },
   })
 
+  const markPaidMutation = useMutation({
+    mutationFn: async ({ orderId, isPaid }: { orderId: string; isPaid: boolean }) => {
+      const res = await fetch(`/api/orders/${orderId}/mark-paid`, {
+        method: 'PATCH',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ isPaid }),
+      })
+      if (!res.ok) {
+        const json = await res.json().catch(() => null)
+        throw new Error(json?.message || 'Failed to update order')
+      }
+      return res.json()
+    },
+  })
+
   const handleDeleteOrder = () => {
     if (!selectedOrder) return
     deleteOrderMutation.mutate(selectedOrder._id, {
@@ -62,13 +80,36 @@ export default function OrdersPage() {
     })
   }
 
+  const handleMarkPaid = (order: Order, newPaidStatus: boolean) => {
+    markPaidMutation.mutate({ orderId: order._id, isPaid: newPaidStatus }, {
+      onSuccess: async () => {
+        const action = newPaidStatus ? 'marked as paid' : 'marked as unpaid'
+        toast.success(`Order ${action}`)
+        await queryClient.invalidateQueries({ queryKey: ['orders'] })
+        await queryClient.invalidateQueries({ queryKey: ['payments'] })
+        await queryClient.invalidateQueries({ queryKey: ['payment-metrics'] })
+      },
+      onError: (err) => {
+        toast.error(err instanceof Error ? err.message : 'Failed to update order')
+      },
+    })
+  }
+
   const columns: ColumnDef<Order>[] = [
     {
       accessorKey: 'title',
       header: 'Title',
       cell: ({ row }) => (
-        <div className="max-w-[250px] truncate font-medium">
-          {row.original.title}
+        <div className="flex items-center gap-2 max-w-[250px]">
+          <div className="truncate font-medium flex-1">
+            {row.original.title}
+          </div>
+          {(row.original as any).isPaid && (
+            <div className="flex items-center gap-1 bg-green-50 px-2 py-1 rounded text-xs font-semibold text-green-700 whitespace-nowrap">
+              <CheckCircle className="h-3 w-3" />
+              Paid
+            </div>
+          )}
         </div>
       ),
     },
@@ -138,6 +179,17 @@ export default function OrdersPage() {
                     <DropdownMenuSeparator />
                   </>
                 )}
+                <DropdownMenuItem
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    const newPaidStatus = !(order as any).isPaid
+                    handleMarkPaid(order, newPaidStatus)
+                  }}
+                >
+                  <DollarSign className="h-4 w-4 mr-2" />
+                  {(order as any).isPaid ? 'Mark as Unpaid' : 'Mark as Paid'}
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
                   <Link href={`/admin/orders/${order._id}/edit`}>
                     <Edit className="h-4 w-4 mr-2" />

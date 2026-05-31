@@ -51,7 +51,7 @@ export async function POST(request: Request) {
       });
     }
 
-    const order = await createOrder(user.userId, discipline, uploadedFiles, totalPrice, price_per_page, total_pages, new Date(deadline), title, description);
+    const order = await createOrder(user.userId, discipline, uploadedFiles, totalPrice, price_per_page, total_pages, new Date(deadline), title, description, false);
     return Response.json({ message: "Order created successfully", order });
   } catch (error: any) {
     console.error("Error creating order:", error);

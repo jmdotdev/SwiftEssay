@@ -3,7 +3,7 @@
 import { use, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft, Calendar, DollarSign, User, MessageSquare, UserPlus, Paperclip, FileText, Image, File, Download, Trash2 } from 'lucide-react'
+import { ArrowLeft, Calendar, DollarSign, User, MessageSquare, UserPlus, Paperclip, FileText, Image, File, Download, Undo2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -13,9 +13,8 @@ import { AssignWriterModal } from '@/components/dashboard/assign-writer-modal'
 import { AddCommentModal } from '@/components/dashboard/add-comment-modal'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useOrder } from '@/lib/hooks'
-import { useQueryClient, useMutation } from '@tanstack/react-query'
+import { useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
-import { DeleteDialog } from '@/components/dashboard/delete-dialog'
 import type { Writer } from '@/lib/types'
 
 function formatFileSize(bytes: number): string {
@@ -93,22 +92,7 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
   const router = useRouter()
   const [assignModalOpen, setAssignModalOpen] = useState(false)
   const [commentModalOpen, setCommentModalOpen] = useState(false)
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false)
   const queryClient = useQueryClient()
-
-  const deleteOrderMutation = useMutation({
-    mutationFn: async () => {
-      const res = await fetch(`/api/orders/${id}`, {
-        method: 'DELETE',
-        credentials: 'include',
-      })
-      if (!res.ok) {
-        const json = await res.json().catch(() => null)
-        throw new Error(json?.message || 'Failed to delete order')
-      }
-      return res.json()
-    },
-  })
 
   const handleAssign = async (writer: Writer) => {
     try {
@@ -128,8 +112,32 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
       toast.success(`Assigned ${writer.username} to this order`)
       queryClient.invalidateQueries({ queryKey: ['order', id] })
       queryClient.invalidateQueries({ queryKey: ['orders'] })
+      setAssignModalOpen(false)
     } catch (error: any) {
       toast.error(error.message || 'Error assigning writer')
+    }
+  }
+
+  const handleUnassign = async () => {
+    try {
+      const response = await fetch(`/api/orders/${id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ writerId: null }),
+      })
+
+      const result = await response.json()
+      if (!response.ok) {
+        throw new Error(result?.message || 'Failed to unassign writer')
+      }
+
+      toast.success('Writer unassigned from this order')
+      queryClient.invalidateQueries({ queryKey: ['order', id] })
+      queryClient.invalidateQueries({ queryKey: ['orders'] })
+    } catch (error: any) {
+      toast.error(error.message || 'Error unassigning writer')
     }
   }
 
@@ -193,10 +201,12 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
             <UserPlus className="h-4 w-4 mr-2" />
             {order.assigned_to ? 'Reassign Writer' : 'Assign Writer'}
           </Button>
-          <Button variant="destructive" onClick={() => setDeleteModalOpen(true)}>
-            <Trash2 className="h-4 w-4 mr-2" />
-            Delete Order
-          </Button>
+          {order.assigned_to && (
+            <Button variant="outline" onClick={handleUnassign}>
+              <Undo2 className="h-4 w-4 mr-2" />
+              Unassign
+            </Button>
+          )}
           <Button variant="outline" onClick={() => setCommentModalOpen(true)}>
             <MessageSquare className="h-4 w-4 mr-2" />
             Add Comment
@@ -313,9 +323,6 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
                       </div>
                     </div>
                   </div>
-                  <Button size="sm" className="mt-4" onClick={() => setAssignModalOpen(true)}>
-                    Reassign Writer
-                  </Button>
                 </>
               ) : (
                 <div className="text-center py-4">
@@ -325,10 +332,6 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
                   <p className="text-sm text-muted-foreground mb-3">
                     No writer assigned yet
                   </p>
-                  <Button size="sm" onClick={() => setAssignModalOpen(true)}>
-                    <UserPlus className="h-4 w-4 mr-2" />
-                    Assign Writer
-                  </Button>
                 </div>
               )}
             </CardContent>
@@ -413,28 +416,6 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
         onOpenChange={setCommentModalOpen}
         onSubmit={handleAddComment}
         orderTitle={order.title}
-      />
-      <DeleteDialog
-        open={deleteModalOpen}
-        onOpenChange={setDeleteModalOpen}
-        onConfirm={async () => {
-          deleteOrderMutation.mutate(undefined, {
-            onSuccess: async () => {
-              toast.success('Order deleted successfully')
-              await queryClient.invalidateQueries({ queryKey: ['orders'] })
-              await queryClient.invalidateQueries({ queryKey: ['order', id] })
-              setDeleteModalOpen(false)
-              router.push('/admin/orders')
-            },
-            onError: (err) => {
-              toast.error(err instanceof Error ? err.message : 'Failed to delete order')
-              setDeleteModalOpen(false)
-            },
-          })
-        }}
-        title="Delete Order"
-        message={`Are you sure you want to delete order “${order.title}”? This will remove the order and its uploaded files from Cloudinary and cannot be undone.`}
-        confirmText="Delete Order"
       />
     </div>
   )

@@ -4,9 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import {
   mockWriters,
   mockOrders,
-  mockPayments,
   writerMetrics,
-  paymentMetrics,
 } from './mock-data'
 import type { Writer, Order, Payment, ChartData, DashboardMetrics, WriterMetrics, PaymentMetrics } from './types'
 
@@ -195,8 +193,40 @@ export function usePayments() {
   return useQuery<Payment[]>({
     queryKey: ['payments'],
     queryFn: async () => {
-      await delay(500)
-      return mockPayments
+      try {
+        const res = await fetch('/api/orders/get', { credentials: 'include' })
+        if (!res.ok) throw new Error('Failed to fetch orders')
+        const orders = await res.json()
+
+        // Transform paid orders to payment records
+        const payments: Payment[] = []
+        if (Array.isArray(orders)) {
+          orders.forEach((order: any) => {
+            if (order.isPaid && order.assigned_to) {
+              const writerUsername = typeof order.assigned_to === 'string'
+                ? order.assigned_to
+                : (order.assigned_to.username || 'Unknown')
+              
+              payments.push({
+                id: order._id,
+                orderId: order._id,
+                orderTitle: order.title,
+                writerId: typeof order.assigned_to === 'string' ? order.assigned_to : order.assigned_to._id,
+                writerName: writerUsername,
+                amount: order.totalPrice,
+                status: 'paid',
+                paidAt: new Date().toISOString(),
+                createdAt: order.createdAt,
+              } as any)
+            }
+          })
+        }
+
+        return payments
+      } catch (err) {
+        await delay(500)
+        return []
+      }
     },
   })
 }
@@ -205,8 +235,31 @@ export function usePaymentMetrics() {
   return useQuery<PaymentMetrics>({
     queryKey: ['payment-metrics'],
     queryFn: async () => {
-      await delay(400)
-      return paymentMetrics
+      try {
+        const res = await fetch('/api/orders/get', { credentials: 'include' })
+        if (!res.ok) throw new Error('Failed to fetch orders')
+        const orders = await res.json()
+
+        let totalPaid = 0
+        let totalPending = 0
+        let totalCancelled = 0
+
+        if (Array.isArray(orders)) {
+          orders.forEach((order: any) => {
+            if (String(order.status) === 'cancelled') {
+            } else if (order.isPaid) {
+              totalPaid += order.totalPrice || 0
+            } else {
+              totalPending += order.totalPrice || 0
+            }
+          })
+        }
+
+        return { totalPaid, totalPending, totalCancelled }
+      } catch (err) {
+        await delay(400)
+        return { totalPaid: 0, totalPending: 0, totalCancelled: 0 }
+      }
     },
   })
 }
@@ -226,8 +279,44 @@ export function useWriterPayments(writerId: string) {
   return useQuery<Payment[]>({
     queryKey: ['writer-payments', writerId],
     queryFn: async () => {
-      await delay(400)
-      return mockPayments.filter((p) => p.writerId === writerId)
+      try {
+        const res = await fetch('/api/orders/get', { credentials: 'include' })
+        if (!res.ok) throw new Error('Failed to fetch orders')
+        const orders = await res.json()
+
+        // Filter paid orders assigned to this writer
+        const payments: Payment[] = []
+        if (Array.isArray(orders)) {
+          orders.forEach((order: any) => {
+            const assignedToId = typeof order.assigned_to === 'string'
+              ? order.assigned_to
+              : (order.assigned_to?._id || '')
+            
+            if (order.isPaid && assignedToId === writerId) {
+              const writerUsername = typeof order.assigned_to === 'string'
+                ? order.assigned_to
+                : (order.assigned_to?.username || 'Unknown')
+              
+              payments.push({
+                id: order._id,
+                orderId: order._id,
+                orderTitle: order.title,
+                writerId: assignedToId,
+                writerName: writerUsername,
+                amount: order.totalPrice,
+                status: 'paid',
+                paidAt: new Date().toISOString(),
+                createdAt: order.createdAt,
+              } as any)
+            }
+          })
+        }
+
+        return payments
+      } catch (err) {
+        await delay(400)
+        return []
+      }
     },
   })
 }

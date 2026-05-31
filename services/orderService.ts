@@ -1,7 +1,7 @@
 import { Order } from "@/models/Order";
 import mongoose from "mongoose";
 
-export async function createOrder(posted_by: string, discipline: string, files: { url: string; public_id: string; name: string }[], totalPrice: number, price_per_page: number, total_pages: number, deadline: Date, title?: string, description?: string) {
+export async function createOrder(posted_by: string, discipline: string, files: { url: string; public_id: string; name: string }[], totalPrice: number, price_per_page: number, total_pages: number, deadline: Date, title?: string, description?: string, isPaid: boolean = false) {
     const order = new Order({ 
         posted_by: new mongoose.Types.ObjectId(posted_by), 
         discipline, 
@@ -11,7 +11,8 @@ export async function createOrder(posted_by: string, discipline: string, files: 
         total_pages, 
         deadline, 
         title, 
-        description 
+        description,
+        isPaid
     });
     await order.save();
     return order;
