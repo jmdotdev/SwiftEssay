@@ -1,4 +1,4 @@
-'use client'
+"use client"
 
 import { useState } from 'react'
 import Link from 'next/link'
@@ -17,6 +17,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { resetPasswordSchema, type ResetPasswordFormData } from '@/lib/validations'
+import { useSearchParams } from 'next/navigation'
 
 export default function ResetPasswordPage() {
   const [showPassword, setShowPassword] = useState(false)
@@ -30,12 +31,23 @@ export default function ResetPasswordPage() {
       confirmPassword: '',
     },
   })
+  const search = useSearchParams()
+  const token = search?.get('token')
 
   const onSubmit = async (data: ResetPasswordFormData) => {
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-
-    setIsSubmitted(true)
+    try {
+      if (!token) throw new Error('Missing token')
+      const res = await fetch('/api/auth/reset-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token, password: data.password }),
+      })
+      if (!res.ok) throw new Error('Failed to reset password')
+      setIsSubmitted(true)
+    } catch (err) {
+      // TODO: show error to user
+      console.error(err)
+    }
   }
 
   return (

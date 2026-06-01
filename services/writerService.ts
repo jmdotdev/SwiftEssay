@@ -3,6 +3,8 @@ import { User } from "../models/User";
 import { Order } from "@/models/Order";
 import { connectDB } from "@/lib/mongoose";
 import bycrypt from "bcryptjs";
+import { signToken } from '@/lib/jwt'
+import { sendMail } from '@/lib/mailer'
 
 export async function addWriter( username: string, email: string, status: string) {
     const exists = await User.findOne({ email });
@@ -13,6 +15,22 @@ export async function addWriter( username: string, email: string, status: string
     const hashedPassword = await bycrypt.hash(dummyPassword, 10);
     const user = new User({ username, email, password: hashedPassword, role: "writer", status: status });
     await user.save();
+    // generate a reset token so the invited writer can set their password
+    try {
+        const token = signToken({ userId: user._id, type: 'reset' })
+        const base = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
+        const link = `${base}/reset-password?token=${token}`
+        const html = `
+          <p>Hello ${username || 'Writer'},</p>
+          <p>You were added as a writer. Click the link below to set your password and sign in:</p>
+          <p><a href="${link}">Set your password</a></p>
+          <p>This link will expire in 24 hours.</p>
+        `
+        await sendMail({ to: email, subject: 'Set your SwiftEssay password', html })
+    } catch (err) {
+        // don't block creation if email sending fails; log to console
+        console.error('Failed to send invite email', err)
+    }
     const { password, ...userWithoutPassword } = user.toObject();
     return userWithoutPassword;
 }

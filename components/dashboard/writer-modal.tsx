@@ -93,7 +93,7 @@ export function WriterModal({
               <DialogDescription>
                 {mode === 'add'
                   ? 'Add a new writer to your team.'
-                  : 'Update the writer&apos;s information.'}
+                  : "Update the writer's information."}
               </DialogDescription>
             </DialogHeader>
             <div className="space-y-4 py-4">
