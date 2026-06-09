@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from 'react'
+import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, CheckCircle, Eye, EyeOff, PenTool } from 'lucide-react'
 import { useForm } from 'react-hook-form'
@@ -32,14 +33,18 @@ export default function ResetForm({ token }: { token?: string | null }) {
     },
   })
 
+  const searchParams = useSearchParams()
+  const urlToken = searchParams?.get('token') ?? null
+
   const onSubmit = async (data: ResetPasswordFormData) => {
     try {
       setError(null)
-      if (!token) throw new Error('Missing token')
+      const activeToken = token ?? urlToken
+      if (!activeToken) throw new Error('Missing token')
       const res = await fetch('/api/auth/reset-password', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token, password: data.password }),
+        body: JSON.stringify({ token: activeToken, password: data.password }),
       })
       if (!res.ok) {
         const body = await res.json().catch(() => ({}))
