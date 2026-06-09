@@ -1,7 +1,13 @@
 // lib/mongoose.ts
 import mongoose from "mongoose"
 
-const MONGODB_URI = process.env.MONGODB_URI!
+function getMongoUri(): string {
+  const uri = process.env.MONGODB_URI
+  if (!uri) {
+    throw new Error('Missing MONGODB_URI environment variable')
+  }
+  return uri
+}
 
 declare global {
   var mongoose: { conn: any; promise: any }
@@ -13,7 +19,7 @@ export async function connectDB() {
   if (cached.conn) return cached.conn
 
   if (!cached.promise) {
-    cached.promise = mongoose.connect(MONGODB_URI)
+    cached.promise = mongoose.connect(getMongoUri())
   }
 
   cached.conn = await cached.promise
