@@ -4,6 +4,7 @@ import { Order } from "@/models/Order";
 import { User } from "@/models/User";
 import { connectDB } from "@/lib/mongoose";
 import isAdmin from "../../(guards)/isAdmin";
+import { verifyToken } from '@/lib/jwt'
 import { v2 as cloudinary } from 'cloudinary';
 
 cloudinary.config({
@@ -18,9 +19,14 @@ export async function GET(
   const { id } = await params;
   const cookieStore = await cookies();
   const token = cookieStore.get("token")?.value;
-  const user = isAdmin(token as string);
-  
-  if (!token || !user) {
+  if (!token) {
+    return new Response(JSON.stringify({ message: "Unauthorized" }), { status: 401 });
+  }
+
+  let user: any = null
+  try {
+    user = verifyToken(token as string)
+  } catch (err) {
     return new Response(JSON.stringify({ message: "Unauthorized" }), { status: 401 });
   }
 

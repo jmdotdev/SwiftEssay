@@ -9,8 +9,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Separator } from '@/components/ui/separator'
 import { StatusBadge } from '@/components/dashboard/status-badge'
 import { Skeleton } from '@/components/ui/skeleton'
-import { useOrder } from '@/lib/hooks'
 import { toast } from 'sonner'
+import { useQueryClient, useMutation } from '@tanstack/react-query'
+import { useOrder } from '@/lib/hooks'
 
 interface WriterOrderDetailsPageProps {
   params: Promise<{ id: string }>
@@ -20,8 +21,32 @@ export default function WriterOrderDetailsPage({ params }: WriterOrderDetailsPag
   const { id } = use(params)
   const { data: order, isLoading } = useOrder(id)
 
-  const handleClaim = () => {
-    toast.success(`Successfully claimed "${order?.title}"`)
+  const queryClient = useQueryClient()
+
+  const claimMutation = useMutation({
+    mutationFn: async (orderId: string) => {
+      const res = await fetch(`/api/orders/${orderId}/claim`, { method: 'POST', credentials: 'include' })
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}))
+        throw new Error(body?.message || 'Failed to claim order')
+      }
+      return res.json()
+    },
+    onSuccess: async (_data, orderId) => {
+      toast.success('Order claimed')
+      await queryClient.invalidateQueries({ queryKey: ['available-orders'] })
+      await queryClient.invalidateQueries({ queryKey: ['orders'] })
+      await queryClient.invalidateQueries({ queryKey: ['order', orderId] })
+    },
+    onError: (err: any) => {
+      toast.error(err?.message || 'Could not claim order')
+    },
+  })
+
+  const handleClaim = async () => {
+    if (!order) return
+    if (claimMutation.isLoading) return
+    claimMutation.mutate(id)
   }
 
   if (isLoading) {
@@ -56,7 +81,7 @@ export default function WriterOrderDetailsPage({ params }: WriterOrderDetailsPag
     )
   }
 
-  const isAvailable = order.status === 'pending' && !order.assignedWriterId
+  const isAvailable = (order?.status && (order.status === 'pending' || order.status === 'unassigned')) && !order.assignedWriterId && !order.assigned_to
 
   return (
     <div className="space-y-6">
@@ -78,9 +103,9 @@ export default function WriterOrderDetailsPage({ params }: WriterOrderDetailsPag
           </div>
         </div>
         {isAvailable && (
-          <Button onClick={handleClaim}>
+          <Button onClick={handleClaim} disabled={claimMutation.isLoading}>
             <HandMetal className="h-4 w-4 mr-2" />
-            Claim Order
+            {claimMutation.isLoading ? 'Claiming...' : 'Claim Order'}
           </Button>
         )}
       </div>
@@ -189,9 +214,9 @@ export default function WriterOrderDetailsPage({ params }: WriterOrderDetailsPag
               {isAvailable && (
                 <>
                   <Separator />
-                  <Button className="w-full" onClick={handleClaim}>
+                  <Button className="w-full" onClick={handleClaim} disabled={claimMutation.isLoading}>
                     <HandMetal className="h-4 w-4 mr-2" />
-                    Claim This Order
+                    {claimMutation.isLoading ? 'Claiming...' : 'Claim This Order'}
                   </Button>
                 </>
               )}

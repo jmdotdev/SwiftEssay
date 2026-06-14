@@ -6,17 +6,45 @@ import { Eye, HandMetal } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { DataTable } from '@/components/dashboard/data-table'
 import { StatusBadge } from '@/components/dashboard/status-badge'
-import { useAvailableOrders } from '@/lib/hooks'
 import { toast } from 'sonner'
+import { useQueryClient, useMutation } from '@tanstack/react-query'
 import type { Order } from '@/lib/types'
+import { useAvailableOrders } from '@/lib/hooks'
 
 export default function WriterOrdersPage() {
   const router = useRouter()
   const { data: orders, isLoading } = useAvailableOrders()
+  const queryClient = useQueryClient()
+
+  const claimMutation = useMutation({
+    mutationFn: async (orderId: string) => {
+      const res = await fetch(`/api/orders/${orderId}/claim`, { method: 'POST', credentials: 'include' })
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}))
+        throw new Error(body?.message || 'Failed to claim order')
+      }
+      return res.json()
+    },
+    onSuccess: async (_data, orderId) => {
+      toast.success('Order claimed')
+      await queryClient.invalidateQueries({ queryKey: ['available-orders'] })
+      await queryClient.invalidateQueries({ queryKey: ['orders'] })
+      await queryClient.invalidateQueries({ queryKey: ['order', orderId] })
+    },
+    onError: (err: any) => {
+      toast.error(err?.message || 'Could not claim order')
+    },
+  })
 
   const handleClaim = (order: Order, e: React.MouseEvent) => {
     e.stopPropagation()
-    toast.success(`Successfully claimed "${order.title}"`)
+    const idOnly = order._id as string
+    if (!idOnly) {
+      toast.warning('Order has no database id; cannot claim.')
+      return
+    }
+    if (claimMutation.isLoading) return
+    claimMutation.mutate(idOnly)
   }
 
   const columns: ColumnDef<Order>[] = [
@@ -59,6 +87,8 @@ export default function WriterOrdersPage() {
       header: '',
       cell: ({ row }) => {
         const order = row.original
+        const orderId = order._id as string
+        const isAvailable = (['pending', 'unassigned'] as string[]).includes(String(order.status)) && !order.assigned_to && !order.assignedWriterId
         return (
           <div className="flex items-center gap-2">
             <Button
@@ -66,19 +96,27 @@ export default function WriterOrdersPage() {
               size="sm"
               onClick={(e) => {
                 e.stopPropagation()
-                router.push(`/writer/orders/${order.id}`)
+                const idOnly = order._id as string
+                if (!idOnly) {
+                  toast.warning('Order has no database id; cannot open details.')
+                  return
+                }
+                router.push(`/writer/orders/${idOnly}`)
               }}
             >
               <Eye className="h-4 w-4 mr-1" />
               View
             </Button>
-            <Button
-              size="sm"
-              onClick={(e) => handleClaim(order, e)}
-            >
-              <HandMetal className="h-4 w-4 mr-1" />
-              Claim
-            </Button>
+                {isAvailable && (
+                  <Button
+                    size="sm"
+                    onClick={(e) => handleClaim(order, e)}
+                    disabled={claimMutation.isLoading}
+                  >
+                    <HandMetal className="h-4 w-4 mr-1" />
+                    {claimMutation.isLoading ? 'Claiming...' : 'Claim'}
+                  </Button>
+                )}
           </div>
         )
       },
@@ -86,7 +124,12 @@ export default function WriterOrdersPage() {
   ]
 
   const handleRowClick = (order: Order) => {
-    router.push(`/writer/orders/${order.id}`)
+    const idOnly = order._id as string
+    if (!idOnly) {
+      toast.warning('Order has no database id; cannot open details.')
+      return
+    }
+    router.push(`/writer/orders/${idOnly}`)
   }
 
   return (

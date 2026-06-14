@@ -122,9 +122,7 @@ export function useWriterOrders(writerId: string) {
     queryKey: ['writer-orders', writerId],
     queryFn: async () => {
       const res = await fetch(`/api/writers/${writerId}/orders`, { credentials: 'include' })
-      if (!res.ok) {
-        throw new Error('Failed to fetch writer orders')
-      }
+      if (!res.ok) throw new Error('Failed to fetch writer orders')
       return res.json()
     },
   })
@@ -161,6 +159,7 @@ export function createOrder(posted_by: string, discipline: string, files: string
   }
   )
 }
+
 export function useOrder(id: string) {
   return useQuery<Order | undefined>({
     queryKey: ['order', id],
@@ -180,11 +179,16 @@ export function useAvailableOrders() {
   return useQuery<Order[]>({
     queryKey: ['available-orders'],
     queryFn: async () => {
-      await delay(400)
-      return mockOrders.filter((o) => {
-        const s = o.status as unknown as string
-        return (['pending', 'unassigned'] as string[]).includes(s) && !o.assignedWriterId
-      })
+      const res = await fetch('/api/orders/available', { credentials: 'include' })
+      if (!res.ok) {
+        console.warn('useAvailableOrders: failed to fetch /api/orders/available')
+        return []
+      }
+      const orders = await res.json()
+      if (!Array.isArray(orders)) return []
+
+      // Ensure each order has an `_id` and `id` mapped for compatibility
+      return orders.map((o: any) => ({ ...o, id: o._id || o.id }))
     },
   })
 }

@@ -8,6 +8,7 @@ import { MetricCard } from '@/components/dashboard/metric-card'
 import { DataTable } from '@/components/dashboard/data-table'
 import { StatusBadge } from '@/components/dashboard/status-badge'
 import { useWriterMetrics, useLatestOrders } from '@/lib/hooks'
+import { toast } from 'sonner'
 import type { Order } from '@/lib/types'
 
 const columns: ColumnDef<Order>[] = [
@@ -49,7 +50,12 @@ export default function WriterDashboardPage() {
   const { data: latestOrders, isLoading: ordersLoading } = useLatestOrders(5)
 
   const handleRowClick = (order: Order) => {
-    router.push(`/writer/orders/${order.id}`)
+    const idOnly = (order as any)._id as string
+    if (!idOnly) {
+      toast.warning('Order has no database id; cannot open details.')
+      return
+    }
+    router.push(`/writer/orders/${idOnly}`)
   }
 
   return (

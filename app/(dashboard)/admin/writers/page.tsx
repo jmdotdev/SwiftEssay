@@ -16,11 +16,11 @@ import { DataTable } from '@/components/dashboard/data-table'
 import { StatusBadge } from '@/components/dashboard/status-badge'
 import { WriterModal } from '@/components/dashboard/writer-modal'
 import type { WriterFormData } from '@/lib/validations'
-import { useWriters } from '@/lib/hooks'
 import { toast } from 'sonner'
 import type { Writer } from '@/lib/types'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { DeleteDialog } from '@/components/dashboard/delete-dialog'
+import { useWriters } from '@/lib/hooks'
 
 export default function WritersPage() {
   const router = useRouter()
