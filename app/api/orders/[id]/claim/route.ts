@@ -14,7 +14,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
   }
 
   try {
-    const decoded = verifyToken(token) as { userId?: string; role?: string }
+    const decoded = verifyToken(token) as { userId?: string; id?: string; role?: string }
     if (!decoded || decoded.role !== 'writer') {
       return new Response(JSON.stringify({ message: 'Forbidden' }), { status: 403 })
     }
@@ -28,7 +28,8 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
       return new Response(JSON.stringify({ message: 'Order already assigned' }), { status: 409 })
     }
 
-    const writer = await User.findById(decoded.userId)
+    const writerId = (decoded.userId as any) || (decoded.id as any)
+    const writer = await User.findById(writerId)
     if (!writer || writer.role !== 'writer') {
       return new Response(JSON.stringify({ message: 'Writer not found' }), { status: 404 })
     }
