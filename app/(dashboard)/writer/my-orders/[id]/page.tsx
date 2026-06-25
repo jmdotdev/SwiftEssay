@@ -7,7 +7,7 @@ interface Props {
   params: Promise<{ id: string }>
 }
 
-export default function WriterOrderDetailsPage({ params }: Props) {
+export default function MyOrderDetailPage({ params }: Props) {
   const { id } = use(params)
-  return <WriterOrderDetail id={id} backHref="/writer/orders" />
+  return <WriterOrderDetail id={id} backHref="/writer/my-orders" />
 }

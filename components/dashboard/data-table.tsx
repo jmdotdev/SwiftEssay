@@ -30,6 +30,7 @@ interface DataTableProps<TData, TValue> {
   searchPlaceholder?: string
   isLoading?: boolean
   onRowClick?: (row: TData) => void
+  toolbar?: React.ReactNode
 }
 
 export function DataTable<TData, TValue>({
@@ -39,6 +40,7 @@ export function DataTable<TData, TValue>({
   searchPlaceholder = 'Search...',
   isLoading,
   onRowClick,
+  toolbar,
 }: DataTableProps<TData, TValue>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
 
@@ -88,17 +90,22 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="space-y-4">
-      {searchKey && (
-        <div className="relative w-64">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          <Input
-            placeholder={searchPlaceholder}
-            value={(table.getColumn(searchKey)?.getFilterValue() as string) ?? ''}
-            onChange={(event) =>
-              table.getColumn(searchKey)?.setFilterValue(event.target.value)
-            }
-            className="pl-9"
-          />
+      {(searchKey || toolbar) && (
+        <div className="flex items-center gap-2">
+          {searchKey && (
+            <div className="relative w-64">
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                placeholder={searchPlaceholder}
+                value={(table.getColumn(searchKey)?.getFilterValue() as string) ?? ''}
+                onChange={(event) =>
+                  table.getColumn(searchKey)?.setFilterValue(event.target.value)
+                }
+                className="pl-9"
+              />
+            </div>
+          )}
+          {toolbar}
         </div>
       )}
       <div className="rounded-md border">
