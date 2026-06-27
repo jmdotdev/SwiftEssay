@@ -9,6 +9,7 @@ import {
   CreditCard,
   LogOut,
   PenTool,
+  ClipboardList,
 } from 'lucide-react'
 import {
   Sidebar,
@@ -63,6 +64,11 @@ const writerNavItems = [
     title: 'Available Orders',
     href: '/writer/orders',
     icon: FileText,
+  },
+  {
+    title: 'My Orders',
+    href: '/writer/my-orders',
+    icon: ClipboardList,
   },
   {
     title: 'Payments',

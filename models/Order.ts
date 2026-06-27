@@ -14,6 +14,11 @@ const orderSchema = new mongoose.Schema({
         public_id: { type: String, required: true },
         name: { type: String, required: true }
     }],
+    submitted_files: [{
+        url: { type: String, required: true },
+        public_id: { type: String, required: true },
+        name: { type: String, required: true }
+    }],
     status: { type: String, enum: StatusEnum, default: 'unassigned' },
     totalPrice: { type: Number, required: true },
     assigned_to: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },

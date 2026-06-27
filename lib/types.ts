@@ -41,6 +41,7 @@ export interface Order {
   assignedWriterId?: string
   assignedWriter?: Writer
   files: FileAttachment[]
+  submitted_files?: OrderFile[]
   createdAt: string
   updatedAt: string
   comments?: Comment[]
@@ -62,6 +63,12 @@ export interface FileAttachment {
   type: string
   url: string
   uploadedAt: string
+}
+
+export interface OrderFile {
+  public_id: string
+  url: string
+  name: string
 }
 
 export interface Payment {
