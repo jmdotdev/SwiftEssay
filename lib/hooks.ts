@@ -6,7 +6,7 @@ import {
   mockOrders,
   writerMetrics,
 } from './mock-data'
-import type { Writer, Order, Payment, ChartData, DashboardMetrics, WriterMetrics, PaymentMetrics } from './types'
+import type { Writer, Order, Payment, PaymentStatus, ChartData, DashboardMetrics, WriterMetrics, PaymentMetrics } from './types'
 
 // Simulate API delay
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
@@ -279,48 +279,42 @@ export function useWriterMetrics() {
   })
 }
 
-export function useWriterPayments(writerId: string) {
+export function useMyPayments() {
   return useQuery<Payment[]>({
-    queryKey: ['writer-payments', writerId],
+    queryKey: ['my-payments'],
     queryFn: async () => {
-      try {
-        const res = await fetch('/api/orders/get', { credentials: 'include' })
-        if (!res.ok) throw new Error('Failed to fetch orders')
-        const orders = await res.json()
+      const res = await fetch('/api/orders/my', { credentials: 'include' })
+      if (!res.ok) throw new Error('Failed to fetch orders')
+      const orders = await res.json()
 
-        // Filter paid orders assigned to this writer
-        const payments: Payment[] = []
-        if (Array.isArray(orders)) {
-          orders.forEach((order: any) => {
-            const assignedToId = typeof order.assigned_to === 'string'
-              ? order.assigned_to
-              : (order.assigned_to?._id || '')
-            
-            if (order.isPaid && assignedToId === writerId) {
-              const writerUsername = typeof order.assigned_to === 'string'
-                ? order.assigned_to
-                : (order.assigned_to?.username || 'Unknown')
-              
-              payments.push({
-                id: order._id,
-                orderId: order._id,
-                orderTitle: order.title,
-                writerId: assignedToId,
-                writerName: writerUsername,
-                amount: order.totalPrice,
-                status: 'paid',
-                paidAt: new Date().toISOString(),
-                createdAt: order.createdAt,
-              } as any)
-            }
-          })
+      if (!Array.isArray(orders)) return []
+
+      return orders.map((order: any): Payment => {
+        const assignedToId = typeof order.assigned_to === 'string'
+          ? order.assigned_to
+          : (order.assigned_to?._id || '')
+        const writerUsername = typeof order.assigned_to === 'string'
+          ? order.assigned_to
+          : (order.assigned_to?.username || 'Unknown')
+
+        const status: PaymentStatus = String(order.status) === 'cancelled'
+          ? 'cancelled'
+          : order.isPaid
+            ? 'paid'
+            : 'pending'
+
+        return {
+          id: order._id,
+          orderId: order._id,
+          orderTitle: order.title,
+          writerId: assignedToId,
+          writerName: writerUsername,
+          amount: order.totalPrice,
+          status,
+          paidAt: order.isPaid ? order.updatedAt : undefined,
+          createdAt: order.createdAt,
         }
-
-        return payments
-      } catch (err) {
-        await delay(400)
-        return []
-      }
+      })
     },
   })
 }

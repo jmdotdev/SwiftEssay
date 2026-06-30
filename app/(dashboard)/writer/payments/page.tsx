@@ -1,11 +1,12 @@
 'use client'
 
+import { useMemo } from 'react'
 import { ColumnDef } from '@tanstack/react-table'
 import { DollarSign, Clock, XCircle } from 'lucide-react'
 import { MetricCard } from '@/components/dashboard/metric-card'
 import { DataTable } from '@/components/dashboard/data-table'
 import { StatusBadge } from '@/components/dashboard/status-badge'
-import { useWriterPayments, usePaymentMetrics } from '@/lib/hooks'
+import { useMyPayments } from '@/lib/hooks'
 import type { Payment } from '@/lib/types'
 
 const columns: ColumnDef<Payment>[] = [
@@ -44,9 +45,17 @@ const columns: ColumnDef<Payment>[] = [
 ]
 
 export default function WriterPaymentsPage() {
-  // Using a mock writer ID for demonstration
-  const { data: payments, isLoading: paymentsLoading } = useWriterPayments('1')
-  const { data: metrics, isLoading: metricsLoading } = usePaymentMetrics()
+  const { data: payments, isLoading } = useMyPayments()
+
+  const metrics = useMemo(() => {
+    const totals = { totalAmount: 0, totalPending: 0, totalCancelled: 0 }
+    payments?.forEach((payment) => {
+      if (payment.status === 'paid') totals.totalAmount += payment.amount
+      else if (payment.status === 'pending') totals.totalPending += payment.amount
+      else if (payment.status === 'cancelled') totals.totalCancelled += payment.amount
+    })
+    return totals
+  }, [payments])
 
   return (
     <div className="space-y-6">
@@ -60,35 +69,35 @@ export default function WriterPaymentsPage() {
       {/* Metrics Cards */}
       <div className="grid gap-4 md:grid-cols-3">
         <MetricCard
-          title="Total Paid"
-          value={`$${metrics?.totalPaid ?? 0}`}
+          title="Total Amount"
+          value={`$${metrics.totalAmount}`}
           icon={DollarSign}
-          description="received payments"
-          isLoading={metricsLoading}
+          description="from paid orders"
+          isLoading={isLoading}
         />
         <MetricCard
           title="Pending Amount"
-          value={`$${metrics?.totalPending ?? 0}`}
+          value={`$${metrics.totalPending}`}
           icon={Clock}
           description="awaiting payment"
-          isLoading={metricsLoading}
+          isLoading={isLoading}
         />
         <MetricCard
           title="Cancelled Amount"
-          value={`$${metrics?.totalCancelled ?? 0}`}
+          value={`$${metrics.totalCancelled}`}
           icon={XCircle}
-          description="cancelled payments"
-          isLoading={metricsLoading}
+          description="from cancelled orders"
+          isLoading={isLoading}
         />
       </div>
 
-      {/* Payments Table */}
+      {/* Orders Table */}
       <DataTable
         columns={columns}
         data={payments ?? []}
         searchKey="orderTitle"
-        searchPlaceholder="Search payments..."
-        isLoading={paymentsLoading}
+        searchPlaceholder="Search orders..."
+        isLoading={isLoading}
       />
     </div>
   )
