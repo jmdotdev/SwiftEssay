@@ -169,6 +169,7 @@ export function WriterOrderDetail({ id, backHref }: WriterOrderDetailProps) {
           <h1 className="text-2xl font-bold tracking-tight">{order.title}</h1>
           <div className="flex items-center gap-3 mt-2">
             <StatusBadge status={order.status} />
+            <StatusBadge status={order.isPaid ? 'paid' : 'unpaid'} />
             <span className="text-sm text-muted-foreground">Order #{order.id || order._id}</span>
           </div>
         </div>
@@ -322,6 +323,10 @@ export function WriterOrderDetail({ id, backHref }: WriterOrderDetailProps) {
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Status</span>
                   <StatusBadge status={order.status} />
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Payment</span>
+                  <StatusBadge status={order.isPaid ? 'paid' : 'unpaid'} />
                 </div>
                 <Separator />
                 <div className="flex justify-between">

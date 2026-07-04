@@ -81,6 +81,7 @@ export function AppSidebar({ role }: AppSidebarProps) {
   const pathname = usePathname()
   const router = useRouter()
   const navItems = role === 'admin' ? adminNavItems : writerNavItems
+  const rootHref = role === 'admin' ? '/admin' : '/writer'
   const user = role === 'admin' 
     ? { name: 'John Admin', email: 'admin@swiftessay.com' }
     : { name: 'Sarah Writer', email: 'sarah@swiftessay.com' }
@@ -116,7 +117,7 @@ export function AppSidebar({ role }: AppSidebarProps) {
                   <SidebarMenuButton
                     asChild
                     isActive={
-                      item.href === '/admin'
+                      item.href === rootHref
                         ? pathname === item.href
                         : pathname === item.href || pathname.startsWith(item.href + '/')
                     }

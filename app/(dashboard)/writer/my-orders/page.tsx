@@ -65,9 +65,14 @@ export default function MyOrdersPage() {
       cell: ({ row }) => <StatusBadge status={row.original.status} />,
     },
     {
-      accessorKey: 'price',
+      accessorKey: 'totalPrice',
       header: 'Payout',
-      cell: ({ row }) => <span className="font-medium">${row.original.price}</span>,
+      cell: ({ row }) => <span className="font-medium">${row.original.totalPrice}</span>,
+    },
+    {
+      id: 'isPaid',
+      header: 'Payment',
+      cell: ({ row }) => <StatusBadge status={row.original.isPaid ? 'paid' : 'unpaid'} />,
     },
     {
       accessorKey: 'deadline',

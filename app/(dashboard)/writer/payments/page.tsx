@@ -5,7 +5,7 @@ import { DollarSign, Clock, XCircle } from 'lucide-react'
 import { MetricCard } from '@/components/dashboard/metric-card'
 import { DataTable } from '@/components/dashboard/data-table'
 import { StatusBadge } from '@/components/dashboard/status-badge'
-import { useWriterPayments, usePaymentMetrics } from '@/lib/hooks'
+import { useWriterPayments, useWriterPaymentMetrics } from '@/lib/hooks'
 import type { Payment } from '@/lib/types'
 
 const columns: ColumnDef<Payment>[] = [
@@ -44,9 +44,8 @@ const columns: ColumnDef<Payment>[] = [
 ]
 
 export default function WriterPaymentsPage() {
-  // Using a mock writer ID for demonstration
-  const { data: payments, isLoading: paymentsLoading } = useWriterPayments('1')
-  const { data: metrics, isLoading: metricsLoading } = usePaymentMetrics()
+  const { data: payments, isLoading: paymentsLoading } = useWriterPayments()
+  const { data: metrics, isLoading: metricsLoading } = useWriterPaymentMetrics()
 
   return (
     <div className="space-y-6">

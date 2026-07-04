@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils'
 import type { OrderStatus, PaymentStatus } from '@/lib/types'
 
 interface StatusBadgeProps {
-  status: OrderStatus | PaymentStatus | 'active' | 'inactive'
+  status: OrderStatus | PaymentStatus | 'active' | 'inactive' | 'unpaid'
   className?: string
 }
 
@@ -39,6 +39,10 @@ const statusConfig: Record<string, { label: string; className: string }> = {
   paid: {
     label: 'Paid',
     className: 'bg-emerald-100 text-emerald-800 border-emerald-200',
+  },
+  unpaid: {
+    label: 'Unpaid',
+    className: 'bg-amber-100 text-amber-800 border-amber-200',
   },
   active: {
     label: 'Active',

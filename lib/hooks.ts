@@ -4,9 +4,8 @@ import { useQuery } from '@tanstack/react-query'
 import {
   mockWriters,
   mockOrders,
-  writerMetrics,
 } from './mock-data'
-import type { Writer, Order, Payment, ChartData, DashboardMetrics, WriterMetrics, PaymentMetrics } from './types'
+import type { Writer, Order, Payment, ChartData, DashboardMetrics, WriterMetrics, PaymentMetrics, PaymentStatus } from './types'
 
 // Simulate API delay
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
@@ -273,64 +272,81 @@ export function useWriterMetrics() {
   return useQuery<WriterMetrics>({
     queryKey: ['writer-metrics'],
     queryFn: async () => {
-      await delay(500)
-      return writerMetrics
-    },
-  })
-}
+      const res = await fetch('/api/orders/my', { credentials: 'include' })
+      if (!res.ok) throw new Error('Failed to fetch orders')
+      const orders = await res.json()
+      const list: any[] = Array.isArray(orders) ? orders : []
 
-export function useWriterPayments(writerId: string) {
-  return useQuery<Payment[]>({
-    queryKey: ['writer-payments', writerId],
-    queryFn: async () => {
-      try {
-        const res = await fetch('/api/orders/get', { credentials: 'include' })
-        if (!res.ok) throw new Error('Failed to fetch orders')
-        const orders = await res.json()
-
-        // Filter paid orders assigned to this writer
-        const payments: Payment[] = []
-        if (Array.isArray(orders)) {
-          orders.forEach((order: any) => {
-            const assignedToId = typeof order.assigned_to === 'string'
-              ? order.assigned_to
-              : (order.assigned_to?._id || '')
-            
-            if (order.isPaid && assignedToId === writerId) {
-              const writerUsername = typeof order.assigned_to === 'string'
-                ? order.assigned_to
-                : (order.assigned_to?.username || 'Unknown')
-              
-              payments.push({
-                id: order._id,
-                orderId: order._id,
-                orderTitle: order.title,
-                writerId: assignedToId,
-                writerName: writerUsername,
-                amount: order.totalPrice,
-                status: 'paid',
-                paidAt: new Date().toISOString(),
-                createdAt: order.createdAt,
-              } as any)
-            }
-          })
-        }
-
-        return payments
-      } catch (err) {
-        await delay(400)
-        return []
+      return {
+        completedOrders: list.filter((o) => String(o.status) === 'completed').length,
+        pendingOrders: list.filter((o) => ['assigned', 'in_progress'].includes(String(o.status))).length,
+        inRevision: list.filter((o) => String(o.status) === 'revision').length,
+        cancelledOrders: list.filter((o) => String(o.status) === 'cancelled').length,
       }
     },
   })
 }
 
-export function useLatestOrders(limit: number = 5) {
-  return useQuery<Order[]>({
-    queryKey: ['latest-orders', limit],
+export function useWriterPayments() {
+  return useQuery<Payment[]>({
+    queryKey: ['writer-payments'],
     queryFn: async () => {
-      await delay(400)
-      return mockOrders.slice(0, limit)
+      const res = await fetch('/api/orders/my', { credentials: 'include' })
+      if (!res.ok) throw new Error('Failed to fetch orders')
+      const orders = await res.json()
+      const list: any[] = Array.isArray(orders) ? orders : []
+
+      return list.map((order): Payment => {
+        const assignedToId = typeof order.assigned_to === 'string'
+          ? order.assigned_to
+          : (order.assigned_to?._id || '')
+        const writerUsername = typeof order.assigned_to === 'string'
+          ? order.assigned_to
+          : (order.assigned_to?.username || 'Unknown')
+
+        const status: PaymentStatus =
+          String(order.status) === 'cancelled' ? 'cancelled' : order.isPaid ? 'paid' : 'pending'
+
+        return {
+          id: order._id,
+          orderId: order._id,
+          orderTitle: order.title,
+          writerId: assignedToId,
+          writerName: writerUsername,
+          amount: order.totalPrice,
+          status,
+          paidAt: order.isPaid ? order.updatedAt : undefined,
+          createdAt: order.createdAt,
+        }
+      })
+    },
+  })
+}
+
+export function useWriterPaymentMetrics() {
+  return useQuery<PaymentMetrics>({
+    queryKey: ['writer-payment-metrics'],
+    queryFn: async () => {
+      const res = await fetch('/api/orders/my', { credentials: 'include' })
+      if (!res.ok) throw new Error('Failed to fetch orders')
+      const orders = await res.json()
+      const list: any[] = Array.isArray(orders) ? orders : []
+
+      let totalPaid = 0
+      let totalPending = 0
+      let totalCancelled = 0
+
+      list.forEach((order) => {
+        if (String(order.status) === 'cancelled') {
+          totalCancelled += order.totalPrice || 0
+        } else if (order.isPaid) {
+          totalPaid += order.totalPrice || 0
+        } else {
+          totalPending += order.totalPrice || 0
+        }
+      })
+
+      return { totalPaid, totalPending, totalCancelled }
     },
   })
 }
