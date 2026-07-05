@@ -1,5 +1,6 @@
 'use client'
 
+import { useMemo } from 'react'
 import { ColumnDef } from '@tanstack/react-table'
 import { DollarSign, Clock, XCircle } from 'lucide-react'
 import { MetricCard } from '@/components/dashboard/metric-card'
@@ -59,10 +60,10 @@ export default function WriterPaymentsPage() {
       {/* Metrics Cards */}
       <div className="grid gap-4 md:grid-cols-3">
         <MetricCard
-          title="Total Paid"
+          title="Total Amount"
           value={`$${metrics?.totalPaid ?? 0}`}
           icon={DollarSign}
-          description="received payments"
+          description="from paid orders"
           isLoading={metricsLoading}
         />
         <MetricCard
@@ -76,17 +77,17 @@ export default function WriterPaymentsPage() {
           title="Cancelled Amount"
           value={`$${metrics?.totalCancelled ?? 0}`}
           icon={XCircle}
-          description="cancelled payments"
+          description="from cancelled orders"
           isLoading={metricsLoading}
         />
       </div>
 
-      {/* Payments Table */}
+      {/* Orders Table */}
       <DataTable
         columns={columns}
         data={payments ?? []}
         searchKey="orderTitle"
-        searchPlaceholder="Search payments..."
+        searchPlaceholder="Search orders..."
         isLoading={paymentsLoading}
       />
     </div>
