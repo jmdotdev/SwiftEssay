@@ -10,6 +10,18 @@ import type { Writer, Order, Payment, ChartData, DashboardMetrics, WriterMetrics
 // Simulate API delay
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
+export function useCurrentUser() {
+  return useQuery<{ id: string; username: string; email: string; role: string; status: string; createdAt: string } | null>({
+    queryKey: ['current-user'],
+    queryFn: async () => {
+      const res = await fetch('/api/auth/me', { credentials: 'include' })
+      if (!res.ok) return null
+      const data = await res.json()
+      return data.user ?? null
+    },
+  })
+}
+
 // Admin hooks
 export function useAdminMetrics() {
   return useQuery<DashboardMetrics>({
