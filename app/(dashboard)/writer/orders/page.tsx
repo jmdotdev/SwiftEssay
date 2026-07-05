@@ -67,10 +67,10 @@ export default function WriterOrdersPage() {
       ),
     },
     {
-      accessorKey: 'price',
+      accessorKey: 'totalPrice',
       header: 'Price',
       cell: ({ row }) => (
-        <span className="font-medium">${row.original.price}</span>
+        <span className="font-medium">${row.original.totalPrice}</span>
       ),
     },
     {

@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { MetricCard } from '@/components/dashboard/metric-card'
 import { DataTable } from '@/components/dashboard/data-table'
 import { StatusBadge } from '@/components/dashboard/status-badge'
-import { useWriterMetrics, useLatestOrders } from '@/lib/hooks'
+import { useWriterMetrics, useAvailableOrders } from '@/lib/hooks'
 import { toast } from 'sonner'
 import type { Order } from '@/lib/types'
 
@@ -27,10 +27,10 @@ const columns: ColumnDef<Order>[] = [
     cell: ({ row }) => <StatusBadge status={row.original.status} />,
   },
   {
-    accessorKey: 'price',
+    accessorKey: 'totalPrice',
     header: 'Price',
     cell: ({ row }) => (
-      <span className="font-medium">${row.original.price}</span>
+      <span className="font-medium">${row.original.totalPrice}</span>
     ),
   },
   {
@@ -47,7 +47,7 @@ const columns: ColumnDef<Order>[] = [
 export default function WriterDashboardPage() {
   const router = useRouter()
   const { data: metrics, isLoading: metricsLoading } = useWriterMetrics()
-  const { data: latestOrders, isLoading: ordersLoading } = useLatestOrders(5)
+  const { data: availableOrders, isLoading: ordersLoading } = useAvailableOrders()
 
   const handleRowClick = (order: Order) => {
     const idOnly = (order as any)._id as string
@@ -74,7 +74,6 @@ export default function WriterDashboardPage() {
           value={metrics?.completedOrders ?? 0}
           icon={CheckCircle}
           description="total completed"
-          trend={{ value: 12, isPositive: true }}
           isLoading={metricsLoading}
         />
         <MetricCard
@@ -100,15 +99,15 @@ export default function WriterDashboardPage() {
         />
       </div>
 
-      {/* Latest Orders */}
+      {/* Available Orders */}
       <Card>
         <CardHeader>
-          <CardTitle>Latest Orders</CardTitle>
+          <CardTitle>Available Orders</CardTitle>
         </CardHeader>
         <CardContent>
           <DataTable
             columns={columns}
-            data={latestOrders ?? []}
+            data={(availableOrders ?? []).slice(0, 5)}
             isLoading={ordersLoading}
             onRowClick={handleRowClick}
           />

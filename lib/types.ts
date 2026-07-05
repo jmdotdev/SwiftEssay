@@ -32,6 +32,7 @@ export interface Order {
   description: string
   status: OrderStatus
   totalPrice: number
+  isPaid?: boolean
   price_per_page?: number
   total_pages?: number
   deadline: string | Date

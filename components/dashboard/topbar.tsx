@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { Bell, Search } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -13,6 +14,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { useCurrentUser } from '@/lib/hooks'
 import type { UserRole } from '@/lib/types'
 
 interface TopbarProps {
@@ -20,9 +22,11 @@ interface TopbarProps {
 }
 
 export function Topbar({ role }: TopbarProps) {
-  const user = role === 'admin' 
-    ? { name: 'John Admin', email: 'admin@swiftessay.com' }
-    : { name: 'Sarah Writer', email: 'sarah@swiftessay.com' }
+  const { data: currentUser } = useCurrentUser()
+  const user = {
+    name: currentUser?.username || (role === 'admin' ? 'Admin' : 'Writer'),
+    email: currentUser?.email || '',
+  }
 
   return (
     <header className="sticky top-0 z-10 flex h-14 items-center gap-4 border-b bg-background px-4">
@@ -84,7 +88,13 @@ export function Topbar({ role }: TopbarProps) {
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Profile</DropdownMenuItem>
+            {role === 'writer' ? (
+              <DropdownMenuItem asChild>
+                <Link href="/writer/profile">Profile</Link>
+              </DropdownMenuItem>
+            ) : (
+              <DropdownMenuItem>Profile</DropdownMenuItem>
+            )}
             <DropdownMenuItem>Settings</DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem className="text-red-600">Logout</DropdownMenuItem>

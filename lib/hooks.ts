@@ -4,12 +4,23 @@ import { useQuery } from '@tanstack/react-query'
 import {
   mockWriters,
   mockOrders,
-  writerMetrics,
 } from './mock-data'
-import type { Writer, Order, Payment, PaymentStatus, ChartData, DashboardMetrics, WriterMetrics, PaymentMetrics } from './types'
+import type { Writer, Order, Payment, ChartData, DashboardMetrics, WriterMetrics, PaymentMetrics, PaymentStatus } from './types'
 
 // Simulate API delay
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
+
+export function useCurrentUser() {
+  return useQuery<{ id: string; username: string; email: string; role: string; status: string; createdAt: string } | null>({
+    queryKey: ['current-user'],
+    queryFn: async () => {
+      const res = await fetch('/api/auth/me', { credentials: 'include' })
+      if (!res.ok) return null
+      const data = await res.json()
+      return data.user ?? null
+    },
+  })
+}
 
 // Admin hooks
 export function useAdminMetrics() {
@@ -273,23 +284,31 @@ export function useWriterMetrics() {
   return useQuery<WriterMetrics>({
     queryKey: ['writer-metrics'],
     queryFn: async () => {
-      await delay(500)
-      return writerMetrics
+      const res = await fetch('/api/orders/my', { credentials: 'include' })
+      if (!res.ok) throw new Error('Failed to fetch orders')
+      const orders = await res.json()
+      const list: any[] = Array.isArray(orders) ? orders : []
+
+      return {
+        completedOrders: list.filter((o) => String(o.status) === 'completed').length,
+        pendingOrders: list.filter((o) => ['assigned', 'in_progress'].includes(String(o.status))).length,
+        inRevision: list.filter((o) => String(o.status) === 'revision').length,
+        cancelledOrders: list.filter((o) => String(o.status) === 'cancelled').length,
+      }
     },
   })
 }
 
-export function useMyPayments() {
+export function useWriterPayments() {
   return useQuery<Payment[]>({
-    queryKey: ['my-payments'],
+    queryKey: ['writer-payments'],
     queryFn: async () => {
       const res = await fetch('/api/orders/my', { credentials: 'include' })
       if (!res.ok) throw new Error('Failed to fetch orders')
       const orders = await res.json()
+      const list: any[] = Array.isArray(orders) ? orders : []
 
-      if (!Array.isArray(orders)) return []
-
-      return orders.map((order: any): Payment => {
+      return list.map((order): Payment => {
         const assignedToId = typeof order.assigned_to === 'string'
           ? order.assigned_to
           : (order.assigned_to?._id || '')
@@ -297,11 +316,8 @@ export function useMyPayments() {
           ? order.assigned_to
           : (order.assigned_to?.username || 'Unknown')
 
-        const status: PaymentStatus = String(order.status) === 'cancelled'
-          ? 'cancelled'
-          : order.isPaid
-            ? 'paid'
-            : 'pending'
+        const status: PaymentStatus =
+          String(order.status) === 'cancelled' ? 'cancelled' : order.isPaid ? 'paid' : 'pending'
 
         return {
           id: order._id,
@@ -319,12 +335,30 @@ export function useMyPayments() {
   })
 }
 
-export function useLatestOrders(limit: number = 5) {
-  return useQuery<Order[]>({
-    queryKey: ['latest-orders', limit],
+export function useWriterPaymentMetrics() {
+  return useQuery<PaymentMetrics>({
+    queryKey: ['writer-payment-metrics'],
     queryFn: async () => {
-      await delay(400)
-      return mockOrders.slice(0, limit)
+      const res = await fetch('/api/orders/my', { credentials: 'include' })
+      if (!res.ok) throw new Error('Failed to fetch orders')
+      const orders = await res.json()
+      const list: any[] = Array.isArray(orders) ? orders : []
+
+      let totalPaid = 0
+      let totalPending = 0
+      let totalCancelled = 0
+
+      list.forEach((order) => {
+        if (String(order.status) === 'cancelled') {
+          totalCancelled += order.totalPrice || 0
+        } else if (order.isPaid) {
+          totalPaid += order.totalPrice || 0
+        } else {
+          totalPending += order.totalPrice || 0
+        }
+      })
+
+      return { totalPaid, totalPending, totalCancelled }
     },
   })
 }

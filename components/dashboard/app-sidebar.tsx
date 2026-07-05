@@ -24,6 +24,7 @@ import {
   SidebarMenuItem,
 } from '@/components/ui/sidebar'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { useCurrentUser } from '@/lib/hooks'
 import type { UserRole } from '@/lib/types'
 
 
@@ -81,10 +82,13 @@ export function AppSidebar({ role }: AppSidebarProps) {
   const pathname = usePathname()
   const router = useRouter()
   const navItems = role === 'admin' ? adminNavItems : writerNavItems
-  const user = role === 'admin' 
-    ? { name: 'John Admin', email: 'admin@swiftessay.com' }
-    : { name: 'Sarah Writer', email: 'sarah@swiftessay.com' }
-  
+  const rootHref = role === 'admin' ? '/admin' : '/writer'
+  const { data: currentUser } = useCurrentUser()
+  const user = {
+    name: currentUser?.username || (role === 'admin' ? 'Admin' : 'Writer'),
+    email: currentUser?.email || '',
+  }
+
   const logout = () => {
     fetch('/api/auth/logout', {
       method: 'POST',
@@ -116,7 +120,7 @@ export function AppSidebar({ role }: AppSidebarProps) {
                   <SidebarMenuButton
                     asChild
                     isActive={
-                      item.href === '/admin'
+                      item.href === rootHref
                         ? pathname === item.href
                         : pathname === item.href || pathname.startsWith(item.href + '/')
                     }
@@ -136,18 +140,35 @@ export function AppSidebar({ role }: AppSidebarProps) {
       <SidebarFooter className="border-t border-sidebar-border">
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton size="lg" className="w-full">
-              <Avatar className="h-8 w-8">
-                <AvatarImage src="/placeholder.svg" />
-                <AvatarFallback className="text-xs">
-                  {user.name.split(' ').map(n => n[0]).join('')}
-                </AvatarFallback>
-              </Avatar>
-              <div className="flex flex-1 flex-col text-left text-sm cursor-pointer">
-                <span className="font-medium">{user.name}</span>
-                <span className="text-xs text-muted-foreground">{user.email}</span>
-              </div>
-            </SidebarMenuButton>
+            {role === 'writer' ? (
+              <SidebarMenuButton size="lg" className="w-full" asChild tooltip="View profile">
+                <Link href="/writer/profile">
+                  <Avatar className="h-8 w-8">
+                    <AvatarImage src="/placeholder.svg" />
+                    <AvatarFallback className="text-xs">
+                      {user.name.split(' ').map(n => n[0]).join('')}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="flex flex-1 flex-col text-left text-sm">
+                    <span className="font-medium">{user.name}</span>
+                    <span className="text-xs text-muted-foreground">{user.email}</span>
+                  </div>
+                </Link>
+              </SidebarMenuButton>
+            ) : (
+              <SidebarMenuButton size="lg" className="w-full">
+                <Avatar className="h-8 w-8">
+                  <AvatarImage src="/placeholder.svg" />
+                  <AvatarFallback className="text-xs">
+                    {user.name.split(' ').map(n => n[0]).join('')}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="flex flex-1 flex-col text-left text-sm">
+                  <span className="font-medium">{user.name}</span>
+                  <span className="text-xs text-muted-foreground">{user.email}</span>
+                </div>
+              </SidebarMenuButton>
+            )}
           </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarMenuButton asChild tooltip="Logout">
