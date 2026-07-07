@@ -109,3 +109,15 @@ export interface ChartData {
   tasks: number
   completed: number
 }
+
+export type NotificationType = 'new_order' | 'order_paid' | 'order_completed'
+
+export interface NotificationItem {
+  _id: string
+  type: NotificationType
+  title: string
+  message: string
+  link: string
+  isRead: boolean
+  createdAt: string
+}

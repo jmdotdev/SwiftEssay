@@ -1,30 +1,41 @@
-# Swift Essay 
-Swift Essay is an academic writing platform built with MERN Stack, where admins can post academic writing tasks and writers can bid on and complete them. This project streamlines the process of connecting clients with skilled writers for academic assignments.
+# Swift Essay
 
-## Table of Contents 
+Swift Essay is an academic writing marketplace where admins post writing orders and writers claim, complete, and submit them for payment. It's built as a full-stack Next.js application with a MongoDB backend.
+
+## Table of Contents
 
 - [Features](#features)
 - [Installation](#installation)
 - [Usage](#usage)
 - [Tech Stack](#tech-stack)
+- [Project Structure](#project-structure)
 - [Contributing](#contributing)
 - [License](#license)
 
 ## Features
 
 - **User Roles:**
-  - **Admin:** Manages users, tasks, and overall system.
-  - **Writers:** Bid on tasks, and submit completed work.
+  - **Admin:** Creates and manages orders, assigns/tracks writers, and processes payments.
+  - **Writer:** Browses available orders, claims work, submits completed files, and tracks earnings.
 
-- **Task Management:**
-  - Admins can post detailed tasks with requirements.
-  - Writers can bid on available tasks and provide estimated completion times.
+- **Order Management:**
+  - Admins create orders with discipline, deadline, pricing (per page/total), and reference files.
+  - Writers claim unassigned orders and upload submitted files when work is complete.
+  - Orders move through a status lifecycle: `unassigned → assigned → in_progress → revision → completed` (or `cancelled`).
+  - File uploads (order attachments and submissions) are stored via Cloudinary.
 
-- **User Authentication:**
-  - Secure user authentication system for admins and writers.
+- **Payments:**
+  - Admins mark orders as paid; dedicated payment views for admins and writers track paid/unpaid orders.
 
-- **Dashboard:**
-  - Personalized dashboards for admins and writers to track ongoing tasks, bids, and completed work.
+- **Notifications:**
+  - In-app notifications (new order, order paid, order completed) are created for relevant users and can be marked as read.
+
+- **Authentication:**
+  - JWT-based auth with login, registration, password reset, and a "forgot password" flow.
+  - Route guards restrict admin-only API endpoints.
+
+- **Dashboards:**
+  - Role-specific dashboards (admin and writer) with a shared topbar/sidebar layout, order tables, and writer profile pages.
 
 ## Installation
 
@@ -38,17 +49,29 @@ Swift Essay is an academic writing platform built with MERN Stack, where admins 
 2. Install dependencies:
 
    ```bash
-   npm install
+   pnpm install
    ```
 
 3. Set up environment variables:
-   
-   Create a `.env` file in the root directory and add the necessary environment variables.
+
+   Create a `.env` file in the root directory with the variables your environment needs, for example:
+
+   ```
+   MONGODB_URI=
+   JWT_SECRET=
+   CLOUDINARY_CLOUD_NAME=
+   CLOUDINARY_API_KEY=
+   CLOUDINARY_API_SECRET=
+   SMTP_HOST=
+   SMTP_PORT=
+   SMTP_USER=
+   SMTP_PASS=
+   ```
 
 4. Run the development server:
 
    ```bash
-   npm start
+   pnpm dev
    ```
 
 5. Open your browser and visit [http://localhost:3000](http://localhost:3000) to view the app.
@@ -56,29 +79,35 @@ Swift Essay is an academic writing platform built with MERN Stack, where admins 
 ## Usage
 
 1. **Admin:**
-   - Access the admin dashboard to manage users, tasks, and overall system settings.
+   - Create new orders, monitor their status, and edit order details.
+   - View and manage writers, assign orders, and mark orders as paid.
 
-2. **Clients:**
-   - Log in to post new tasks, review bids, and communicate with writers.
-   - Assign tasks to chosen writers and track the progress.
-
-3. **Writers:**
-   - Bid on available tasks, communicate with clients, and submit completed work.
+2. **Writer:**
+   - Browse available orders and claim ones matching their skills/deadline.
+   - Submit completed files, track "my orders," and review payment history.
+   - Manage profile details from a dedicated profile page.
 
 ## Tech Stack
 
-- **Frontend:**
-  - ReactJS
+- **Framework:** Next.js (App Router) with React
+- **Language:** TypeScript
+- **Database:** MongoDB via Mongoose
+- **Auth:** JWT (jsonwebtoken, bcryptjs for password hashing)
+- **File Storage:** Cloudinary
+- **Email:** Nodemailer
+- **UI:** Tailwind CSS, Radix UI primitives, shadcn-style components
+- **Data Fetching/State:** TanStack Query, TanStack Table
+- **Forms/Validation:** React Hook Form, Zod
 
-- **Backend:**
-  - Nodejs
+## Project Structure
 
-- **Database:**
-  - MongoDb
-
-- **DevOps & Cloud**
-  - Azure DevOps
-  - Azure
+- `app/(auth)` — login, registration, and password reset pages
+- `app/(dashboard)` — admin and writer dashboard pages (orders, payments, writers, profile)
+- `app/api` — REST-style API routes for auth, orders, writers, and notifications
+- `components/dashboard` — dashboard UI (topbar, order tables/detail views, etc.)
+- `models` — Mongoose schemas (`User`, `Order`, `Notification`)
+- `services` — client-side service functions that call the API routes
+- `lib` — shared utilities (Mongoose connection, JWT helpers, mailer, notifications, validations)
 
 ## Contributing
 
@@ -87,4 +116,3 @@ We welcome contributions! Please follow our [contribution guidelines](CONTRIBUTI
 ## License
 
 This project is licensed under the [MIT License](LICENSE). Feel free to use, modify, and distribute it as per the license terms.
-

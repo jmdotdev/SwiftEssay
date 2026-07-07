@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { Bell, Search } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -14,15 +15,28 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { useCurrentUser } from '@/lib/hooks'
-import type { UserRole } from '@/lib/types'
+import { useCurrentUser, useNotifications, useMarkNotificationRead } from '@/lib/hooks'
+import { cn } from '@/lib/utils'
+import type { UserRole, NotificationItem } from '@/lib/types'
 
 interface TopbarProps {
   role: UserRole
 }
 
 export function Topbar({ role }: TopbarProps) {
+  const router = useRouter()
   const { data: currentUser } = useCurrentUser()
+  const { data: notifications = [] } = useNotifications()
+  const markAsRead = useMarkNotificationRead()
+  const unreadCount = notifications.filter((n) => !n.isRead).length
+
+  const handleNotificationClick = (notification: NotificationItem) => {
+    if (!notification.isRead) {
+      markAsRead.mutate(notification._id)
+    }
+    router.push(notification.link)
+  }
+
   const user = {
     name: currentUser?.username || (role === 'admin' ? 'Admin' : 'Writer'),
     email: currentUser?.email || '',
@@ -46,27 +60,40 @@ export function Topbar({ role }: TopbarProps) {
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="relative">
               <Bell className="h-4 w-4" />
-              <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-primary text-[10px] font-medium text-primary-foreground flex items-center justify-center">
-                3
-              </span>
+              {unreadCount > 0 && (
+                <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-primary text-[10px] font-medium text-primary-foreground flex items-center justify-center">
+                  {unreadCount > 9 ? '9+' : unreadCount}
+                </span>
+              )}
               <span className="sr-only">Notifications</span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-80">
             <DropdownMenuLabel>Notifications</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="flex flex-col items-start gap-1 cursor-pointer">
-              <span className="font-medium">New order received</span>
-              <span className="text-xs text-muted-foreground">Research Paper on AI Ethics - $200</span>
-            </DropdownMenuItem>
-            <DropdownMenuItem className="flex flex-col items-start gap-1 cursor-pointer">
-              <span className="font-medium">Order completed</span>
-              <span className="text-xs text-muted-foreground">Technical Documentation has been submitted</span>
-            </DropdownMenuItem>
-            <DropdownMenuItem className="flex flex-col items-start gap-1 cursor-pointer">
-              <span className="font-medium">Revision requested</span>
-              <span className="text-xs text-muted-foreground">Marketing Strategy Essay needs updates</span>
-            </DropdownMenuItem>
+            {notifications.length === 0 ? (
+              <div className="px-2 py-4 text-center text-sm text-muted-foreground">
+                No notifications
+              </div>
+            ) : (
+              <div className="max-h-80 overflow-y-auto">
+                {notifications.map((notification) => (
+                  <DropdownMenuItem
+                    key={notification._id}
+                    className={cn(
+                      'flex flex-col items-start gap-1 cursor-pointer',
+                      !notification.isRead && 'bg-muted/50'
+                    )}
+                    onClick={() => handleNotificationClick(notification)}
+                  >
+                    <span className={cn('font-medium', notification.isRead && 'font-normal text-muted-foreground')}>
+                      {notification.title}
+                    </span>
+                    <span className="text-xs text-muted-foreground">{notification.message}</span>
+                  </DropdownMenuItem>
+                ))}
+              </div>
+            )}
           </DropdownMenuContent>
         </DropdownMenu>
         <DropdownMenu>

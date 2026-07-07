@@ -72,7 +72,7 @@ export default function AdminDashboardPage() {
 
       {/* Charts */}
       <div className="grid gap-4 md:grid-cols-2">
-        <Card>
+        <Card className="min-w-0">
           <CardHeader>
             <CardTitle>Task Trends</CardTitle>
             <CardDescription>
@@ -130,7 +130,7 @@ export default function AdminDashboardPage() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="min-w-0">
           <CardHeader>
             <CardTitle>Monthly Performance</CardTitle>
             <CardDescription>

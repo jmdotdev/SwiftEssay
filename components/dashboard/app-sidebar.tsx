@@ -22,6 +22,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from '@/components/ui/sidebar'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { useCurrentUser } from '@/lib/hooks'
@@ -84,6 +85,11 @@ export function AppSidebar({ role }: AppSidebarProps) {
   const navItems = role === 'admin' ? adminNavItems : writerNavItems
   const rootHref = role === 'admin' ? '/admin' : '/writer'
   const { data: currentUser } = useCurrentUser()
+  const { isMobile, setOpenMobile } = useSidebar()
+
+  const closeOnMobile = () => {
+    if (isMobile) setOpenMobile(false)
+  }
   const user = {
     name: currentUser?.username || (role === 'admin' ? 'Admin' : 'Writer'),
     email: currentUser?.email || '',
@@ -100,7 +106,7 @@ export function AppSidebar({ role }: AppSidebarProps) {
   return (
     <Sidebar>
       <SidebarHeader className="border-b border-sidebar-border px-4 py-4">
-        <Link href={role === 'admin' ? '/admin' : '/writer'} className="flex items-center gap-2">
+        <Link href={role === 'admin' ? '/admin' : '/writer'} className="flex items-center gap-2" onClick={closeOnMobile}>
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
             <PenTool className="h-4 w-4 text-primary-foreground" />
           </div>
@@ -126,7 +132,7 @@ export function AppSidebar({ role }: AppSidebarProps) {
                     }
                     tooltip={item.title}
                   >
-                    <Link href={item.href}>
+                    <Link href={item.href} onClick={closeOnMobile}>
                       <item.icon className="h-4 w-4" />
                       <span>{item.title}</span>
                     </Link>
@@ -142,7 +148,7 @@ export function AppSidebar({ role }: AppSidebarProps) {
           <SidebarMenuItem>
             {role === 'writer' ? (
               <SidebarMenuButton size="lg" className="w-full" asChild tooltip="View profile">
-                <Link href="/writer/profile">
+                <Link href="/writer/profile" onClick={closeOnMobile}>
                   <Avatar className="h-8 w-8">
                     <AvatarImage src="/placeholder.svg" />
                     <AvatarFallback className="text-xs">
