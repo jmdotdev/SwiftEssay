@@ -164,34 +164,34 @@ export function WriterOrderDetail({ id, backHref }: WriterOrderDetailProps) {
         </Link>
       </Button>
 
-      <div className="flex items-start justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">{order.title}</h1>
+          <h1 className="text-2xl font-bold tracking-tight wrap-break-word">{order.title}</h1>
           <div className="flex items-center gap-3 mt-2">
             <StatusBadge status={order.status} />
             <StatusBadge status={order.isPaid ? 'paid' : 'unpaid'} />
             <span className="text-sm text-muted-foreground">Order #{order.id || order._id}</span>
           </div>
         </div>
-        <div className="flex gap-2">
-          {isAvailable && (
+        <div className="flex flex-wrap gap-2">
+          {/* {isAvailable && (
             <Button onClick={() => claimMutation.mutate(id)} disabled={claimMutation.isPending}>
               <HandMetal className="h-4 w-4 mr-2" />
               {claimMutation.isPending ? 'Claiming…' : 'Claim Order'}
             </Button>
-          )}
+          )} */}
           {isAssignedToMe && !hasSubmitted && (
-            <Button onClick={() => setSubmitModalOpen(true)}>
+            <Button className="flex-1 sm:flex-none" onClick={() => setSubmitModalOpen(true)}>
               <Upload className="h-4 w-4 mr-2" />
               Submit Work
             </Button>
           )}
-          {isAssignedToMe && hasSubmitted && (
+          {/* {isAssignedToMe && hasSubmitted && (
             <Button variant="outline" onClick={() => setSubmitModalOpen(true)}>
               <Pencil className="h-4 w-4 mr-2" />
               Edit Submission
             </Button>
-          )}
+          )} */}
         </div>
       </div>
 

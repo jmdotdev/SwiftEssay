@@ -186,9 +186,9 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
         </Link>
       </Button>
 
-        <div className="flex items-start justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">{order.title}</h1>
+          <h1 className="text-2xl font-bold tracking-tight wrap-break-word">{order.title}</h1>
           <div className="flex items-center gap-3 mt-2">
             <StatusBadge status={order.status} />
             <span className="text-sm text-muted-foreground">
@@ -196,18 +196,18 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
             </span>
           </div>
         </div>
-        <div className="flex gap-2">
-          <Button onClick={() => setAssignModalOpen(true)}>
+        <div className="flex flex-wrap gap-2">
+          <Button className="flex-1 sm:flex-none" onClick={() => setAssignModalOpen(true)}>
             <UserPlus className="h-4 w-4 mr-2" />
             {order.assigned_to ? 'Reassign Writer' : 'Assign Writer'}
           </Button>
           {order.assigned_to && (
-            <Button variant="outline" onClick={handleUnassign}>
+            <Button className="flex-1 sm:flex-none" variant="outline" onClick={handleUnassign}>
               <Undo2 className="h-4 w-4 mr-2" />
               Unassign
             </Button>
           )}
-          <Button variant="outline" onClick={() => setCommentModalOpen(true)}>
+          <Button className="flex-1 sm:flex-none" variant="outline" onClick={() => setCommentModalOpen(true)}>
             <MessageSquare className="h-4 w-4 mr-2" />
             Add Comment
           </Button>

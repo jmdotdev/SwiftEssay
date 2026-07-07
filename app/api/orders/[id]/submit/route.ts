@@ -2,6 +2,7 @@ import { cookies } from 'next/headers'
 import { verifyToken } from '@/lib/jwt'
 import { connectDB } from '@/lib/mongoose'
 import { Order } from '@/models/Order'
+import { notifyRole } from '@/lib/notify'
 import { v2 as cloudinary } from 'cloudinary'
 
 cloudinary.config({
@@ -72,6 +73,14 @@ export async function POST(
     },
     { new: true }
   )
+
+  await notifyRole('admin', {
+    type: 'order_completed',
+    title: 'Order completed',
+    message: `${updated.title} has been submitted for review`,
+    link: `/admin/orders/${updated._id}`,
+    order: updated._id.toString(),
+  })
 
   return Response.json({ submitted_files: updated.submitted_files })
 }

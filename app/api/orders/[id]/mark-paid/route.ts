@@ -2,6 +2,7 @@ import { cookies } from "next/headers";
 import isAdmin from "../../../(guards)/isAdmin";
 import { Order } from "@/models/Order";
 import { connectDB } from "@/lib/mongoose";
+import { notifyUser } from "@/lib/notify";
 
 export async function PATCH(
   request: Request,
@@ -31,15 +32,27 @@ export async function PATCH(
       );
     }
 
+    const existing = await Order.findById(id);
+
+    if (!existing) {
+      return new Response(JSON.stringify({ message: "Order not found" }), {
+        status: 404,
+      });
+    }
+
     const order = await Order.findByIdAndUpdate(
       id,
       { isPaid },
       { new: true }
     );
 
-    if (!order) {
-      return new Response(JSON.stringify({ message: "Order not found" }), {
-        status: 404,
+    if (isPaid && !existing.isPaid && order.assigned_to) {
+      await notifyUser(String(order.assigned_to), {
+        type: 'order_paid',
+        title: 'Order marked as paid',
+        message: `${order.title} - $${order.totalPrice}`,
+        link: `/writer/my-orders/${order._id}`,
+        order: order._id.toString(),
       });
     }
 

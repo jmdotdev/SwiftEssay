@@ -1,11 +1,11 @@
 'use client'
 
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import {
   mockWriters,
   mockOrders,
 } from './mock-data'
-import type { Writer, Order, Payment, ChartData, DashboardMetrics, WriterMetrics, PaymentMetrics, PaymentStatus } from './types'
+import type { Writer, Order, Payment, ChartData, DashboardMetrics, WriterMetrics, PaymentMetrics, PaymentStatus, NotificationItem } from './types'
 
 // Simulate API delay
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
@@ -18,6 +18,37 @@ export function useCurrentUser() {
       if (!res.ok) return null
       const data = await res.json()
       return data.user ?? null
+    },
+  })
+}
+
+export function useNotifications() {
+  return useQuery<NotificationItem[]>({
+    queryKey: ['notifications'],
+    queryFn: async () => {
+      const res = await fetch('/api/notifications', { credentials: 'include' })
+      if (!res.ok) return []
+      return res.json()
+    },
+    refetchInterval: 30000,
+  })
+}
+
+export function useMarkNotificationRead() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const res = await fetch(`/api/notifications/${id}/read`, {
+        method: 'PATCH',
+        credentials: 'include',
+      })
+      if (!res.ok) throw new Error('Failed to mark notification as read')
+      return res.json()
+    },
+    onSuccess: (_data, id) => {
+      queryClient.setQueryData<NotificationItem[]>(['notifications'], (old) =>
+        old?.map((n) => (n._id === id ? { ...n, isRead: true } : n))
+      )
     },
   })
 }
