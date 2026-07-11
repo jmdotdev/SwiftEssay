@@ -72,6 +72,7 @@ function getFileIcon(type: string) {
 export function OrderForm({ initialData, isEditing = false }: OrderFormProps) {
   const router = useRouter()
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const todayDateString = new Date().toISOString().split('T')[0]
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>(
     initialData?.files?.map((file) => ({
       id: file.public_id,
@@ -449,7 +450,7 @@ export function OrderForm({ initialData, isEditing = false }: OrderFormProps) {
                       <FormItem>
                         <FormLabel>Deadline</FormLabel>
                         <FormControl>
-                          <Input type="date" {...field} />
+                          <Input type="date" min={todayDateString} {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>

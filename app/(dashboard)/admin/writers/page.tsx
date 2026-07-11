@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { ColumnDef } from '@tanstack/react-table'
-import { MoreHorizontal, Edit, Trash2, Plus } from 'lucide-react'
+import { MoreHorizontal, Edit, Trash2, Plus, Star } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import {
@@ -212,6 +212,22 @@ export default function WritersPage() {
       cell: ({ row }) => (
         <span className="font-medium">{row.original.canceledTasks ?? 0}</span>
       ),
+    },
+    {
+      id: 'rating',
+      header: 'Rating',
+      cell: ({ row }) => {
+        const completed = row.original.tasksCompleted ?? 0
+        const canceled = row.original.canceledTasks ?? 0
+        const finished = completed + canceled
+        const rating = finished > 0 ? Math.round((completed / finished) * 5 * 10) / 10 : 0
+        return (
+          <div className="flex items-center gap-1">
+            <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
+            <span className="font-medium">{finished > 0 ? rating.toFixed(1) : '—'}</span>
+          </div>
+        )
+      },
     },
     {
       id: 'actions',

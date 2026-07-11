@@ -4,7 +4,7 @@ import { use } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { ColumnDef } from '@tanstack/react-table'
-import { ArrowLeft, CheckCircle, Clock, RotateCcw, FileText, Mail, Calendar } from 'lucide-react'
+import { ArrowLeft, CheckCircle, Clock, RotateCcw, FileText, Mail, Calendar, Star } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -14,6 +14,7 @@ import { StatusBadge } from '@/components/dashboard/status-badge'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useWriter, useWriterOrders } from '@/lib/hooks'
 import type { Order } from '@/lib/types'
+import { cn } from '@/lib/utils'
 
 const columns: ColumnDef<Order>[] = [
   {
@@ -101,6 +102,11 @@ export default function WriterProfilePage({ params }: WriterProfilePageProps) {
     if (orderId) router.push(`/admin/orders/${orderId}`)
   }
 
+  const completed = writer.tasksCompleted ?? 0
+  const canceled = writer.canceledTasks ?? 0
+  const finished = completed + canceled
+  const rating = finished > 0 ? Math.round((completed / finished) * 5 * 10) / 10 : 0
+
   return (
     <div className="space-y-6">
       <Button variant="ghost" asChild>
@@ -168,6 +174,36 @@ export default function WriterProfilePage({ params }: WriterProfilePageProps) {
           icon={FileText}
         />
       </div>
+
+      {/* Rating */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Performance Rating</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-1">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <Star
+                  key={i}
+                  className={cn(
+                    'h-6 w-6',
+                    i < Math.round(rating)
+                      ? 'fill-amber-400 text-amber-400'
+                      : 'text-muted-foreground'
+                  )}
+                />
+              ))}
+            </div>
+            <span className="text-xl font-bold">{rating.toFixed(1)} / 5</span>
+            <span className="text-sm text-muted-foreground">
+              {finished > 0
+                ? `based on ${completed} completed and ${canceled} cancelled orders`
+                : 'no completed or cancelled orders yet'}
+            </span>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Tasks Table */}
       <Card>

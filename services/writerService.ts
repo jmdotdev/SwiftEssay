@@ -137,6 +137,7 @@ export async function getWriterById(id: string) {
     const completedCount = await Order.countDocuments({ assigned_to: user._id, status: 'completed' });
     const pendingCount = await Order.countDocuments({ assigned_to: user._id, status: 'pending' });
     const inRevisionCount = await Order.countDocuments({ assigned_to: user._id, status: 'revision' });
+    const canceledCount = await Order.countDocuments({ assigned_to: user._id, status: 'cancelled' });
     const activeOrder = await Order.findOne({ assigned_to: user._id, status: { $in: ['assigned', 'in_progress'] } }).lean();
 
     return {
@@ -149,6 +150,7 @@ export async function getWriterById(id: string) {
         tasksCompleted: completedCount,
         pendingTasks: pendingCount,
         inRevision: inRevisionCount,
+        canceledTasks: canceledCount,
         currentActiveTask: activeOrder ? (activeOrder.title || null) : null,
     };
 }

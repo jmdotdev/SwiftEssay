@@ -54,7 +54,12 @@ export const createOrderSchema = z.object({
   price_per_page: z.coerce.number().positive('Price per page must be greater than 0'),
   total_pages: z.coerce.number().int('Total pages must be a number').positive('Total pages must be greater than 0'),
   files: z.array(z.any()).min(1, 'At least one file is required'),
-  deadline: z.string().min(1, 'Deadline is required'),
+  deadline: z.string().min(1, 'Deadline is required').refine((value) => {
+    const deadline = new Date(value)
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+    return deadline >= today
+  }, 'Deadline cannot be earlier than today'),
 })
 
 export type CreateOrderFormData = z.infer<typeof createOrderSchema>
