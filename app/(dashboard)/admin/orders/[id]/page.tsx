@@ -244,7 +244,7 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
                   <div>
                     <div className="text-sm text-muted-foreground">Deadline</div>
                     <div className="font-semibold">
-                      {new Date(order.deadline).toLocaleDateString()}
+                      {new Date(order.deadline).toLocaleString()}
                     </div>
                   </div>
                 </div>
@@ -395,7 +395,7 @@ export default function OrderDetailsPage({ params }: OrderDetailsPageProps) {
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Deadline</span>
                   <span className="font-medium">
-                    {new Date(order.deadline).toLocaleDateString()}
+                    {new Date(order.deadline).toLocaleString()}
                   </span>
                 </div>
               </div>

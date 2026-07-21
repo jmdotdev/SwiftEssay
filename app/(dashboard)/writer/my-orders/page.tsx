@@ -77,7 +77,7 @@ export default function MyOrdersPage() {
     {
       accessorKey: 'deadline',
       header: 'Deadline',
-      cell: ({ row }) => <span className="text-muted-foreground">{new Date(row.original.deadline).toLocaleDateString()}</span>,
+      cell: ({ row }) => <span className="text-muted-foreground">{new Date(row.original.deadline).toLocaleString()}</span>,
     },
     {
       id: 'actions',

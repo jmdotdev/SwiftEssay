@@ -225,7 +225,7 @@ export function WriterOrderDetail({ id, backHref }: WriterOrderDetailProps) {
                   <div>
                     <div className="text-sm text-muted-foreground">Deadline</div>
                     <div className="font-semibold">
-                      {new Date(order.deadline).toLocaleDateString()}
+                      {new Date(order.deadline).toLocaleString()}
                     </div>
                   </div>
                 </div>
@@ -335,7 +335,7 @@ export function WriterOrderDetail({ id, backHref }: WriterOrderDetailProps) {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Deadline</span>
-                  <span>{new Date(order.deadline).toLocaleDateString()}</span>
+                  <span>{new Date(order.deadline).toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Created</span>

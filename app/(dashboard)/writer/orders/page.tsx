@@ -78,7 +78,7 @@ export default function WriterOrdersPage() {
       header: 'Deadline',
       cell: ({ row }) => (
         <span className="text-muted-foreground">
-          {new Date(row.original.deadline).toLocaleDateString()}
+          {new Date(row.original.deadline).toLocaleString()}
         </span>
       ),
     },

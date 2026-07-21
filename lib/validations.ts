@@ -56,10 +56,8 @@ export const createOrderSchema = z.object({
   files: z.array(z.any()).min(1, 'At least one file is required'),
   deadline: z.string().min(1, 'Deadline is required').refine((value) => {
     const deadline = new Date(value)
-    const today = new Date()
-    today.setHours(0, 0, 0, 0)
-    return deadline >= today
-  }, 'Deadline cannot be earlier than today'),
+    return deadline >= new Date()
+  }, 'Deadline cannot be earlier than now'),
 })
 
 export type CreateOrderFormData = z.infer<typeof createOrderSchema>

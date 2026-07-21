@@ -42,9 +42,9 @@ export default function EditOrderPage() {
 
         const data = await response.json()
         
-        // Format deadline to YYYY-MM-DD for input field
+        // Format deadline to YYYY-MM-DDTHH:mm for the datetime-local input field
         const deadline = new Date(data.deadline)
-        const formattedDeadline = deadline.toISOString().split('T')[0]
+        const formattedDeadline = deadline.toISOString().slice(0, 16)
 
         setOrderData({
           ...data,
