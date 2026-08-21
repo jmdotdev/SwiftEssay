@@ -175,6 +175,13 @@ export default function LoginPage() {
                   </Button>
                 </form>
               </Form>
+              <div className="mt-6 rounded-lg border border-dashed p-4 text-sm">
+                <p className="font-medium mb-2">Test credentials</p>
+                <div className="space-y-1 text-muted-foreground">
+                  <p>Admin: admin@gmail.com / 1234admin</p>
+                  <p>Writer: writer@gmail.com / 1234writer</p>
+                </div>
+              </div>
             </CardContent>
             <CardFooter className="flex flex-col px-0 lg:px-6">
                <Link
