@@ -2,9 +2,18 @@
 
 Swift Essay is an academic writing marketplace where admins post writing orders and writers claim, complete, and submit them for payment. It's built as a full-stack Next.js application with a MongoDB backend.
 
+## Notes on the build
+
+**Why the order lifecycle is a state machine.** Orders move through unassigned → assigned → in_progress → revision → completed, with cancelled as an exit at several points. I modelled it as explicit states rather than a set of booleans because the transitions have rules attached: a writer can only claim an unassigned order, only the assigned writer can submit work, and only an admin can mark something paid. Keeping that in the status field rather than scattering checks through the handlers meant the authorisation logic stayed in one place.
+
+**Auth and route guards.** JWT with bcrypt password hashing, and guards enforced on the admin API routes rather than only in the UI. Hiding a button doesn't secure an endpoint, and the admin actions here move money.
+
+**What I'd change.** The service layer calls API routes directly from the client, which was fine at this scale but would need a more deliberate caching and invalidation strategy as order volume grew. TanStack Query handles part of that, but I'd think harder about query keys. I'd also add tests around the status transitions, since that's the logic most likely to break as the rules change.
+
 ## Table of Contents
 
 - [Features](#features)
+- [Notes on the build](#notes-on-the-build)
 - [Installation](#installation)
 - [Usage](#usage)
 - [Tech Stack](#tech-stack)
@@ -42,7 +51,7 @@ Swift Essay is an academic writing marketplace where admins post writing orders 
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/your-username/swift-essay.git
+   git clone https://github.com/jmdotdev/swift-essay.git
    cd swift-essay
    ```
 
@@ -108,10 +117,6 @@ Swift Essay is an academic writing marketplace where admins post writing orders 
 - `models` — Mongoose schemas (`User`, `Order`, `Notification`)
 - `services` — client-side service functions that call the API routes
 - `lib` — shared utilities (Mongoose connection, JWT helpers, mailer, notifications, validations)
-
-## Contributing
-
-We welcome contributions! Please follow our [contribution guidelines](CONTRIBUTING.md) to contribute to Swift Essay.
 
 ## License
 
