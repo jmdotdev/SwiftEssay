@@ -114,7 +114,7 @@ export function Topbar({ role }: TopbarProps) {
                 <span className="text-xs font-normal text-muted-foreground">{user.email}</span>
               </div>
             </DropdownMenuLabel>
-            <DropdownMenuSeparator />
+            { role === 'writer' && <DropdownMenuSeparator /> }
             {role === 'writer' && (
               <DropdownMenuItem asChild>
                 <Link href="/writer/profile">Profile</Link>
