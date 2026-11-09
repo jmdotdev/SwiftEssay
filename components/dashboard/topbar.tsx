@@ -115,16 +115,14 @@ export function Topbar({ role }: TopbarProps) {
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            {role === 'writer' ? (
+            {role === 'writer' && (
               <DropdownMenuItem asChild>
                 <Link href="/writer/profile">Profile</Link>
               </DropdownMenuItem>
-            ) : (
-              <DropdownMenuItem>Profile</DropdownMenuItem>
             )}
-            <DropdownMenuItem>Settings</DropdownMenuItem>
+            {/* <DropdownMenuItem>Settings</DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-red-600">Logout</DropdownMenuItem>
+            <DropdownMenuItem className="text-red-600">Logout</DropdownMenuItem> */}
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
